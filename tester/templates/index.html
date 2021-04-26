@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends "base_generic.html" %}
 
-</head>
-<body>
-  hello
-</body>
-</html>
+{% block content %}
+
+  <div class="start-test">
+    <a href="{% url 'exam' %}">
+      <p>Start test</p>
+    </a>
+  </div>
+
+{% endblock %}
