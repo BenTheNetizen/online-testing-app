@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #add new Application
-    'tester.apps.TesterConfig',
+    'exams',
+    'questions',
+    'results',
 ]
 
 MIDDLEWARE = [
@@ -60,7 +62,7 @@ ROOT_URLCONF = 'online-testing-app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,6 +130,10 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # The URL to use when referring to static files (where they will be served from)
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+    BASE_DIR / 'exams' / 'static',
+]
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/

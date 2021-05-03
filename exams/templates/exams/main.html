@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block scripts %}
+  <script src="{% static 'main.js' %}" defer></script>
+{% endblock scripts %}
+
+{% block title %}
+Home
+{% endblock title %}
+
+{% block content %}
+
+
+<!-- Modal -->
+<div class="modal fade" id="sectionStartModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Start Section?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body-confirm"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+        <button type="button" id="start-button" class="btn btn-success">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="h1">Quiz List</div>
+<hr>
+{% for obj in object_list %}
+  <button
+      class="btn btn-link modal-button"
+      data-pk="{{obj.pk}}"
+      data-exam="{{obj.name}}"
+      data-questions="{{obj.num_questions}}"
+      data-time="{{obj.time}}"
+      data-toggle="modal"
+      data-target="#sectionStartModal">
+      {{obj.name}}
+    </button>
+    <br>
+{% endfor %}
+
+{% endblock content %}
