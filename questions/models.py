@@ -3,10 +3,10 @@ from exams.models import Section
 # Create your models here.
 
 class Question(models.Model):
-    question_number = models.IntegerField(max_length=1000, default="10")
-    text = models.CharField(max_length=200)
+    question_number = models.IntegerField(default=-1)
+    text = models.CharField(max_length=200, default=" ")
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
-    student_response = models.CharField(max_length=1000, null=True, blank=True)
+    student_response = models.CharField(max_length=1, null=True, blank=True, default=" ")
 
     def __str__(self):
         return str(self.text)
@@ -15,8 +15,8 @@ class Question(models.Model):
         return self.answer_set.all()
 
 class Answer(models.Model):
-    text = models.CharField(max_length=1000, default="")
-    letter = models.CharField(max_length=1000, default="")
+    text = models.CharField(max_length=200, default="")
+    letter = models.CharField(max_length=1, default="")
     correct = models.BooleanField(default=False)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 

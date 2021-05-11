@@ -71,7 +71,7 @@ const sendData = () => {
       success: function(response) {
         console.log(response)
         //THIS IS A HORRIBLE WAY TO REDIRECT THE URL
-        //section_name = response.section_name
+        section_name = response.section_name
 
         if (section_name == "reading") {
           window.location.href="../break1"

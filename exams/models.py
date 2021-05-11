@@ -27,9 +27,9 @@ class Student(models.Model):
 
 #model for the Exam
 class Exam(models.Model):
-    name = models.CharField(max_length=100)
-    url = models.SlugField(max_length=60, blank=False)
-    time = models.IntegerField(max_length=1000, help_text="duration of the exam in minutes")
+    name = models.CharField(max_length=100, default=" ")
+    url = models.SlugField(max_length=60, blank=False, default=" ")
+
 
     class Meta:
         verbose_name_plural = "Exams"
@@ -42,12 +42,12 @@ class Exam(models.Model):
         return str(self.name)
 
 class Section(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, default=" ")
     #Type = "Reading", "Writing", "Math1", "Math2"
     type = models.CharField(max_length=100, default='none')
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
-    num_questions = models.IntegerField(max_length=1000, default=0)
-    time = models.IntegerField(max_length=1000, help_text="duration of the section in minutes")
+    num_questions = models.IntegerField(default=0)
+    time = models.IntegerField(default=5, help_text="duration of the section in minutes")
 
     def __str__(self):
         return f"{self.name}-{self.exam}"
