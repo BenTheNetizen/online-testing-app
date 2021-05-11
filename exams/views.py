@@ -6,20 +6,19 @@ from questions.models import Question, Answer
 from results.models import Result
 # Create your views here.
 
+#def exam_view(request, pk):
+#    exam = Exam.objects.get(pk=pk)
+#    return render(request, 'exams/exam.html', {'exam': exam})
+
+def index(request):
+    return render(request, 'index.html', {})
+
 class ExamListView(ListView):
     model=Exam
-    #template_name = 'exams/main.html'
+    template_name = 'exams/exam_list.html'
 
-class SectionListView(ListView):
-    model=Section
-    template_name = 'exams/main.html'
-
-def exam_view(request, pk):
-    exam = Exam.objects.get(pk=pk)
-    return render(request, 'exams/exam.html', {'exam': exam})
-
-def section_view(request, pk):
-    section = Section.objects.get(pk=pk)
+def section_view(request, pk, section_name):
+    section = Section.objects.get(exam_id=pk, type=section_name)
     return render(request, 'exams/section.html', {'section': section})
 
 def section_data_view(request, pk):
@@ -37,8 +36,10 @@ def section_data_view(request, pk):
         'time': section.time,
     })
 
-def save_section_view(request, pk):
-    #print(request.POST)
+def save_section_view(request, pk, section_name):
+    print(request.POST)
+    results = []
+    score = 0
     if request.is_ajax():
 
         data = request.POST
@@ -60,9 +61,9 @@ def save_section_view(request, pk):
         print('USER: ' + str(user))
         section = Section.objects.get(pk=pk)
 
-        score = 0
+
         multiplier = 100 / section.num_questions
-        results = []
+
         correct_answer = None
 
         for q in questions:
@@ -84,8 +85,14 @@ def save_section_view(request, pk):
             else:
                 results.append({str(q): 'not answered'})
 
-        score_ = score * multiplier
-        Result.objects.create(section=section, user=user, score=score_)
+        score = score * multiplier
+        Result.objects.create(section=section, user=user, score=score)
+
+    return JsonResponse({'score': score, 'results': results, 'section_name': section_name})
 
 
-    return JsonResponse({'score': score_, 'results': results})
+def section_break_view(request, pk, break_num):
+    if break_num == 1:
+        return render(request, 'exams/break1.html', {})
+    elif break_num == 2:
+        return render(request, 'exams/break2.html', {})

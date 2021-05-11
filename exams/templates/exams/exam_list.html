@@ -2,13 +2,16 @@
 
 {% load static %}
 
-{% block scripts %}
-  <script src="{% static 'main.js' %}" defer></script>
-{% endblock scripts %}
-
 {% block title %}
-Home
+Exam List
 {% endblock title %}
+
+{% block nav %}
+  <li class="active"><a href="{% url 'exams:index' %}">Home</a></li>
+  <li><a href="#about">About</a></li>
+  <li><a href="./blog">Blog</a></li>
+  <li><a href="#contact">Contact</a></li>
+{% endblock %}
 
 {% block content %}
 
@@ -32,9 +35,10 @@ Home
   </div>
 </div>
 
-<div class="h1">Quiz List</div>
+<div class="h1">Exam List</div>
 <hr>
 {% for obj in object_list %}
+  <p>{{obj.name}}'s Sections: {{obj.section_set.all}} </p>
   <button
       class="btn btn-link modal-button"
       data-pk="{{obj.pk}}"
@@ -47,5 +51,7 @@ Home
     </button>
     <br>
 {% endfor %}
+
+  <script src="{% static 'exam_list.js' %}" defer></script>
 
 {% endblock content %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="section-break">
+  <h1>Alexander Academy</h1>
+  <h2>Next Section: Writing</h2>
+
+  <p>This is the first break between the reading and writing section of the exam.
+     You will be given 5 minutes before the next sections begin automatically. If
+     you would like to continue before time's up, you may click the button below and continue
+     the examination.
+  </p>
+
+  <p id="demo">test</p>
+
+  <form id="break-form" class="mt-3 mb-3">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary mt-3">Continue</button>
+  </form>
+</div>
+
+<!-- REALLY BAD WAY TO PASS THE VALUE TO JS -->
+<p id="next-section">writing</p>
+<style>
+  #next-section {
+    visibility: hidden;
+  }
+</style>
+
+<script src="{% static 'break.js' %}" ></script>
+
+{% endblock content %}

@@ -29,17 +29,22 @@ class Student(models.Model):
 class Exam(models.Model):
     name = models.CharField(max_length=100)
     url = models.SlugField(max_length=60, blank=False)
-    time = models.IntegerField(help_text="duraction of the exam in minutes")
+    time = models.IntegerField(help_text="duration of the exam in minutes")
 
     class Meta:
         verbose_name_plural = "Exams"
         ordering = ['id']
+
+    def get_sections(self):
+        return self.section_set.all()
 
     def __str__(self):
         return str(self.name)
 
 class Section(models.Model):
     name = models.CharField(max_length=100)
+    #Type = "Reading", "Writing", "Math1", "Math2"
+    type = models.CharField(max_length=100, default='none')
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     num_questions = models.IntegerField(default=0)
     time = models.IntegerField(help_text="duration of the section in minutes")

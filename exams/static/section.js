@@ -14,7 +14,7 @@ $.ajax({
   type: 'GET',
   url: `${url}data`,
   success: function(response) {
-    //console.log(response)
+    console.log(response)
     const data = response.data
 
     //el is the dictionary index that represents a single question, answer pair
@@ -42,6 +42,8 @@ $.ajax({
   }
 })
 
+//used to gather the section name so that we can redirect to the correct following break or section
+var section_name
 const sectionForm = document.getElementById('section-form')
 const csrf = document.getElementsByName('csrfmiddlewaretoken')
 
@@ -60,13 +62,44 @@ const sendData = () => {
       }
     }
   })
+  console.log(data)
 
   $.ajax({
       type: 'POST',
-      url: `${url}save/`,
+      url: `${url}save`,
+      data: data,
+      success: function(response) {
+        console.log(response)
+        //THIS IS A HORRIBLE WAY TO REDIRECT THE URL
+        //section_name = response.section_name
+
+        if (section_name == "reading") {
+          window.location.href="../break1"
+          console.log("what....")
+        }
+        else if (section_name == "writing") {
+          window.location.href="../math1"
+        }
+        else if (section_name == "math1") {
+          window.location.href="../break2"
+        }
+      },
+      error: function(error) {
+        console.log(error)
+      }
+
+  })
+
+
+/*
+  $.ajax({
+      type: 'POST',
+      url: `${url}save`,
       data: data,
       success: function(response) {
         //console.log(response)
+        section_name = response.section_name
+        console.log(section_name)
         const results = response.results
         sectionForm.classList.add('not-visible')
 
@@ -94,6 +127,7 @@ const sendData = () => {
                 resultDiv.classList.add('bg-success')
                 resultDiv.innerHTML += ` answered: ${answer}`
 
+
               } else {
                 resultDiv.classList.add('bg-danger')
                 resultDiv.innerHTML += ` | correct answer: ${correct}`
@@ -107,7 +141,11 @@ const sendData = () => {
       error: function(error) {
         console.log(error)
       }
+
   })
+*/
+
+
 
 }
 
@@ -115,4 +153,5 @@ sectionForm.addEventListener('submit', e=>{
   e.preventDefault()
 
   sendData()
+
 })
