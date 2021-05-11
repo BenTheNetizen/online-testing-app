@@ -6,7 +6,7 @@ class Question(models.Model):
     question_number = models.IntegerField(default=-1)
     text = models.CharField(max_length=200, default=" ")
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
-    student_response = models.CharField(max_length=1, default="t")
+    #student_response = models.CharField(max_length=1, default="t")
 
     def __str__(self):
         return str(self.text)
