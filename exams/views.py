@@ -2,8 +2,8 @@ from django.shortcuts import render
 from .models import Section, Exam
 from django.views.generic import ListView
 from django.http import JsonResponse
-from questions.models import Question, Answer
-from results.models import Result
+from questions.models import Question, Answer, Result
+#from results.models import Result
 # Create your views here.
 
 #def exam_view(request, pk):

@@ -1,5 +1,5 @@
 from django.db import models
-from exams.models import Section
+from exams.models import Section, User
 # Create your models here.
 
 class Question(models.Model):
@@ -23,7 +23,13 @@ class Answer(models.Model):
     def __str__(self):
         return f"question: {self.question.text}, answer: {self.text}, correct: {self.correct}"
 
+class Result(models.Model):
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    score = models.FloatField()
 
+    def __str__(self):
+        return str(self.pk)
 
 
     # question = models.TextField(max_length=500)
