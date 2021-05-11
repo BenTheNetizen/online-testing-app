@@ -4,9 +4,9 @@ from exams.models import Section
 
 class Question(models.Model):
     question_number = models.IntegerField()
-    text = models.CharField()
+    text = models.CharField(max_length=200)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
-    student_response = models.CharField(null=True, blank=True)
+    student_response = models.CharField(max_length=1000, null=True, blank=True)
 
     def __str__(self):
         return str(self.text)
@@ -15,8 +15,8 @@ class Question(models.Model):
         return self.answer_set.all()
 
 class Answer(models.Model):
-    text = models.CharField(default="")
-    letter = models.CharField(default="")
+    text = models.CharField(max_length=1000, default="")
+    letter = models.CharField(max_length=1000, default="")
     correct = models.BooleanField(default=False)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
