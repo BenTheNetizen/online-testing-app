@@ -38,6 +38,7 @@ def section_data_view(request, pk):
 
 def save_section_view(request, pk, section_name):
     #print(request.POST)
+    print("DAWODJAWIODAWJIOJIOAWDJIOADJIOAWDJIOAWDJIOAWDJIOAWDJIOAWD")
     results = []
     score = 0
     if request.is_ajax():
