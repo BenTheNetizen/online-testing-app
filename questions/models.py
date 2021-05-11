@@ -6,7 +6,7 @@ class Question(models.Model):
     question_number = models.IntegerField(default=-1)
     text = models.CharField(max_length=200)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
-    student_response = models.CharField(max_length=1, null=True, blank=True)
+    student_response = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return str(self.text)
@@ -16,7 +16,7 @@ class Question(models.Model):
 
 class Answer(models.Model):
     text = models.CharField(max_length=200, default="")
-    letter = models.CharField(max_length=1, default="")
+    letter = models.CharField(max_length=100, default="")
     correct = models.BooleanField(default=False)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
