@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class Result(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    score = models.FloatField()
+    score = models.FloatField(max_length=1000)
 
     def __str__(self):
         return str(self.pk)

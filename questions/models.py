@@ -3,7 +3,7 @@ from exams.models import Section
 # Create your models here.
 
 class Question(models.Model):
-    question_number = models.IntegerField()
+    question_number = models.IntegerField(max_length=1000)
     text = models.CharField(max_length=200)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
     student_response = models.CharField(max_length=1000, null=True, blank=True)
