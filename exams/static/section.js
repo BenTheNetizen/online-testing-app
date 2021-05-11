@@ -16,7 +16,7 @@ $.ajax({
   success: function(response) {
     console.log(response)
     const data = response.data
-
+    console.log(data)
     //el is the dictionary index that represents a single question, answer pair
     data.forEach(el => {
       for (const [question, answers] of Object.entries(el)) {

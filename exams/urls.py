@@ -16,6 +16,6 @@ urlpatterns = [
     #this url begins the exam
     path('exam-<pk>/<str:section_name>/', section_view, name='section-view'),
     re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/save$', save_section_view, name='save-section-view'),
-    re_path(r'^exam-(?P<pk>[0-9]+)/\w+/data$', section_data_view, name='section-data-view'),
+    re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/data$', section_data_view, name='section-data-view'),
     path('exam-<pk>/break<int:break_num>', section_break_view, name='section-break-view'),
 ]

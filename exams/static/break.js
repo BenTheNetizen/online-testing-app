@@ -8,7 +8,7 @@ const breakForm = document.getElementById('break-form')
 const nextSection = document.getElementById('next-section').innerHTML
 
 //count-down timer
-var distance = 3000
+var distance = 30000
 
 var x = setInterval(function() {
 

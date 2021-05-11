@@ -1,12 +1,11 @@
 from django.db import models
-from exams.models import Section, User
+from exams.models import Section, User, Exam
 # Create your models here.
 
 class Question(models.Model):
     question_number = models.IntegerField(default=-1)
     text = models.CharField(max_length=200, default=" ")
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
-    #student_response = models.CharField(max_length=1, default="t")
 
     def __str__(self):
         return str(self.text)
@@ -31,30 +30,12 @@ class Result(models.Model):
     def __str__(self):
         return str(self.pk)
 
+class Student_Answer(models.Model):
+    answer = models.CharField(max_length=1, default="")
+    question_number = models.IntegerField(default=0)
+    section = models.CharField(max_length=30, default="")
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    # question = models.TextField(max_length=500)
-    # option1 = models.CharField(max_length=100)
-    # option2 = models.CharField(max_length=100)
-    # option3 = models.CharField(max_length=100)
-    # option4 = models.CharField(max_length=100)
-    # choose = (('A', 'option1'), ('B', 'option2'), ('C', 'option3'), ('D', 'option4'))
-    # correct_answer = models.CharField(max_length=1, choices=choose)
-    #
-    # class Meta:
-    #     ordering = ['id']
-    #
-    # def check_if_correct(self, guess):
-    #     if guess = correct_answer:
-    #         return True
-    #     else:
-    #         return False
-    #
-    # def get_answers_list(self):
-    #     return self.choose
-    #
-    #
-    # def __str__(self):
-    #     return str(self.question)
-    #
-    # def get_absolute_url(self):
-    #     return reverse('question-detail', args=[str(self.id)])
+    def __str__(self):
+        return f"User: {self.user}, Exam: {self. exam}, Section: {self.section}, Question: {self.question_number}, Answer: {self.answer}"
