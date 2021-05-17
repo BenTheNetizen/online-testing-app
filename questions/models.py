@@ -4,7 +4,7 @@ from exams.models import Section, User, Exam
 
 class Question(models.Model):
     question_number = models.IntegerField(default=-1)
-    text = models.CharField(max_length=200, default=" ")
+    text = models.CharField(max_length=1000, default=" ")
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -14,7 +14,7 @@ class Question(models.Model):
         return self.answer_set.all()
 
 class Answer(models.Model):
-    text = models.CharField(max_length=200, default="")
+    text = models.CharField(max_length=500, default="")
     letter = models.CharField(max_length=1, default="")
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
