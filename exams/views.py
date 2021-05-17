@@ -6,11 +6,8 @@ from questions.models import Question, Answer, Result, Student_Answer
 
 from django.contrib import messages
 import csv, io
-import pandas as pd
 #from results.models import Result
 # Create your views here.
-from .forms import UploadFileForm
-
 
 def file_upload(request):
     if request.method == 'POST':
@@ -104,7 +101,6 @@ def file_upload(request):
             )
 
     return render(request, 'exams/file_upload.html')
-
 
 def index(request):
     return render(request, 'index.html', {})
