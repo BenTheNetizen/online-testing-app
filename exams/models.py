@@ -1,6 +1,3 @@
-
-
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
@@ -31,8 +28,6 @@ class Student(models.Model):
 #model for the Exam
 class Exam(models.Model):
     name = models.CharField(max_length=100, default=" ")
-    url = models.SlugField(max_length=60, blank=False, default=" ")
-
 
     class Meta:
         verbose_name_plural = "Exams"

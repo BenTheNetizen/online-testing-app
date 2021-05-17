@@ -16,11 +16,10 @@ class Question(models.Model):
 class Answer(models.Model):
     text = models.CharField(max_length=200, default="")
     letter = models.CharField(max_length=1, default="")
-    correct = models.BooleanField(default=False)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"question: {self.question.text}, answer: {self.text}, correct: {self.correct}"
+        return f"question: {self.question.text}, answer: {self.text}"
 
 class Result(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
