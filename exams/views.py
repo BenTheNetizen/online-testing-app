@@ -30,7 +30,7 @@ def file_upload(request):
         section_object = None
         question_object = None
 
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
         for column in csv.reader(io_string, delimiter=',', quotechar="|"):
             print(column)
             #create new exam
