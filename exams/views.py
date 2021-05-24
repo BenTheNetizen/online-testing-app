@@ -102,7 +102,14 @@ def file_upload(request):
 
     return render(request, 'exams/file_upload.html')
 
+def save_user(request):
+
+    if request.is_ajax():
+        print(request.POST)
+
+    return JsonResponse({'potato' : 'potato'})
 def index(request):
+
     return render(request, 'index.html', {})
 
 class ExamListView(ListView):

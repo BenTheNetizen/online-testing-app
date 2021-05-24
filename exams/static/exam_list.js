@@ -4,7 +4,7 @@ Javascript file for the main page
 
 */
 
-console.log('hello world');
+console.log('what in the world');
 
 
 //the dots [... are added to make modalBtns an array
