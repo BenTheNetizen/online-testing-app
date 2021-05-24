@@ -133,8 +133,10 @@ LOGIN_URL = '/login'
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
+    BASE_DIR / 'exams' / 'static',
 ]
 
 CRISPY_TEMPLATE_PACK="bootstrap4"
