@@ -83,6 +83,9 @@ const sendData = () => {
         else if (section_name == "math1") {
           window.location.href="../break2"
         }
+        else if (section_name =="math2") {
+          window.location.href="../results"
+        }
       },
       error: function(error) {
         console.log(error)

@@ -22,14 +22,19 @@ from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
 
-
+from register import views as v
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     #path('tester/', include('tester.urls')),
     #path('', RedirectView.as_view(url='tester/', permanent=True)),
     path('', include('exams.urls', namespace='exams')),
-    path('accounts/', include('django.contrib.auth.urls')),
+
+    path('register/', v.register, name='register'),
+
+    path('', include('django.contrib.auth.urls')),
+
+    #path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

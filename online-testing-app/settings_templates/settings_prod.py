@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #add new Application
+    #'tester.apps.TesterConfig',
+    'crispy_forms',
+    'register',
     'exams',
     'questions',
     'results',
@@ -121,6 +124,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Redirect to home URL after login (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = '/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -134,6 +139,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
     BASE_DIR / 'exams' / 'static',
 ]
+
+CRISPY_TEMPLATE_PACK="bootstrap4"
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/

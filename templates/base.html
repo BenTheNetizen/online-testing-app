@@ -57,9 +57,12 @@
     </div>
   </header><!-- End Header -->
 
+  <div class="login">
+      <p>Login <a href="/login">Here</a></p>
+      {% block content %}
+      {% endblock %}
 
-  {% block content %}{% endblock %}
-
+  </div>
   <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="footer-top">
@@ -93,8 +96,6 @@
   <script src="{% static 'assets/js/particles.js' %}"></script>
   <script src="{% static 'assets/js/app.js' %}"></script>
 
-  <!-- THIS REALLY SHOULD NOT BE HERE-->
-  <script src="{% static 'assets/js/sign_up.js' %}" defer></script>
 
 </body>
 </html>

@@ -15,13 +15,6 @@ class Student(models.Model):
     #user is the username of the student account
     user = models.CharField(primary_key=True, max_length=20, unique=True)
 
-    #name is the name of the student
-    name = models.CharField(max_length=30)
-
-    password = models.CharField(max_length=24)
-
-    slug = models.SlugField(max_length=200)
-
     def __str__(self):
         return str(self.user)
 

@@ -3,12 +3,13 @@ from .models import Section, Exam
 from django.views.generic import ListView
 from django.http import JsonResponse
 from questions.models import Question, Answer, Result, Student_Answer
-
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import csv, io
 #from results.models import Result
 # Create your views here.
 
+@login_required
 def file_upload(request):
     if request.method == 'POST':
         #import pdb; pdb.set_trace()
@@ -102,14 +103,11 @@ def file_upload(request):
 
     return render(request, 'exams/file_upload.html')
 
-def save_user(request):
-
-    if request.is_ajax():
-        print(request.POST)
-
-    return JsonResponse({'potato' : 'potato'})
 def index(request):
+    print(request.user)
+    return render(request, 'index.html', {})
 
+def test(request, pk):
     return render(request, 'index.html', {})
 
 class ExamListView(ListView):
