@@ -6,7 +6,7 @@ from questions.models import Question, Answer, Result, Student_Answer
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import csv, io
-from openpyxl import load_workbook
+from openpyxl.reader.excel import load_workbook
 #from results.models import Result
 # Create your views here.
 
