@@ -41,38 +41,34 @@
 <body>
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top">
-    <div class="container d-flex align-items-center">
+    <div class="container d-flex justify-content-center">
 
 
-      <a href="{% url 'exams:index' %}" class="logo mr-auto">
-        <img src="{% static 'assets/img/alexander-academy-logo.png' %}" alt="" class="img-fluid">AlexanderAcademy
+      <a href="{% url 'exams:index' %}" class="logo">
+        <img src="{% static 'assets/img/logo.png' %}" alt="" class="img-fluid">
       </a>
 
-
+      <!-- .nav-menu
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           {% block nav %}{% endblock %}
         </ul>
-      </nav><!-- .nav-menu -->
+      </nav> -->
     </div>
   </header><!-- End Header -->
 
-  <div class="login">
-      <p>Login <a href="/login">Here</a></p>
-      {% block content %}
-      {% endblock %}
-
-  </div>
-  <!-- ======= Footer ======= -->
+  {% block content %}
+  {% endblock %}
+  <!-- ======= Footer =======
   <footer id="footer">
     <div class="footer-top">
         <div class="copyright">
           &copy; 2021 - <strong><span>AlexanderAcademy</span></strong>. All Rights Reserved.
         </div>
     </div>
-  </footer><!-- End Footer -->
-
-  <a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>
+  </footer>
+-->
+  <!--<a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>-->
   <div id="preloader"></div>
 
 
@@ -93,9 +89,6 @@
   <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
   <!-- Template Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
-  <script src="{% static 'assets/js/particles.js' %}"></script>
-  <script src="{% static 'assets/js/app.js' %}"></script>
-
 
 </body>
 </html>

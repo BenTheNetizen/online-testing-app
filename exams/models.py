@@ -5,12 +5,6 @@ from django.template.defaultfilters import slugify
 # Create your models here.
 from django.urls import reverse
 
-DIFFICULTY_CHOICES = (
-    ('easy', 'easy'),
-    ('medium', 'medium'),
-    ('hard', 'hard'),
-)
-
 class Student(models.Model):
     #user is the username of the student account
     user = models.CharField(primary_key=True, max_length=20, unique=True)

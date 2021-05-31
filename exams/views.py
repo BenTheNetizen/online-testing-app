@@ -6,6 +6,7 @@ from questions.models import Question, Answer, Result, Student_Answer
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import csv, io
+from openpyxl import load_workbook
 #from results.models import Result
 # Create your views here.
 
@@ -13,13 +14,12 @@ import csv, io
 def file_upload(request):
     if request.method == 'POST':
         #import pdb; pdb.set_trace()
-        csv_file = request.FILES['file']
-        if not csv_file.name.endswith('.csv'):
-            messages.error(request, 'This is not a csv file')
+        file = request.FILES['file']
+        if not file.name.endswith('.xls') or not file.name.endswish('.xlsx'):
+            messages.error(request, 'This is not an Excel file')
 
-        data_set = csv_file.read().decode('UTF-8')
-        io_string = io.StringIO(data_set)
-        next(io_string)
+        wb = load_workbook(filename=request.FILES['file'].file)
+        worksheet = wb["Sheet1"]
 
         #processing variables
         exam_name = ''
@@ -32,18 +32,22 @@ def file_upload(request):
         question_object = None
 
         #import pdb; pdb.set_trace()
-        for column in csv.reader(io_string, delimiter=',', quotechar="|"):
-            print(column)
+        for row in worksheet.iter_rows(min_row=2):
+            #checks if the 'section' column is empty - this is when processing should stop
+            if row[1].value is None:
+                break
+
             #create new exam
+            for cell in row:
+                print(cell.value)
             if question_object is None:
-                exam_name = column[0]
+                exam_name = row[0].value
                 exam_object, created = Exam.objects.get_or_create(
                     name = exam_name
                 )
-
             #if we have a new section, then we create a new section
-            if current_section != column[1]:
-                current_section = column[1]
+            if current_section != row[1].value:
+                current_section = row[1].value
                 num_questions = 0
                 time = 0
                 #resets the question_number to 1
@@ -72,31 +76,36 @@ def file_upload(request):
             #current_section_object = Section.objects.get(type = current_section, exam = exam_object)
 
             #create questions and answers
+            question_text = row[2].value
+            if question_text is None:
+                question_text = "no question"
             question_object, created = Question.objects.get_or_create(
                 question_number = question_number,
-                text = column[2],
+                text = question_text,
                 section = section_object,
             )
+            question_number += 1
+
             answer_object_A, created = Answer.objects.get_or_create(
-                text = column[3],
+                text = row[3].value,
                 letter = 'A',
                 question = question_object
             )
 
             answer_object_B, created = Answer.objects.get_or_create(
-                text = column[4],
+                text = row[4].value,
                 letter = 'B',
                 question = question_object
             )
 
             answer_object_C, created = Answer.objects.get_or_create(
-                text = column[5],
+                text = row[5].value,
                 letter = 'C',
                 question = question_object
             )
 
             answer_object_D, created = Answer.objects.get_or_create(
-                text = column[6],
+                text = row[6].value,
                 letter = 'D',
                 question = question_object
             )
@@ -140,6 +149,7 @@ def section_break_view(request, pk, break_num):
         return render(request, 'exams/break2.html', {})
 
 def save_section_view(request, pk, section_name):
+    #import pdb; pdb.set_trace()
     print(request.POST)
     if request.is_ajax():
 
@@ -149,26 +159,19 @@ def save_section_view(request, pk, section_name):
         #gets rid of the csrf token from the dict
         data_.pop('csrfmiddlewaretoken')
 
-        #grabs the questions displayed on the site
-        #THIS IS NECESSARY IF THE QUESTIONS ARE DISPLAYED IN RANDOM ordering
-        #probably could delete and instead use section.get_questions
-        questions = []
-        for k in data_.keys():
-            print('key: ', k)
-            question = Question.objects.get(text=k)
-            questions.append(question)
-
+        #grabs the questions and section displayed on the site
         user = request.user
         print('USER: ' + str(user))
         section = Section.objects.get(type=section_name, exam=pk)
+        questions = section.get_questions()
         exam = Exam.objects.get(pk=pk)
         print('EXAM: ' + str(exam))
-
+        #import pdb; pdb.set_trace()
         for q in questions:
             answer_selected = request.POST.get(q.text)
-
+            print(answer_selected)
             #checks if non-Null answer and adds 1 to score if the answer is correct
-            if answer_selected != "":
+            if answer_selected != 'N':
                 question_answers = Answer.objects.filter(question=q)
                 for a in question_answers:
 
@@ -179,9 +182,12 @@ def save_section_view(request, pk, section_name):
                         print("exam-number: " + str(pk))
                         print("section_name: " + section_name)
                         print("user: " + str(user))
+                        print("CREATED STUDENT ANSWER OBJECT")
                         Student_Answer.objects.create(answer=a.letter, question_number=q.question_number, section=section_name, exam=exam, user=user)
+
             else:
-                print("did not select an answer")
+                print("CREATED NULL STUDENT ANSWER")
+                Student_Answer.objects.create(answer='N', question_number=q.question_number, section=section_name, exam=exam, user=user)
 
     return JsonResponse({'section_name':section_name})
 

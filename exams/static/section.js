@@ -7,8 +7,6 @@ Javascript file for taking the exam sections
 const url = window.location.href
 
 const sectionBox = document.getElementById('section-box')
-const scoreBox = document.getElementById('score-box')
-const resultBox = document.getElementById('result-box')
 
 $.ajax({
   type: 'GET',
@@ -18,11 +16,14 @@ $.ajax({
     const data = response.data
     console.log(data)
     //el is the dictionary index that represents a single question, answer pair
+    var question_number = 1
     data.forEach(el => {
       for (const [question, answers] of Object.entries(el)) {
         sectionBox.innerHTML += `
           <hr>
           <div class="mb-2">
+            <b>Question ${question_number}</b>
+            <br>
             <b>${question}</b>
           </div>
         `
@@ -34,6 +35,9 @@ $.ajax({
             </div>
           `
         })
+
+        question_number += 1
+
       }
     })
   },
@@ -58,7 +62,7 @@ const sendData = () => {
     } else {
       //this checks if the question has been answered
       if (!data[el.name]) {
-        data[el.name] = null
+        data[el.name] = 'N'
       }
     }
   })

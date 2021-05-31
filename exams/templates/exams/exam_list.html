@@ -6,15 +6,7 @@
 Exam List
 {% endblock title %}
 
-{% block nav %}
-  <li class="active"><a href="{% url 'exams:index' %}">Home</a></li>
-  <li><a href="#about">About</a></li>
-  <li><a href="./blog">Blog</a></li>
-  <li><a href="#contact">Contact</a></li>
-{% endblock %}
-
 {% block content %}
-
 
 <!-- Modal -->
 <div class="modal fade" id="sectionStartModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -35,23 +27,37 @@ Exam List
   </div>
 </div>
 
-<div class="h1">Exam List</div>
-<hr>
-{% for obj in object_list %}
-  <p>{{obj.name}}'s Sections: {{obj.section_set.all}} </p>
-  <button
-      class="btn btn-link modal-button"
-      data-pk="{{obj.pk}}"
-      data-exam="{{obj.name}}"
-      data-questions="{{obj.num_questions}}"
-      data-time="{{obj.time}}"
-      data-toggle="modal"
-      data-target="#sectionStartModal">
-      {{obj.name}}
-    </button>
-    <br>
-{% endfor %}
+<div class="exam-list-container">
+  <div class="exam-list">
+    <h1>SAT MOCK EXAMS</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
+    {% for obj in object_list %}
+      <button
+          class="btn btn-link modal-button"
+          data-pk="{{obj.pk}}"
+          data-exam="{{obj.name}}"
+          data-questions="{{obj.num_questions}}"
+          data-time="{{obj.time}}"
+          data-toggle="modal"
+          data-target="#sectionStartModal">
+          {{obj.name}}
+        </button>
+        <br>
+    {% endfor %}
+  </div>
+  <div class="test-details">
+    <div class="test-details-header">
+      <h1>Practice Test 1</h1>
+      <div id="btn-start-exam">
+        <a href="" id="btn-start-exam" class="btn-start-exam scrollto">START EXAM!</a>
+      </div>
 
+
+    </div>
+
+
+  </div>
+</div>
 
 <script src="{% static 'exam_list.js' %}" defer></script>
 <!--<script src="{% static 'exam_list.js' %}" defer></script>

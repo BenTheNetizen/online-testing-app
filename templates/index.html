@@ -4,63 +4,55 @@
 
 {% block title %} Home {% endblock title %}
 
+<!--
 {% block nav %}
   <li class="active"><a href="{% url 'exams:index' %}">Home</a></li>
   <li><a href="#about">About</a></li>
   <li><a href="./blog">Blog</a></li>
   <li><a href="#contact">Contact</a></li>
 {% endblock %}
+-->
 
 {% block content %}
 <!-- ======= Hero Section ======= -->
 <section id="hero" class="d-flex align-items-center">
 
   <div class="container position-relative">
-    <div id="particles-js"></div>
     <div class="row justify-content-center">
       <div id="hero-text-wrapper" class="col-xl-7 col-lg-9 text-center">
-        <h1>Online Examination App Available!</h1>
-        <h2>Sign Up and Take an Exam!</h2>
+        <h1>Alexander Academy Mock Test</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
       </div>
     </div>
     <div class="text-center">
       <a href="{% url 'exams:exam-list-view' %}" class="btn-get-started scrollto">Take Exam!</a>
       <a href="{% url 'register' %}" class="btn-get-started scrollto">Sign Up!</a>
       <a href="{% url 'exams:file-upload' %}" class="btn-get-started scrollto">Upload to Database</a>
+      <a href="{% url 'login' %}" class="btn-get-started scrollto">Login</a>
     </div>
 
-    <h3 id="technologies">Features: </h3>
-
     <div class="row icon-boxes">
-      <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+      <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
         <div class="icon-box">
-          <div class="icon"><i class="ri-fingerprint-line"></i></div>
-          <h4 class="title"><a href="" target="_blank">Timer</a></h4>
+          <div class="icon"><img src="{% static 'assets/img/home1.png' %}" alt="" class="img-fluid"></div>
+          <h4 class="title">Timer</h4>
           <p class="description">Timer reflects real examination conditions</p>
         </div>
       </div>
 
-      <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+      <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
         <div class="icon-box">
-          <div class="icon"><i class="ri-palette-line"></i></div>
-          <h4 class="title"><a href="" target="_blank">Breaks</a></h4>
+          <div class="icon"><img src="{% static 'assets/img/home2.png' %}" alt="" class="img-fluid"></div>
+          <h4 class="title">Breaks</h4>
           <p class="description">Break-times are just like the real exam</p>
         </div>
       </div>
 
-      <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+      <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
         <div class="icon-box">
-          <div class="icon"><i class="ri-command-line"></i></div>
-          <h4 class="title"><a href="" target="_blank">Data Analysis</a></h4>
+          <div class="icon"><img src="{% static 'assets/img/home3.png' %}" alt="" class="img-fluid"></div>
+          <h4 class="title">Data Analysis</h4>
           <p class="description">Analytics are performed on the results to give meaningful feedback</p>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="500">
-        <div class="icon-box">
-          <div class="icon"><i class="ri-stack-line"></i></div>
-          <h4 class="title"><a href="" target="_blank">User Login</a></h4>
-          <p class="description">Students can login to pick exams catered for them</p>
         </div>
       </div>
 
