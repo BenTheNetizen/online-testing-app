@@ -14,11 +14,17 @@ from openpyxl import load_workbook
 def file_upload(request):
     if request.method == 'POST':
         #import pdb; pdb.set_trace()
-        file = request.FILES['file']
-        if not file.name.endswith('.xls') or not file.name.endswish('.xlsx'):
-            messages.error(request, 'This is not an Excel file')
 
-        wb = load_workbook(filename=request.FILES['file'].file)
+        questions_file = request.FILES['questions_file']
+        material_files = request.FILES.getlist('material_files')
+        print(material_files)
+        #TODO: CANNOT ASSUME THAT THE FILES BEING UPLOADED ARE IN ORDER
+        material_files_index = 0
+        #import pdb; pdb.set_trace()
+        if not questions_file.name.endswith('.xls') and not questions_file.name.endswith('.xlsx'):
+            return render(request, 'exams/file_upload.html', {'error': 'You did not upload a valid Excel file.'})
+
+        wb = load_workbook(filename=request.FILES['questions_file'].file)
         worksheet = wb["Sheet1"]
 
         #processing variables
@@ -26,6 +32,8 @@ def file_upload(request):
         current_section = ''
         question_number = 1
 
+        #TODO FIX THE SAME QUESTION TEXT ERROR
+        no_question_index = 1
         #Declare object variables to reduce querying to database
         exam_object = None
         section_object = None
@@ -75,17 +83,30 @@ def file_upload(request):
             #exam_object = Exam.objects.get(name = exam_name)
             #current_section_object = Section.objects.get(type = current_section, exam = exam_object)
 
-            #create questions and answers
+            #create questions
+            #import pdb; pdb.set_trace()
+            material = None
+            if row[7].value == 'yes':
+                if material_files_index < len(material_files):
+                    material = material_files[material_files_index]
+                    material_files_index += 1
+                    print("MATERIAL_FILE_NAME: " + material.name)
+                else:
+                    material = None
+
             question_text = row[2].value
             if question_text is None:
-                question_text = "no question"
+                question_text = "no question" + str(no_question_index)
+                no_question_index += 1
             question_object, created = Question.objects.get_or_create(
                 question_number = question_number,
                 text = question_text,
                 section = section_object,
+                material = material,
             )
             question_number += 1
 
+            #create answers to question
             answer_object_A, created = Answer.objects.get_or_create(
                 text = row[3].value,
                 letter = 'A',
@@ -110,7 +131,7 @@ def file_upload(request):
                 question = question_object
             )
 
-    return render(request, 'exams/file_upload.html')
+    return render(request, 'exams/file_upload.html', {'success': 'Exam successfully uploaded to database.'})
 
 def index(request):
     print(request.user)
@@ -125,10 +146,16 @@ class ExamListView(ListView):
 
 def section_view(request, pk, section_name):
     section = Section.objects.get(exam_id=pk, type=section_name)
-    return render(request, 'exams/section.html', {'section': section})
+    exam = Exam.objects.get(pk=pk)
+    context = {
+        'section':section,
+        'exam':exam,
+    }
+    return render(request, 'exams/section.html', context)
 
 def section_data_view(request, pk, section_name):
     section = Section.objects.get(exam=pk, type=section_name)
+    exam = Exam.objects.get(pk=pk)
     questions = []
     #gives key, value pairs to "questions," which are the questions and the answers
     for q in section.get_questions():

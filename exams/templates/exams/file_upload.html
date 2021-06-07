@@ -1,12 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="section-wrapper">
   <h2>Upload</h2>
-  <form method="post" enctype="multipart/form-data">
+  <form id="upload-files" method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <label>Upload a file</label>
-      <input id="id_docfile" type="file" name="file"/>
+      <label>Upload a file for the questions</label>
+      <input id="id_docfile" type="file" name="questions_file"/>
+      <hr>
+      <label>Upload a file for the passage materials</label>
+      <input id="id_docfile" type="file" multiple name="material_files"/>
+      <hr>
+      <label>Upload a file for the scoring sheet</label>
+      <input id="id_docfile" type="file" name="scoring_file"/>
       <button type="submit">Upload</button>
   </form>
-
+  <br>
+  {% if error %}
+  <h3>Error message: {{ error }}</h3>
+  {% elif success %}
+  <h3>Message: {{ success }}</h3>
+  {% endif %}
+</div>
 {% endblock content %}

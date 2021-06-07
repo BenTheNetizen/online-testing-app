@@ -94,12 +94,47 @@ h1, h2, h3, h4, h5, h6 {
 .section-wrapper {
   margin-top: 100px;
   margin-left: 100px;
+  margin-right: 100px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+#section-content {
+  display: flex;
+  justify-content: center;
+}
+
+.section-material {
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+#section-form {
+  overflow-y: scroll;
+  height: 100vh;
 }
 
 
 .section-break {
   margin-top: 10%;
 }
+
+
+/*--------------------------------------------------------------
+# File Uploading
+--------------------------------------------------------------*/
+#upload-files {
+  display: flex;
+  flex-direction: column;
+}
+
+#upload-files button {
+  max-width: 30vw;
+}
+
 
 /*--------------------------------------------------------------
 # Back to top button
@@ -345,7 +380,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   height: 100vh;
   position: relative;
-  background: url("../img/hero-bg.jpg") top center;
+  background: url("../img/hero-background.png") top center;
   background-size: cover;
   position: relative;
   text-align: center;
@@ -353,7 +388,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #hero:before {
   content: "";
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 1.8);
   position: absolute;
   bottom: 0;
   top: 0;

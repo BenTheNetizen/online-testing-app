@@ -140,6 +140,8 @@ STATIC_ROOT = BASE_DIR / 'static'
 #    BASE_DIR / 'exams' / 'static',
 #]
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/assets/img/exam-materials')
+
 CRISPY_TEMPLATE_PACK="bootstrap4"
 
 # Simplified static file serving.
