@@ -141,6 +141,7 @@ STATIC_ROOT = BASE_DIR / 'static'
 #]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/assets/img/exam-materials')
+MEDIA_URL = '/exam-materials/'
 
 CRISPY_TEMPLATE_PACK="bootstrap4"
 

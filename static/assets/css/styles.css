@@ -107,9 +107,10 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
 }
 
-.section-material {
+#section-material {
   overflow-y: scroll;
   height: 100vh;
+  max-width: 50%;
 }
 
 #section-form {

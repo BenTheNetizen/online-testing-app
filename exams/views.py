@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from questions.models import Question, Answer, Result, Student_Answer
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-import csv, io
+import csv, io, re
 from openpyxl import load_workbook
 #from results.models import Result
 # Create your views here.
@@ -16,8 +16,11 @@ def file_upload(request):
         #import pdb; pdb.set_trace()
 
         questions_file = request.FILES['questions_file']
-        material_files = request.FILES.getlist('material_files')
-        print(material_files)
+        reading_passages = request.FILES.getlist('reading_passages')
+        writing_passages = request.FILES.getlist('writing_passages')
+        nocalc_materials = request.FILES.getlist('nocalc_materials')
+        calc_materials = request.FILES.getlist('calc_materials')
+
         #TODO: CANNOT ASSUME THAT THE FILES BEING UPLOADED ARE IN ORDER
         material_files_index = 0
         #import pdb; pdb.set_trace()
@@ -31,6 +34,7 @@ def file_upload(request):
         exam_name = ''
         current_section = ''
         question_number = 1
+        num_passages = 0
 
         #TODO FIX THE SAME QUESTION TEXT ERROR
         no_question_index = 1
@@ -50,15 +54,25 @@ def file_upload(request):
                 print(cell.value)
             if question_object is None:
                 exam_name = row[0].value
+                if Exam.objects.filter(name=exam_name).count() > 0:
+                    Exam.objects.get(name=exam_name).delete()
+
                 exam_object, created = Exam.objects.get_or_create(
                     name = exam_name
                 )
+
+            #update the previous section's num_passage field
+            if section_object is not None:
+                section_object.num_passages = num_passages
+                section_object.save()
+                num_passages = 0
+
             #if we have a new section, then we create a new section
             if current_section != row[1].value:
                 current_section = row[1].value
                 num_questions = 0
                 time = 0
-                #resets the question_number to 1
+                #resets the question_number to 1 for a new section
                 question_number = 1
                 if current_section == 'reading':
                     num_questions = 52
@@ -80,56 +94,85 @@ def file_upload(request):
                     time = time,
                 )
 
-            #exam_object = Exam.objects.get(name = exam_name)
-            #current_section_object = Section.objects.get(type = current_section, exam = exam_object)
 
             #create questions
-            #import pdb; pdb.set_trace()
-            material = None
-            if row[7].value == 'yes':
-                if material_files_index < len(material_files):
-                    material = material_files[material_files_index]
-                    material_files_index += 1
-                    print("MATERIAL_FILE_NAME: " + material.name)
-                else:
-                    material = None
+            question_text = row[3].value.replace("\n", "\\n")
+            question_passage = row[2].value
+            if question_passage is not None:
+                if question_passage > num_passages:
+                    num_passages = question_passage
 
-            question_text = row[2].value
             if question_text is None:
                 question_text = "no question" + str(no_question_index)
                 no_question_index += 1
+
             question_object, created = Question.objects.get_or_create(
                 question_number = question_number,
                 text = question_text,
                 section = section_object,
-                material = material,
+                passage = question_passage
             )
             question_number += 1
 
             #create answers to question
             answer_object_A, created = Answer.objects.get_or_create(
-                text = row[3].value,
+                text = row[4].value,
                 letter = 'A',
                 question = question_object
             )
 
             answer_object_B, created = Answer.objects.get_or_create(
-                text = row[4].value,
+                text = row[5].value,
                 letter = 'B',
                 question = question_object
             )
 
             answer_object_C, created = Answer.objects.get_or_create(
-                text = row[5].value,
+                text = row[6].value,
                 letter = 'C',
                 question = question_object
             )
 
             answer_object_D, created = Answer.objects.get_or_create(
-                text = row[6].value,
+                text = row[7].value,
                 letter = 'D',
                 question = question_object
             )
+
+
+        #assign images to the respective questions in each section
+        #NOTE: for reading passages, the image should be representative of the entire passage
+        for file in reading_passages:
+            filename = file.name
+            passage_num = int(re.findall(r'\d+', filename)[0])
+            section_object = Section.objects.get(type='reading', exam=exam_object)
+            question_object = Question.objects.filter(section=section_object, passage=passage_num).order_by('question_number')[0]
+            question_object.material = file
+            question_object.save()
+
+        for file in writing_passages:
+            filename = file.name
+            passage_num = int(re.findall(r'\d+', filename)[0])
+            section_object = Section.objects.get(type='writing', exam=exam_object)
+            question_object = Question.objects.filter(section=section_object, passage=passage_num).order_by('question_number')[0]
+            question_object.material = file
+            question_object.save()
+
+        for file in nocalc_materials:
+            filename = file.name
+            question_no = int(re.findall(r'\d+', filename)[0])
+            section_object = Section.objects.get(type='math1', exam=exam_object)
+            question_object = Question.objects.get(question_number=question_no, section=section_object)
+            question_object.material = file
+            question_object.save()
+
+        for file in calc_materials:
+            filename = file.name
+            question_no = int(re.findall(r'\d+', filename)[0])
+            section_object = Section.objects.get(type='math2', exam=exam_object)
+            question_object = Question.objects.get(question_number=question_no, section=section_object)
+            question_object.material = file
+            question_object.save()
 
     return render(request, 'exams/file_upload.html', {'success': 'Exam successfully uploaded to database.'})
 
@@ -156,6 +199,17 @@ def section_view(request, pk, section_name):
 def section_data_view(request, pk, section_name):
     section = Section.objects.get(exam=pk, type=section_name)
     exam = Exam.objects.get(pk=pk)
+
+    image_urls = []
+    if section_name == 'reading' or section_name == 'writing':
+        for i in range(1, section.num_passages + 1):
+            image_urls.append(Question.objects.filter(section=section, passage=i).order_by('question_number')[0].material.url)
+
+    if section_name == 'math1' or section_name == 'math2':
+        for question in section.get_questions():
+            if question.material.name:
+                image_urls.append(question.material.url)
+
     questions = []
     #gives key, value pairs to "questions," which are the questions and the answers
     for q in section.get_questions():
@@ -167,6 +221,7 @@ def section_data_view(request, pk, section_name):
     return JsonResponse({
         'data': questions,
         'time': section.time,
+        'img_urls': image_urls,
     })
 
 def section_break_view(request, pk, break_num):

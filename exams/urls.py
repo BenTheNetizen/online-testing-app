@@ -13,6 +13,7 @@ from .views import (
 )
 app_name = 'exams'
 
+
 urlpatterns = [
     path('', index, name='index'),
     path('exam-list/', ExamListView.as_view(), name="exam-list-view"),

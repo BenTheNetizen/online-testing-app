@@ -13,3 +13,4 @@ django-import-export==2.5.0
 django-crispy-forms==1.11.2
 xhtml2pdf==0.2.5
 openpyxl==3.0.7
+pillow==8.2.0

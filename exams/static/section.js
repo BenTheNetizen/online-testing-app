@@ -1,11 +1,8 @@
 /*
-
 Javascript file for taking the exam sections
-
 */
 
 const url = window.location.href
-
 const sectionBox = document.getElementById('section-box')
 
 $.ajax({
@@ -40,6 +37,19 @@ $.ajax({
 
       }
     })
+
+    //testing new code
+    test_div = document.getElementById('section-material')
+    console.log(response.img_urls)
+    for (i in response.img_urls) {
+      console.log(response.img_urls[i])
+      test_div.innerHTML += `
+        <img src="${response.img_urls[i]}">
+        `
+    }
+
+
+    MathJax.typesetPromise();
   },
   error: function(error) {
     console.log(error)

@@ -33,6 +33,7 @@ class Section(models.Model):
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     num_questions = models.IntegerField(default=0)
     time = models.IntegerField(default=5, help_text="duration of the section in minutes")
+    num_passages = models.IntegerField(default=0, blank=True, null=True)
 
     def __str__(self):
         return f"{self.name}-{self.exam}"
