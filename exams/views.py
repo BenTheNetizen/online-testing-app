@@ -96,15 +96,17 @@ def file_upload(request):
 
 
             #create questions
-            question_text = row[3].value.replace("\n", "\\n")
-            question_passage = row[2].value
-            if question_passage is not None:
-                if question_passage > num_passages:
-                    num_passages = question_passage
+            question_text = row[3].value
 
             if question_text is None:
                 question_text = "no question" + str(no_question_index)
                 no_question_index += 1
+
+            question_text = question_text.replace("\n", "\\n")
+            question_passage = row[2].value
+            if question_passage is not None:
+                if question_passage > num_passages:
+                    num_passages = question_passage
 
             question_object, created = Question.objects.get_or_create(
                 question_number = question_number,
@@ -214,8 +216,12 @@ def section_data_view(request, pk, section_name):
     #gives key, value pairs to "questions," which are the questions and the answers
     for q in section.get_questions():
         answers = []
+        #import pdb; pdb.set_trace()
         for a in q.get_answers():
             answers.append(a.text)
+
+        if 'no question' in q.text:
+            q.text = ''
         questions.append({str(q): answers})
 
     return JsonResponse({
