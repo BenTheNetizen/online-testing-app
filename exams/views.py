@@ -50,8 +50,8 @@ def file_upload(request):
                 break
 
             #create new exam
-            for cell in row:
-                print(cell.value)
+            #for cell in row:
+                #print(cell.value)
             if question_object is None:
                 exam_name = row[0].value
                 if Exam.objects.filter(name=exam_name).count() > 0:
