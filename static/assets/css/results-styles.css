@@ -1,0 +1,18 @@
+#test {
+  /* 400 to 1600 */
+  position: absolute;
+  width: 35px;
+  height: 34px;
+  left: 202px;
+  top: 222px;
+
+  font-family: Trade Gothic LT Std;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 120%;
+  /* or 17px */
+
+
+  color: #757575;
+}

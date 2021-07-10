@@ -7,11 +7,21 @@ Login Here
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="login">
-  <form method="post" class="from-group">
-    {% csrf_token %}
-    {{form|crispy}}
-    <p>Don't have an account? Create one <a href="/register">here</a></p>
-    <button type="submit" class="btn btn-success">Login</button>
+
+
+<div class="login-wrapper">
+  <div class="login">
+    <div class="login-left">
+      <form id="register-form" method="POST" class="form-group">
+        <h1>Login</h1>
+           {% csrf_token %}
+           {{form|crispy}}
+           <p>Don't have an account? Create one <a href="/register">here</a></p>
+        <button id="register-button" type="submit" class="btn btn-success">Login</button>
+      </form>
+    </div>
+    <div class="login-right">
+    </div>
+  </div>
 </div>
 {% endblock %}

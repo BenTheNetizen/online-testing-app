@@ -32,6 +32,7 @@ def render_pdf_view(request, pk):
     num_correct = 0
     num_wrong = 0
     num_unanswered = 0
+
     #IF THE USER WENT THROUGH THE EXAM WITHOUT REPEATING ANY ANSWERS, 'answers' IS INDEXED IN ORDER OF QUESTION NUMBER AND SECTION
     answers = Student_Answer.objects.filter(user=user, exam=exam).values()
     for row in worksheet.iter_rows(min_row=2):

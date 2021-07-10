@@ -9,6 +9,8 @@ import csv, io, re
 from openpyxl import load_workbook
 #from results.models import Result
 # Create your views here.
+from django.utils.decorators import method_decorator
+
 
 @login_required
 def file_upload(request):
@@ -185,6 +187,7 @@ def index(request):
 def test(request, pk):
     return render(request, 'index.html', {})
 
+@method_decorator(login_required, name='dispatch')
 class ExamListView(ListView):
     model=Exam
     template_name = 'exams/exam_list.html'

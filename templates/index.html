@@ -15,51 +15,25 @@
 
 {% block content %}
 <!-- ======= Hero Section ======= -->
-<section id="hero" class="d-flex align-items-center">
-
+<div id="hero">
   <div class="container position-relative">
     <div class="row justify-content-center">
       <div id="hero-text-wrapper" class="col-xl-7 col-lg-9 text-center">
-        <h1>Alexander Academy Mock Test</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        <p>When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
-$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</p>
+        <h1>Welcome to Alexander Academy's Mock Exam App!</h1>
+        <p>SAT/ACT Mock Exams with full score reports.</p>.
+        <a href="{% url 'exams:exam-list-view' %}" class="login-btn">Get Started</a>
+
       </div>
     </div>
     <div class="text-center">
       <a href="{% url 'exams:exam-list-view' %}" class="btn-get-started scrollto">Take Exam!</a>
       <a href="{% url 'register' %}" class="btn-get-started scrollto">Sign Up!</a>
       <a href="{% url 'exams:file-upload' %}" class="btn-get-started scrollto">Upload to Database</a>
-      <a href="{% url 'login' %}" class="btn-get-started scrollto">Login</a>
     </div>
 
-    <div class="row icon-boxes">
-      <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
-        <div class="icon-box">
-          <div class="icon"><img src="{% static 'assets/img/home1.png' %}" alt="" class="img-fluid"></div>
-          <h4 class="title">Timer</h4>
-          <p class="description">Timer reflects real examination conditions</p>
-        </div>
-      </div>
 
-      <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
-        <div class="icon-box">
-          <div class="icon"><img src="{% static 'assets/img/home2.png' %}" alt="" class="img-fluid"></div>
-          <h4 class="title">Breaks</h4>
-          <p class="description">Break-times are just like the real exam</p>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
-        <div class="icon-box">
-          <div class="icon"><img src="{% static 'assets/img/home3.png' %}" alt="" class="img-fluid"></div>
-          <h4 class="title">Data Analysis</h4>
-          <p class="description">Analytics are performed on the results to give meaningful feedback</p>
-        </div>
-      </div>
-
-    </div>
   </div>
-</section><!-- End Hero -->
+</div>
+
 
 {% endblock content %}
