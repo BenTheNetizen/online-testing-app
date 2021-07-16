@@ -187,19 +187,46 @@ def index(request):
 def test(request, pk):
     return render(request, 'index.html', {})
 
-@method_decorator(login_required, name='dispatch')
-class ExamListView(ListView):
-    model=Exam
-    template_name = 'exams/exam_list.html'
+@login_required
+def exam_list_view(request):
+    exams = Exam.objects.all()
+    context = {
+        'exams':exams,
+    }
+    return render(request, 'exams/new_exam_list.html', context)
+
+def exam_list_data_view(request):
+    
+    return JsonResponse({
+        'data': 'hello',
+    })
+
+def start_exam_view(request, pk):
+    exam = Exam.objects.get(pk=pk)
+    context = {
+        'exam':exam,
+    }
+    return render(request, 'exams/start_exam.html', context)
+
+def section_directions_view(request, pk, section_name):
+    exam = Exam.objects.get(pk=pk)
+    section = Section.objects.get(exam=exam, type=section_name)
+    context = {
+        'exam':exam,
+        'section':section,
+    }
+    return render(request, 'exams/section_directions.html', context)
 
 def section_view(request, pk, section_name):
     section = Section.objects.get(exam_id=pk, type=section_name)
     exam = Exam.objects.get(pk=pk)
+    questions = section.get_questions()
     context = {
         'section':section,
         'exam':exam,
+        'questions':questions,
     }
-    return render(request, 'exams/section.html', context)
+    return render(request, 'exams/passage_section.html', context)
 
 def section_data_view(request, pk, section_name):
     section = Section.objects.get(exam=pk, type=section_name)
@@ -267,17 +294,9 @@ def save_section_view(request, pk, section_name):
                 for a in question_answers:
 
                     if answer_selected == a.text:
-                        print("a-text: " + a.text)
-                        print("a-letter: " + a.letter)
-                        print("q-number: " + str(q.question_number))
-                        print("exam-number: " + str(pk))
-                        print("section_name: " + section_name)
-                        print("user: " + str(user))
-                        print("CREATED STUDENT ANSWER OBJECT")
                         Student_Answer.objects.create(answer=a.letter, question_number=q.question_number, section=section_name, exam=exam, user=user)
 
             else:
-                print("CREATED NULL STUDENT ANSWER")
                 Student_Answer.objects.create(answer='N', question_number=q.question_number, section=section_name, exam=exam, user=user)
 
     return JsonResponse({'section_name':section_name})

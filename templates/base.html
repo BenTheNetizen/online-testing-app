@@ -32,8 +32,12 @@
     <a href="{% url 'exams:index' %}" class="logo">
       <img src="{% static 'assets/img/logo.png' %}" alt="" class="img-fluid">
     </a>
+    {% if user.is_authenticated %}
+    <p class="username">{{ user }}</p>
+    {% else %}
     <a href="{% url 'login' %}" class="login-btn">Sign In</a>
-      <!-- .nav-menu
+    {% endif %}
+    <!-- .nav-menu
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           {% block nav %}{% endblock %}

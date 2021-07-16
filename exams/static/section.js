@@ -2,6 +2,7 @@
 Javascript file for taking the exam sections
 */
 
+
 const url = window.location.href
 const sectionBox = document.getElementById('section-box')
 
@@ -89,10 +90,9 @@ const sendData = () => {
 
         if (section_name == "reading") {
           window.location.href="../break1"
-          console.log("what....")
         }
         else if (section_name == "writing") {
-          window.location.href="../math1"
+          window.location.href="../math1/section-directions"
         }
         else if (section_name == "math1") {
           window.location.href="../break2"

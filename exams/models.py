@@ -23,6 +23,9 @@ class Exam(models.Model):
     def get_sections(self):
         return self.section_set.all()
 
+    def test():
+        return str(self.name)
+
     def __str__(self):
         return str(self.name)
 

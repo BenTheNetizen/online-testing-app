@@ -7,6 +7,8 @@ Javascript file for the main page
 console.log('what in the world');
 
 
+
+
 //the dots [... are added to make modalBtns an array
 const modalBtns = [...document.getElementsByClassName('modal-button')]
 const modalBody = document.getElementById('modal-body-confirm')
@@ -29,7 +31,8 @@ modalBtns.forEach(modalBtn=> modalBtn.addEventListener('click', ()=> {
       `
     startBtn.addEventListener('click', ()=>{
 
-      window.location.href="../exam-" + pk + "/reading/"
+      //window.location.href="../exam-" + pk + "/reading/"
+      window.location.href="../exam-" + pk + "/start-exam/"
     })
 
 }))

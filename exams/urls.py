@@ -2,8 +2,10 @@ from django.urls import path, re_path
 from django.urls import include
 from .views import (
     index,
-    ExamListView,
-    #exam_view,
+    exam_list_view,
+    exam_list_data_view,
+    start_exam_view,
+    section_directions_view,
     section_view,
     section_data_view,
     save_section_view,
@@ -16,7 +18,10 @@ app_name = 'exams'
 
 urlpatterns = [
     path('', index, name='index'),
-    path('exam-list/', ExamListView.as_view(), name="exam-list-view"),
+    path('exam-list/', exam_list_view, name="exam-list-view"),
+    path('exam-list/data', exam_list_data_view, name="exam-list-data-view"),
+    path('exam-<pk>/start-exam/', start_exam_view, name="start-exam-view"),
+    path('exam-<pk>/<str:section_name>/section-directions/', section_directions_view, name="section-directions-view"),
     #this redirects to the 'results' app
     path('exam-<pk>/results/', include('results.urls', namespace='results')),
     #this url begins the exam

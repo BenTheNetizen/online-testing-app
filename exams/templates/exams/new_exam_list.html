@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+Exam List
+{% endblock title %}
+
+{% block content %}
+
+<!-- Modal -->
+<div class="modal fade" id="sectionStartModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Start Section?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body-confirm"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+        <button type="button" id="start-button" class="btn btn-success">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="exam-list-container">
+  <div class="exam-list">
+    <h1>SAT MOCK EXAMS</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
+    {% for exam in exams %}
+      <button
+          id="{{exam.name}}-btn"
+          data-exam="{{exam.name}}"
+          class="btn btn-link modal-button"
+          onclick="showExamDetails(this.id)">
+          <h1>{{exam.name}} <i class="arrow right"></i></h1>
+          <p>test</p>
+        </button>
+        <br>
+    {% endfor %}
+  </div>
+
+  <div class="exam-details">
+    <div id="guide-msg" class="exam-details-header">
+      <h1>Select an exam on the right to get started!</h1>
+    </div>
+    {% for exam in exams %}
+    <div id="{{exam.name}}-details" style="display: none">
+      <div class="exam-details-header">
+        <h1>{{exam.name | title}}</h1>
+        <p>You must finish all sections of this exam to view a complete score breakdown.</p>
+      </div>
+      <div class="section-details-wrapper">
+        <div class="section-details">
+            <span class="dot">65min</span>
+            <div>
+              <h1>Reading</h1>
+              <p>Raw Score: </p>
+              <p>Estimated Section Score Range: </p>
+              <a href="{% url 'exams:section-directions-view' pk=exam.id section_name='reading' %}" class="btn btn-primary">Begin this section</a>
+            </div>
+        </div>
+        <div class="section-details">
+          <span class="dot">65min</span>
+          <div>
+            <h1>Writing and Language</h1>
+            <p>Raw Score: </p>
+            <p>Estimated Section Score Range: </p>
+            <a href="{% url 'exams:section-directions-view' pk=exam.id section_name='writing' %}" class="btn btn-primary">Begin this section</a>
+          </div>
+        </div>
+        <div class="section-details">
+          <span class="dot">65min</span>
+          <div>
+            <h1>Math (No calculator)</h1>
+            <p>Raw Score: </p>
+            <p>Estimated Section Score Range: </p>
+            <a href="{% url 'exams:section-directions-view' pk=exam.id section_name='math1' %}" class="btn btn-primary">Begin this section</a>
+          </div>
+        </div>
+        <div class="section-details">
+          <span class="dot">65min</span>
+          <div>
+            <h1>Math (Calculator)</h1>
+            <p>Raw Score: </p>
+            <p>Section Score Range: </p>
+            <a href="{% url 'exams:section-directions-view' pk=exam.id section_name='math2' %}" class="btn btn-primary">Begin this section</a>
+          </div>
+        </div>
+        <div class="section-details">
+          <div>
+          <a href="{% url 'exams:start-exam-view' pk=exam.id %}" class="btn btn-primary">Begin this Exam</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script src="{% static 'exam_list.js' %}" defer></script>
+<script>
+  //function to show the correct exam's details when button is clicked on the exam list
+  var prevElement = null
+  const guideMsg = document.getElementById("guide-msg");
+  const url = window.location.href
+
+  function showExamDetails(btn_id) {
+    console.log("test")
+    const btn = document.getElementById(btn_id);
+    const examName = btn.getAttribute("data-exam");
+    const examDetailsDiv = document.getElementById(examName + "-details");
+
+    if (examDetailsDiv.style.display == "none")
+    {
+      if (prevElement === null)
+      {
+        prevElement = examDetailsDiv;
+      }
+      else
+      {
+        prevElement.style.display = "none";
+        prevElement = examDetailsDiv;
+      }
+      examDetailsDiv.style.display = "block";
+      guideMsg.style.display = "none";
+    }
+    else
+    {
+      examDetailsDiv.style.display = "none";
+      if (prevElement == examDetailsDiv) {
+        guideMsg.style.display = "block";
+      }
+    }
+  }
+
+  //ajax request to grab the Results (raw score) info from database
+  $.ajax({
+    type: 'GET',
+    url: `${url}data`,
+    success: function(response) {
+      console.log(response)
+      console.log(resopnse.data)
+    },
+    error: function(error) {
+      console.log(error)
+    }
+  })
+
+</script>
+
+{% endblock content %}
