@@ -195,8 +195,11 @@ def exam_list_view(request):
     }
     return render(request, 'exams/new_exam_list.html', context)
 
-def exam_list_data_view(request):
+def exam_list_data_view(request, pk):
+
+    exam = Exam.objects.get(pk=pk)
     
+
     return JsonResponse({
         'data': 'hello',
     })

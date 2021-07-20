@@ -19,7 +19,7 @@ app_name = 'exams'
 urlpatterns = [
     path('', index, name='index'),
     path('exam-list/', exam_list_view, name="exam-list-view"),
-    path('exam-list/data', exam_list_data_view, name="exam-list-data-view"),
+    path('exam-list/exam-<pk>/data', exam_list_data_view, name="exam-list-data-view"),
     path('exam-<pk>/start-exam/', start_exam_view, name="start-exam-view"),
     path('exam-<pk>/<str:section_name>/section-directions/', section_directions_view, name="section-directions-view"),
     #this redirects to the 'results' app

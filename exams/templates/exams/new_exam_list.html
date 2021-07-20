@@ -36,7 +36,7 @@ Exam List
           id="{{exam.name}}-btn"
           data-exam="{{exam.name}}"
           class="btn btn-link modal-button"
-          onclick="showExamDetails(this.id)">
+          onclick="showExamDetails(this.id, {{exam.pk}})">
           <h1>{{exam.name}} <i class="arrow right"></i></h1>
           <p>test</p>
         </button>
@@ -110,9 +110,9 @@ Exam List
   const guideMsg = document.getElementById("guide-msg");
   const url = window.location.href
 
-  function showExamDetails(btn_id) {
-    console.log("test")
-    const btn = document.getElementById(btn_id);
+  function showExamDetails(btnId, examPk) {
+
+    const btn = document.getElementById(btnId);
     const examName = btn.getAttribute("data-exam");
     const examDetailsDiv = document.getElementById(examName + "-details");
 
@@ -137,21 +137,21 @@ Exam List
         guideMsg.style.display = "block";
       }
     }
-  }
 
   //ajax request to grab the Results (raw score) info from database
-  $.ajax({
-    type: 'GET',
-    url: `${url}data`,
-    success: function(response) {
-      console.log(response)
-      console.log(resopnse.data)
-    },
-    error: function(error) {
-      console.log(error)
-    }
-  })
-
+    $.ajax({
+      type: 'GET',
+      url: `${url}exam-` + examPk + `/data`,
+      success: function(response) {
+        console.log(response)
+        console.log(response.data)
+        console.log('AJAX REQUEST')
+      },
+      error: function(error) {
+        console.log(error)
+      }
+    })
+  }
 </script>
 
 {% endblock content %}
