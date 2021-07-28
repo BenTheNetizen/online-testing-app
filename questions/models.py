@@ -5,9 +5,11 @@ from exams.models import Section, User, Exam
 class Question(models.Model):
     question_number = models.IntegerField(default=-1)
     text = models.CharField(max_length=1000, default=" ")
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE, null=True, blank=True)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
     material = models.ImageField(null=True, blank=True)
     passage = models.IntegerField(null=True, blank=True)
+    correct_answer = models.CharField(max_length=1, default="")
 
     def __str__(self):
         return str(self.text)
@@ -21,15 +23,16 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"question: {self.question.text}, answer: {self.text}"
+        return f"Question: {self.question.text}, Answer: {self.text}"
 
 class Result(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    score = models.FloatField()
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    score = models.IntegerField(default=0)
 
     def __str__(self):
-        return str(self.pk)
+        return f"User: {self.user}, Exam: {self.exam.name}, Section: {self.section.type}, Raw Score: {self.score}"
 
 class Student_Answer(models.Model):
     answer = models.CharField(max_length=1, default="")
@@ -39,4 +42,4 @@ class Student_Answer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"User: {self.user}, Exam: {self. exam}, Section: {self.section}, Question: {self.question_number}, Answer: {self.answer}"
+        return f"User: {self.user}, Exam: {self.exam}, Section: {self.section}, Question: {self.question_number}, Answer: {self.answer}"

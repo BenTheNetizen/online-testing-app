@@ -8,10 +8,6 @@
 
 {% block content %}
 
-
-
-
-
 <div class="section-wrapper">
   <div class="section-header">
     <h1>{{exam.name}} - {{section.type | title}}</h1>
@@ -51,8 +47,14 @@
         </div>
       </div>
       <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary" id="prev-passage" onClick="getPassage('prev')">
+        Previous Passage
+      </button>
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
         Finish this section
+      </button>
+      <button type="button" class="btn btn-primary" id="next-passage" onclick="getPassage('next')">
+        Next Passage
       </button>
     </form>
 
@@ -69,7 +71,7 @@
     </div>
 
 </div>
-<script src="{% static 'section.js' %}" defer></script>
+<script src="{% static 'passage_section.js' %}" defer></script>
 <script>
   const sectionTimer = document.getElementById('section-timer')
   const timerBtn = document.getElementById('pause-btn')

@@ -226,6 +226,10 @@ h1, h2, h3, h4, h5, h6 {
   width: 30vw;
 }
 
+.math-material {
+  width: 40vw;
+}
+
 #section-form {
   overflow-y: scroll;
   height: 100vh;

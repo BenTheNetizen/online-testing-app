@@ -7,11 +7,12 @@ from .views import (
     start_exam_view,
     section_directions_view,
     section_view,
-    section_data_view,
+    section_math_data_view,
+    section_passage_data_view,
     save_section_view,
+    save_question_view,
     section_break_view,
     file_upload,
-    test,
 )
 app_name = 'exams'
 
@@ -27,7 +28,9 @@ urlpatterns = [
     #this url begins the exam
     path('exam-<pk>/<str:section_name>/', section_view, name='section-view'),
     re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/save$', save_section_view, name='save-section-view'),
-    re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/data$', section_data_view, name='section-data-view'),
+    re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/data$', section_math_data_view, name='section-math-data-view'),
+    re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/passage-(?P<passage_num>[0-9]+)/data$', section_passage_data_view, name='section-passage-data-view'),
+    re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/save-question$', save_question_view, name='save-question-view'),
     path('exam-<pk>/break<int:break_num>', section_break_view, name='section-break-view'),
     path('upload-csv/', file_upload, name="file-upload"),
 

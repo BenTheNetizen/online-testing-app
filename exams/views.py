@@ -15,7 +15,6 @@ from django.utils.decorators import method_decorator
 @login_required
 def file_upload(request):
     if request.method == 'POST':
-        #import pdb; pdb.set_trace()
 
         questions_file = request.FILES['questions_file']
         reading_passages = request.FILES.getlist('reading_passages')
@@ -25,7 +24,6 @@ def file_upload(request):
 
         #TODO: CANNOT ASSUME THAT THE FILES BEING UPLOADED ARE IN ORDER
         material_files_index = 0
-        #import pdb; pdb.set_trace()
         if not questions_file.name.endswith('.xls') and not questions_file.name.endswith('.xlsx'):
             return render(request, 'exams/file_upload.html', {'error': 'You did not upload a valid Excel file.'})
 
@@ -45,7 +43,6 @@ def file_upload(request):
         section_object = None
         question_object = None
 
-        #import pdb; pdb.set_trace()
         for row in worksheet.iter_rows(min_row=2):
             #checks if the 'section' column is empty - this is when processing should stop
             if row[1].value is None:
@@ -100,12 +97,17 @@ def file_upload(request):
             #create questions
             question_text = row[3].value
 
-            if question_text is None:
+            if question_text is not None:
+                question_text = question_text.replace('"', '&quot;')
+            else:
                 question_text = "no question" + str(no_question_index)
                 no_question_index += 1
 
+
             question_text = question_text.replace("\n", "\\n")
             question_passage = row[2].value
+            correct_answer = row[8].value
+
             if question_passage is not None:
                 if question_passage > num_passages:
                     num_passages = question_passage
@@ -114,7 +116,10 @@ def file_upload(request):
                 question_number = question_number,
                 text = question_text,
                 section = section_object,
-                passage = question_passage
+                passage = question_passage,
+                correct_answer = correct_answer,
+                exam = exam_object,
+
             )
             question_number += 1
 
@@ -184,24 +189,30 @@ def index(request):
     print(request.user)
     return render(request, 'index.html', {})
 
-def test(request, pk):
-    return render(request, 'index.html', {})
-
 @login_required
 def exam_list_view(request):
     exams = Exam.objects.all()
+
     context = {
         'exams':exams,
     }
-    return render(request, 'exams/new_exam_list.html', context)
+    return render(request, 'exams/exam_list.html', context)
 
 def exam_list_data_view(request, pk):
 
     exam = Exam.objects.get(pk=pk)
-    
+    user = request.user
+    results = Result.objects.filter(exam=exam, user=user)
+
+    raw_scores = []
+
+    if len(results) > 0:
+        for result in results:
+            raw_scores.append({result.section.type: result.score})
 
     return JsonResponse({
         'data': 'hello',
+        'scores': raw_scores,
     })
 
 def start_exam_view(request, pk):
@@ -229,16 +240,65 @@ def section_view(request, pk, section_name):
         'exam':exam,
         'questions':questions,
     }
-    return render(request, 'exams/passage_section.html', context)
 
-def section_data_view(request, pk, section_name):
+    if section_name == 'math1' or section_name =='math2':
+        template = 'exams/math_section.html'
+    else:
+        template = 'exams/passage_section.html'
+
+    return render(request, template, context)
+
+def section_math_data_view(request, pk, section_name):
+    # CURRENTLY HANDLES RETIEVING DATA FOR THE MATH SECTION
     section = Section.objects.get(exam=pk, type=section_name)
     exam = Exam.objects.get(pk=pk)
+    user = request.user
+
+    image_urls = []
+
+    data = []
+    #gives key, value pairs to "questions," which are the questions and the answers
+    for q in section.get_questions():
+        answers = []
+        for a in q.get_answers():
+            answers.append(a.text)
+
+        # ERROR OCCURS WHEN UNCOMMENTED
+        #if 'no question' in q.text:
+        #    q.text = ''
+
+        # Get's the previously answered question if possible
+        student_answer = Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=q.question_number).first()
+        student_answer_text = None
+
+        if student_answer is not None and student_answer.answer != 'N':
+            student_answer_text = Answer.objects.get(question=q, letter=student_answer.answer).text
+
+        #GETS THE IMAGE URLS
+        image_url = None
+
+        if q.material.name:
+            image_url = q.material.url
+        data.append({str(q): [answers, student_answer_text, image_url]})
+
+    return JsonResponse({
+        'data': data,
+        'time': section.time,
+        'img_urls': image_urls,
+        'section': section.type,
+    })
+
+def section_passage_data_view(request, pk, section_name, passage_num):
+    section = Section.objects.get(exam=pk, type=section_name)
+    exam = Exam.objects.get(pk=pk)
+    user = request.user
 
     image_urls = []
     if section_name == 'reading' or section_name == 'writing':
-        for i in range(1, section.num_passages + 1):
-            image_urls.append(Question.objects.filter(section=section, passage=i).order_by('question_number')[0].material.url)
+        image = Question.objects.filter(section=section, passage=passage_num).order_by('question_number')[0].material
+        # MAKES SURE THAT A URL EXISTS
+        if image.name != '':
+            image_urls.append(image.url)
 
     if section_name == 'math1' or section_name == 'math2':
         for question in section.get_questions():
@@ -247,20 +307,28 @@ def section_data_view(request, pk, section_name):
 
     questions = []
     #gives key, value pairs to "questions," which are the questions and the answers
-    for q in section.get_questions():
+    for q in Question.objects.filter(exam=exam, section=section, passage=passage_num):
         answers = []
-        #import pdb; pdb.set_trace()
         for a in q.get_answers():
             answers.append(a.text)
 
-        if 'no question' in q.text:
-            q.text = ''
-        questions.append({str(q): answers})
+        # ERROR OCCURS WHEN UNCOMMENTED
+        #if 'no question' in q.text:
+        #    q.text = ''
+
+        # Get's the previously answered question if possible
+        student_answer = Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=q.question_number).first()
+        student_answer_text = None
+
+        if student_answer is not None and student_answer.answer != 'N':
+            student_answer_text = Answer.objects.get(question=q, letter=student_answer.answer).text
+        questions.append({q.question_number: [str(q), answers, student_answer_text]})
 
     return JsonResponse({
         'data': questions,
         'time': section.time,
         'img_urls': image_urls,
+        'section': section.type,
     })
 
 def section_break_view(request, pk, break_num):
@@ -270,7 +338,6 @@ def section_break_view(request, pk, break_num):
         return render(request, 'exams/break2.html', {})
 
 def save_section_view(request, pk, section_name):
-    #import pdb; pdb.set_trace()
     print(request.POST)
     if request.is_ajax():
 
@@ -286,79 +353,57 @@ def save_section_view(request, pk, section_name):
         section = Section.objects.get(type=section_name, exam=pk)
         questions = section.get_questions()
         exam = Exam.objects.get(pk=pk)
-        print('EXAM: ' + str(exam))
-        #import pdb; pdb.set_trace()
-        for q in questions:
-            answer_selected = request.POST.get(q.text)
-            print(answer_selected)
-            #checks if non-Null answer and adds 1 to score if the answer is correct
-            if answer_selected != 'N':
-                question_answers = Answer.objects.filter(question=q)
-                for a in question_answers:
+        raw_score = 0
 
-                    if answer_selected == a.text:
-                        Student_Answer.objects.create(answer=a.letter, question_number=q.question_number, section=section_name, exam=exam, user=user)
+        student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section_name)
+        questions = Question.objects.filter(exam=exam, section=section)
 
+        for question in questions:
+            if Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number).exists():
+                answer_letter = Student_Answer.objects.get(user=user, exam=exam, section=section_name, question_number=question.question_number).answer
+                if answer_letter == question.correct_answer:
+                    raw_score += 1
             else:
-                Student_Answer.objects.create(answer='N', question_number=q.question_number, section=section_name, exam=exam, user=user)
+                Student_Answer.objects.create(user=user, exam=exam, section=section_name, question_number=question.question_number, answer='N')
+
+        #CREATE SECTION RESULT OBJECT
+        Result.objects.create(section=section, user=user, exam=exam, score=raw_score)
 
     return JsonResponse({'section_name':section_name})
 
+def save_question_view(request, pk, section_name):
+    print("received request")
 
-
-"""
-def save_section_view(request, pk, section_name):
-    #print(request.POST)
-
-    results = []
-    score = 0
     if request.is_ajax():
 
         data = request.POST
         #converts the data from a QueryDict to a dict
         data_ = dict(data.lists())
-        #gets rid of the csrf token from the dict
-        data_.pop('csrfmiddlewaretoken')
-
-        #grabs the questions displayed on the site
-        #THIS IS NECESSARY IF THE QUESTIONS ARE DISPLAYED IN RANDOM ordering
-        #probably could delete and instead use section.get_questions
-        questions = []
-        for k in data_.keys():
-            print('key: ', k)
-            question = Question.objects.get(text=k)
-            questions.append(question)
 
         user = request.user
-        print('USER: ' + str(user))
-        section = Section.objects.get(pk=pk)
 
+        exam = Exam.objects.get(pk=pk)
+        section = Section.objects.get(type=section_name, exam=pk)
 
-        multiplier = 100 / section.num_questions
+        #CONVERT THE QUOTATION ESCAPES BACK TO REGULAR QUOTES
+        question_text = data['question'].replace('"', '&quot;')
+        question = Question.objects.get(text=question_text, section=section)
+        answer_letter = Answer.objects.get(question=question, text=data['answer']).letter
 
-        correct_answer = None
-
-        for q in questions:
-            answer_selected = request.POST.get(q.text)
-
-            #checks if non-Null answer and adds 1 to score if the answer is correct
-            if answer_selected != "":
-                question_answers = Answer.objects.filter(question=q)
-                for a in question_answers:
-                    if answer_selected == a.text:
-                        if a.correct:
-                            score += 1
-                            correct_answer = a.text
-                    else:
-                        if a.correct:
-                            correct_answer = a.text
-                results.append({str(q): {'correct_answer': correct_answer,
-                                         'answered': answer_selected}})
-            else:
-                results.append({str(q): 'not answered'})
-
-        score = score * multiplier
-        Result.objects.create(section=section, user=user, score=score)
-
-    return JsonResponse({'score': score, 'results': results, 'section_name': section_name})
-"""
+        # Checks if there has already been an answer to the question and updates if true, otherwise created the student_answer object
+        if Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number).exists():
+            student_answer = Student_Answer.objects.get(question_number=question.question_number, section=section_name, exam=exam, user=user)
+            student_answer.answer = answer_letter
+            student_answer.save()
+        else:
+            Student_Answer.objects.create(
+                answer = answer_letter,
+                question_number = question.question_number,
+                section = section_name,
+                exam = exam,
+                user = user,
+        )
+        print("CREATED STUDENT ANSWER OBJECT")
+    return JsonResponse({
+        'hello':'hello'
+    })
