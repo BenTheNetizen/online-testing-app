@@ -30,6 +30,8 @@ urlpatterns = [
     #path('', RedirectView.as_view(url='tester/', permanent=True)),
     path('', include('exams.urls', namespace='exams')),
 
+    path('', include('results.urls', namespace='results')),
+
     path('register/', v.register, name='register'),
 
     path('', include('django.contrib.auth.urls')),
