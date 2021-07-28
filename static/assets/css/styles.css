@@ -136,9 +136,18 @@ h1, h2, h3, h4, h5, h6 {
   margin-left: 25px;
 }
 
+#exam-details-header-inner {
+  display: flex;
+  justify-content: space-between;
+}
+
 .section-details {
   height: 15vh;
   margin-top: 30px;
+  display: flex;
+}
+
+.section-begin {
   display: flex;
 }
 

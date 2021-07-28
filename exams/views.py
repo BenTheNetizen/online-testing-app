@@ -1,11 +1,11 @@
 from django.shortcuts import render
-from .models import Section, Exam
+from .models import Section, Exam, SectionInstance
 from django.views.generic import ListView
 from django.http import JsonResponse
 from questions.models import Question, Answer, Result, Student_Answer
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-import csv, io, re
+import csv, io, re, datetime, math
 from openpyxl import load_workbook
 #from results.models import Result
 # Create your views here.
@@ -73,20 +73,26 @@ def file_upload(request):
                 time = 0
                 #resets the question_number to 1 for a new section
                 question_number = 1
+                section_name = None
+
                 if current_section == 'reading':
                     num_questions = 52
                     time = 65
+                    section_name = 'Reading'
                 elif current_section == 'writing':
                     num_questions = 44
                     time = 35
+                    section_name = 'Writing and Language'
                 elif current_section == 'math1':
                     num_questions = 20
                     time = 25
+                    section_name = 'Math (No calculator)'
                 elif current_section =='math2':
                     num_questions = 38
                     time = 55
+                    section_name = 'Math (Calculator)'
                 section_object, created = Section.objects.get_or_create(
-                    name = current_section,
+                    name = section_name,
                     type = current_section,
                     exam = exam_object,
                     num_questions = num_questions,
@@ -201,18 +207,36 @@ def exam_list_view(request):
 def exam_list_data_view(request, pk):
 
     exam = Exam.objects.get(pk=pk)
+    sections = exam.get_sections()
     user = request.user
     results = Result.objects.filter(exam=exam, user=user)
 
-    raw_scores = []
 
-    if len(results) > 0:
+    data = []
+
+    # Appending the raw scores
+    """
+    if results.exists() > 0:
         for result in results:
             raw_scores.append({result.section.type: result.score})
+    """
+
+    for section in sections:
+        minutes = None
+        seconds = None
+        score = None
+        if SectionInstance.objects.filter(user=user, exam=exam, section=section).exists():
+            section_instance = SectionInstance.objects.get(user=user, exam=exam, section=section)
+            minutes = section_instance.minutes_left
+            seconds = section_instance.seconds_left
+        if Result.objects.filter(user=user, exam=exam, section=section).exists():
+            result = Result.objects.get(user=user, exam=exam, section=section)
+            score = result.score
+
+        data.append({section.type: [score, minutes, seconds]})
 
     return JsonResponse({
-        'data': 'hello',
-        'scores': raw_scores,
+        'data': data,
     })
 
 def start_exam_view(request, pk):
@@ -231,14 +255,44 @@ def section_directions_view(request, pk, section_name):
     }
     return render(request, 'exams/section_directions.html', context)
 
+def save_timer_view(request, pk, section_name):
+
+    data = request.POST
+    section = Section.objects.get(exam_id=pk, type=section_name)
+    exam = Exam.objects.get(pk=pk)
+    user = request.user
+
+    section_instance = SectionInstance.objects.get(user=user, exam=exam, section=section)
+    section_instance.minutes_left = data['minutes']
+    section_instance.seconds_left = data['seconds']
+    section_instance.save()
+
+    return JsonResponse({})
+
 def section_view(request, pk, section_name):
     section = Section.objects.get(exam_id=pk, type=section_name)
     exam = Exam.objects.get(pk=pk)
     questions = section.get_questions()
+    user = request.user
+    minutes_remaining = None
+    seconds_remaining = None
+
+    if SectionInstance.objects.filter(user=user, exam=exam, section=section).exists():
+        section_instance = SectionInstance.objects.get(user=user, exam=exam, section=section)
+        minutes_remaining = section_instance.minutes_left
+        seconds_remaining = section_instance.seconds_left
+    else:
+        section_minutes = section.time
+        time_object = SectionInstance.objects.create(user=user, exam=exam, section=section, minutes_left = section_minutes, seconds_left = 0)
+        minutes_remaining = section.time
+        seconds_remaining = 0
+
     context = {
         'section':section,
         'exam':exam,
         'questions':questions,
+        'minutes_remaining': minutes_remaining,
+        'seconds_remaining': seconds_remaining,
     }
 
     if section_name == 'math1' or section_name =='math2':

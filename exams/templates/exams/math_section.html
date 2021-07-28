@@ -63,13 +63,35 @@
 
 </div>
 <script src="{% static 'math_section.js' %}" defer></script>
-<script>
+<<script>
   const sectionTimer = document.getElementById('section-timer')
   const timerBtn = document.getElementById('pause-btn')
   const timerText = document.getElementById('section-timer')
 
   var isTimerOn = true
-  var distance = {{ section.time }} * 60000
+  var distance = {{ minutes_remaining }} * 60000 + {{ seconds_remaining }} * 1000
+  var hours
+  var minutes
+  var seconds
+
+  window.addEventListener('unload', (ev) => {
+    console.log(ev);
+    saveTimer(ev);
+
+  })
+
+  function saveTimer(ev) {
+    minutesRemaining = minutes
+    secondsRemaining = seconds
+
+    var data = new FormData();
+    data.append('csrfmiddlewaretoken', '{{csrf_token}}');
+    data.append('minutes', minutesRemaining);
+    data.append('seconds', secondsRemaining);
+
+    navigator.sendBeacon(`${url}save-timer`, data);
+    console.log(data);
+  }
 
 
   //start the timer
@@ -93,9 +115,9 @@
 
     distance -= 1000
 
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
     if (hours > 0) {
       minutes += 60;

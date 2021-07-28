@@ -43,3 +43,14 @@ class Section(models.Model):
 
     def get_questions(self):
         return self.question_set.all()[:self.num_questions]
+
+#model for a section instance
+class SectionInstance(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
+    minutes_left = models.IntegerField(default=0)
+    seconds_left = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"User: {self.user}, Exam: {self.exam}, Section: {self.section}, Time Remaining: {self.minutes_left} mins, {self.seconds_left} seconds"

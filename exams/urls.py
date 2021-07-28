@@ -9,6 +9,7 @@ from .views import (
     section_view,
     section_math_data_view,
     section_passage_data_view,
+    save_timer_view,
     save_section_view,
     save_question_view,
     section_break_view,
@@ -28,6 +29,7 @@ urlpatterns = [
     #this url begins the exam
     path('exam-<pk>/<str:section_name>/', section_view, name='section-view'),
     re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/save$', save_section_view, name='save-section-view'),
+    re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/save-timer$', save_timer_view, name='save-timer-view'),
     re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/data$', section_math_data_view, name='section-math-data-view'),
     re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/passage-(?P<passage_num>[0-9]+)/data$', section_passage_data_view, name='section-passage-data-view'),
     re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/save-question$', save_question_view, name='save-question-view'),

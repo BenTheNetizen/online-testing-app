@@ -33,7 +33,17 @@
       <img src="{% static 'assets/img/logo.png' %}" alt="" class="img-fluid">
     </a>
     {% if user.is_authenticated %}
+    <!--
     <p class="username">{{ user }}</p>
+  -->
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ user }}
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+      </div>
+    </div>
     {% else %}
     <a href="{% url 'login' %}" class="login-btn">Sign In</a>
     {% endif %}
