@@ -15,78 +15,6 @@ const csrf = document.getElementsByName('csrfmiddlewaretoken')
 // grabs the data for the first passage
 getPassage()
 
-function sendData(isNextSection) {
-  const elements = [...document.getElementsByClassName('ans')]
-  const data = {}
-  data['csrfmiddlewaretoken'] = csrf[0].value
-  elements.forEach(el=>{
-    if (el.checked) {
-      data[el.name] = el.value
-    } else {
-      //this checks if the question has been answered
-      if (!data[el.name]) {
-        data[el.name] = 'N'
-      }
-    }
-  })
-  console.log(data)
-
-  $.ajax({
-      type: 'POST',
-      url: `${url}save`,
-      data: data,
-      success: function(response) {
-        console.log(response)
-        //THIS IS A HORRIBLE WAY TO REDIRECT THE URLs
-        sectionName = response.section_name
-
-        if (isNextSection) {
-          if (sectionName == "reading") {
-            window.location.href="../break1/writing"
-          }
-          else if (sectionName == "writing") {
-            window.location.href="../math1/section-directions"
-          }
-          else if (sectionName == "math1") {
-            window.location.href="../break2/math2"
-          }
-          else if (sectionName =="math2") {
-            window.location.href="../results"
-          }
-        }
-        else {
-          window.location.href= window.location.origin + '/exam-list'
-        }
-      },
-      error: function(error) {
-        console.log(error)
-      }
-  })
-}
-
-function radioChecked(elt) {
-  console.log('radio checked!')
-  console.log(elt.name)
-  let question = elt.name
-  let answer = elt.value
-
-  $.ajax({
-      type: 'POST',
-      url: `${url}save-question`,
-      data: {
-        csrfmiddlewaretoken: csrf[0].value,
-        question: question,
-        answer: answer,
-      },
-      success: function(response) {
-
-      },
-      error: function(error) {
-        console.log(error)
-      }
-  })
-}
-
 function getPassage() {
   $.ajax({
     type: 'GET',
@@ -129,19 +57,23 @@ function getPassage() {
             if (answer == questionData[2] && questionData[2] != null) {
               sectionBox.innerHTML += `
                 <div>
-                  <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this)" checked>
-                  <label for="${questionData[0]}">${answer}</label>
+                  <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" disabled=true onclick="radioChecked(this)" checked>
+                  <label for="${questionData[0]}" id="${questionData[0]}-${answer}-label">${answer}</label>
                 </div>
               `
             } else {
               sectionBox.innerHTML += `
                 <div>
-                  <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this)">
-                  <label for="${questionData[0]}">${answer}</label>
+                  <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" disabled=true onclick="radioChecked(this)">
+                  <label for="${questionData[0]}" id="${questionData[0]}-${answer}-label">${answer}</label>
                 </div>
               `
             }
           })
+          // STYLE THE CORRECT ANSWER BELOW HERE
+          let question_text = questionData[0].replaceAll('&quot;', '"')
+          console.log(`Question ${questionNum}: ${question_text}-${correctAnswers[questionNum-1]}-label`)
+          document.getElementById(`${question_text}-${correctAnswers[questionNum-1]}-label`).style.color = "green";
         }
       })
 

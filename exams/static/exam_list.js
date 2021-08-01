@@ -1,38 +1,100 @@
 /*
-
-Javascript file for the main page
-
+Javascript file for the exam list page
 */
 
-console.log('what in the world');
-
-
-
-
 //the dots [... are added to make modalBtns an array
-const modalBtns = [...document.getElementsByClassName('modal-button')]
-const modalBody = document.getElementById('modal-body-confirm')
-const startBtn = document.getElementById('start-button')
 
-modalBtns.forEach(modalBtn=> modalBtn.addEventListener('click', ()=> {
-    const pk = modalBtn.getAttribute('data-pk')
-    const name = modalBtn.getAttribute('data-exam')
-    const numQuestions = modalBtn.getAttribute('data-questions')
-    const time = modalBtn.getAttribute('data-time')
+//function to show the correct exam's details when button is clicked on the exam list
+var prevElement = null
+const guideMsg = document.getElementById("guide-msg");
+const url = window.location.href
 
-    modalBody.innerHTML = `
-      <div class="h5 mb-3">Are you sure you want to begin "<b>${name}</b>"?</div>
-      <div class="text-muted">
-        <ul>
-          <li>Number of Questions: <b>${numQuestions}</b></li>
-          <li>Time: <b>${time} minutes</b></li>
-        </ul>
-      </div>
-      `
-    startBtn.addEventListener('click', ()=>{
+function showExamDetails(btnId, examPk) {
 
-      //window.location.href="../exam-" + pk + "/reading/"
-      window.location.href="../exam-" + pk + "/start-exam/"
-    })
+  const btn = document.getElementById(btnId);
+  const examName = btn.getAttribute("data-exam");
+  const examDetailsDiv = document.getElementById(examName + "-details");
 
-}))
+  if (examDetailsDiv.style.display == "none")
+  {
+    if (prevElement === null)
+    {
+      prevElement = examDetailsDiv;
+    }
+    else
+    {
+      prevElement.style.display = "none";
+      prevElement = examDetailsDiv;
+    }
+    examDetailsDiv.style.display = "block";
+    guideMsg.style.display = "none";
+  }
+  else
+  {
+    examDetailsDiv.style.display = "none";
+    if (prevElement == examDetailsDiv) {
+      guideMsg.style.display = "block";
+    }
+  }
+
+//ajax request to grab the Results (raw score) info from database
+  $.ajax({
+    type: 'GET',
+    url: `${url}exam-${examPk}/data`,
+    success: function(response) {
+      console.log(response.data)
+      //debugger;
+      data = response.data
+
+      data.forEach(el => {
+        for (const [section, section_data] of Object.entries(el)) {
+          //NOTE THAT 'section_data' IS AN ARRAY
+          //'section' is the string of the section type
+          //section_data[0] is the raw score (if it exists)
+          //section_data[1] are the minutes left (if it exists)
+          //section_data[2] are the seconds left (if it exists)
+          if (section_data[0] != null) {
+            // Implies that the section has been finished
+            document.getElementById(section + '-score').innerHTML = `Raw Score: ${section_data[0]}`
+            
+            document.getElementById(section + '-start').style.display = 'none'
+            document.getElementById(section + '-time-remaining').style.display = 'none'
+          }
+          else if (section_data[1] != null) {
+            // Implies that the section is in progress
+            document.getElementById(section + '-time-remaining').innerHTML = `${section_data[1]} minutes ${section_data[2]} seconds remaining`
+            document.getElementById(section + '-start').innerHTML = 'Resume this section'
+          }
+          else {
+            // Implies that the section has not ever been started
+            document.getElementById(section + '-reset').style.display = 'none'
+            document.getElementById(section + '-review').style.display = 'none'
+            document.getElementById(section + '-time-remaining').style.display = 'none'
+          }
+        }
+      })
+    },
+    error: function(error) {
+      console.log(error)
+    }
+  })
+}
+
+function changeSectionTime(value) {
+  console.log('change time')
+}
+
+function resetExam(examPk) {
+  console.log(examPk)
+
+  $.ajax({
+    type: 'POST',
+    url: `${url}exam-${examPk}/reset`,
+    success: function(response) {
+      console.log('reset ajax received response')
+    },
+    error: function(error) {
+      console.log(error)
+    }
+  })
+}

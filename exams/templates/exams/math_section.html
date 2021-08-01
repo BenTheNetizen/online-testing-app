@@ -8,13 +8,117 @@
 
 {% block content %}
 
+<!-- Pause Section Modal  -->
+<div class="modal fade" id="pauseSectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Your exam is paused and your timer has stopped</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        To continue your exam please click resume.
+      </div>
+      <div class="modal-footer">
+        <a href="{% url 'exams:exam-list-view' %}" class="btn btn-secondary">Leave exam</a>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Resume</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Finish Section Modal -->
+<div class="modal fade" id="finishSectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you would like to finish this section?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Once you finish, scores for this section will be uploaded to your account.
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#finishSectionConfirmationModal">Yes, finish section</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, continue working</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Finish Section Confirmation Modal -->
+<div class="modal fade" id="finishSectionConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        {% if section.type == 'math2' %}
+        <h5 class="modal-title" id="exampleModalLongTitle">Congraduations!</h5>
+        {% else %}
+        <h5 class="modal-title" id="exampleModalLongTitle">How would you like to proceed?</h5>
+        {% endif %}
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% if section.type == 'math2' %}
+        You have finished {{ exam.name | title }}. Please return to the home page to view your results.
+        {% else %}
+        Scores for this section are being uploaded to your account homepage.
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        {% if section.type == 'math2' %}
+        <button onclick="sendData(false)" class="btn btn-primary">Back to account homepage</button>
+        {% else %}
+        <button onclick="sendData(true)" class="btn btn-primary">Next section</button>
+        <button onclick="sendData(false)" class="btn btn-secondary">Back to account homepage</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Times Up Modal (disabled clicking the backdrop to exit) -->
+<div class="modal fade" data-keyboard="false" data-backdrop="static" id="timesUpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Times up!</h5>
+      </div>
+      <div class="modal-body">
+        {% if section.type == 'math2' %}
+        Congraduations! You have finished {{exam.name | title}}. Please return to the home page to view your results.
+        {% else %}
+        There is no more time remaining for this section. Would you like to move on to the next section?
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        {% if section.tpye == 'math2' %}
+        <button onclick="sendData(false)" class="btn btn-primary" data-dismiss="modal">Return to home</button>
+        {% else %}
+        <button onclick="sendData(true)" class="btn btn-primary">Next section</button>
+        <button onclick="sendData(false)" class="btn btn-secondary" data-dismiss="modal">Back to account homepage</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="section-wrapper">
   <div class="section-header">
     <h1>{{exam.name}} - {{section.type | title}}</h1>
     <div id="header-timer">
-      <button id="pause-btn">
-      </button>
-      <p id="section-timer">TIME GOES HERE</p>
+      <!-- 'correct_answers' is only passed to the template when in review mode -->
+      {% if not correct_answers %}
+        <!-- Timer -->
+        <button id="pause-btn" data-toggle="modal" data-target="#pauseSectionModal" onclick="toggleTimer()"></button>
+        <p id="section-timer">TIME GOES HERE</p>
+      {% endif %}
     </div>
   </div>
   <hr>
@@ -23,30 +127,12 @@
       {% csrf_token %}
       <div id="section-box">
       </div>
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you would like to finish this section?</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              Once you finish, scores for this section will be uploaded to your account.
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">No, continue working</button>
-              <button type="submit" class="btn btn-primary">Yes, finish section</button>
-            </div>
-          </div>
-        </div>
-      </div>
       <!-- Button trigger modal -->
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+      {% if not correct_answers %}
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#finishSectionModal">
         Finish this section
       </button>
+      {% endif %}
     </form>
 
     <div class="question-tracker">
@@ -56,14 +142,29 @@
         <img src= "{% static 'assets/img/unanswered.png' %}"
         <p id="question{{question.question_number}}">Question {{ question.question_number }}</p>
       </div>
-
-
       {% endfor %}
     </div>
 
-</div>
-<script src="{% static 'math_section.js' %}" defer></script>
-<<script>
+  </div>
+  {% if correct_answers %}
+  <script src="{% static 'math_section_review.js' %}" defer></script>
+  {% else %}
+  <script src="{% static 'math_section.js' %}" defer></script>
+  {% endif %}
+
+<!-- ONLY RUN THE TOP SCRIPT WHEN IN REVIEW MODE (don't need a timer during review) -->
+{% if correct_answers %}
+<script>
+  const correctAnswers = {{ correct_answers | safe }}
+  const maxPassages = {{ section.num_passages }}
+  console.log(correctAnswers)
+</script>
+{% else %}
+<script>
+  /* Cannot pass Django templates to JavaScript files, so the timer and other features using
+     template variables are all implemented in this script tag
+  */
+  const maxPassages = {{ section.num_passages }}
   const sectionTimer = document.getElementById('section-timer')
   const timerBtn = document.getElementById('pause-btn')
   const timerText = document.getElementById('section-timer')
@@ -74,30 +175,20 @@
   var minutes
   var seconds
 
+  // saves timer when the user exits the page
   window.addEventListener('unload', (ev) => {
-    console.log(ev);
     saveTimer(ev);
-
   })
-
-  function saveTimer(ev) {
-    minutesRemaining = minutes
-    secondsRemaining = seconds
-
-    var data = new FormData();
-    data.append('csrfmiddlewaretoken', '{{csrf_token}}');
-    data.append('minutes', minutesRemaining);
-    data.append('seconds', secondsRemaining);
-
-    navigator.sendBeacon(`${url}save-timer`, data);
-    console.log(data);
-  }
-
 
   //start the timer
   var timer = setInterval(startTimer, 1000);
 
-  timerBtn.addEventListener('click', function() {
+  // toggles the timer when pause modal is closed
+  $('#pauseSectionModal').on('hide.bs.modal', function() {
+    toggleTimer()
+  })
+
+  function toggleTimer() {
     if (isTimerOn) {
       stopTimer();
       timerBtn.style.backgroundImage = "url({% static 'assets/img/start-btn.png' %})"
@@ -108,7 +199,7 @@
       timerBtn.style.backgroundImage = "url({% static 'assets/img/pause-btn.png' %})"
       isTimerOn = true;
     }
-  })
+  }
 
   function startTimer() {
     var now = new Date().getTime();
@@ -130,14 +221,30 @@
     }
     if (distance < 0) {
       clearInterval(timer);
-      sendData();
-      timerText.innerHTML = "EXPIRED";
+
+      //display the times up modal
+      $('#timesUpModal').modal()
+      timerText.innerHTML = "TIMES UP";
     }
   }
 
   function stopTimer() {
     clearInterval(timer);
   }
+
+  function saveTimer(ev) {
+    minutesRemaining = minutes
+    secondsRemaining = seconds
+
+    var data = new FormData();
+    data.append('csrfmiddlewaretoken', '{{csrf_token}}');
+    data.append('minutes', minutesRemaining);
+    data.append('seconds', secondsRemaining);
+
+    navigator.sendBeacon(`${url}save-timer`, data);
+    console.log(data);
+  }
 </script>
+{% endif %}
 
 {% endblock content %}
