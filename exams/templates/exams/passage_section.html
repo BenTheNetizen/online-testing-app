@@ -130,17 +130,21 @@
       <div id="section-box">
       </div>
       <!-- Button trigger modal -->
+      {% if 'math' not in section.type %}
       <button type="button" class="btn btn-primary" id="prev-passage" onClick="getPassage('prev')">
         Previous Passage
       </button>
+      {% endif %}
       {% if not correct_answers %}
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#finishSectionModal">
         Finish this section
       </button>
       {% endif %}
+      {% if 'math' not in section.type %}
       <button type="button" class="btn btn-primary" id="next-passage" onclick="getPassage('next')">
         Next Passage
       </button>
+      {% endif %}
     </form>
 
     <div class="question-tracker">
@@ -163,6 +167,7 @@
 <!-- ONLY RUN THE TOP SCRIPT WHEN IN REVIEW MODE (don't need a timer during review) -->
 {% if correct_answers %}
 <script>
+  const isMathSection = ('{{ section.type|safe }}'.includes('math')) ? true : false
   const correctAnswers = {{ correct_answers | safe }}
   const maxPassages = {{ section.num_passages }}
   console.log(correctAnswers)
@@ -172,6 +177,7 @@
   /* Cannot pass Django templates to JavaScript files, so the timer and other features using
      template variables are all implemented in this script tag
   */
+  const isMathSection = ('{{ section.type|safe }}'.includes('math')) ? true : false
   const maxPassages = {{ section.num_passages }}
   const sectionTimer = document.getElementById('section-timer')
   const timerBtn = document.getElementById('pause-btn')

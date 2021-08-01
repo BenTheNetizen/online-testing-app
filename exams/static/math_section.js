@@ -2,11 +2,10 @@
 Javascript file for taking the exam sections
 */
 
-
 const url = window.location.href
 const sectionBox = document.getElementById('section-box')
 const sectionMaterial = document.getElementById('section-material')
-
+var passageNum = 1
 //used to gather the section name so that we can redirect to the correct following break or section
 var sectionName
 const sectionForm = document.getElementById('section-form')

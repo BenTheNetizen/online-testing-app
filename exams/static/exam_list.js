@@ -9,7 +9,7 @@ var prevElement = null
 const guideMsg = document.getElementById("guide-msg");
 const url = window.location.href
 
-function showExamDetails(btnId, examPk) {
+function getExamDetails(btnId, examPk) {
 
   const btn = document.getElementById(btnId);
   const examName = btn.getAttribute("data-exam");
@@ -56,7 +56,7 @@ function showExamDetails(btnId, examPk) {
           if (section_data[0] != null) {
             // Implies that the section has been finished
             document.getElementById(section + '-score').innerHTML = `Raw Score: ${section_data[0]}`
-            
+
             document.getElementById(section + '-start').style.display = 'none'
             document.getElementById(section + '-time-remaining').style.display = 'none'
           }
@@ -80,8 +80,31 @@ function showExamDetails(btnId, examPk) {
   })
 }
 
-function changeSectionTime(value) {
+function changeSectionTime(value, examPk) {
   console.log('change time')
+  let timeMultiplier
+  if (value === 'regular') {
+    timeMultiplier = 1.0
+  }
+  else if (value === 'extended') {
+    timeMultiplier = 1.5
+  }
+
+  $.ajax({
+    type: 'POST',
+    url: `${url}exam-${examPk}/change-time`,
+    data: {
+      csrfmiddlewaretoken: csrf,
+      multiplier: timeMultiplier,
+    },
+    success: function(response) {
+      console.log(response)
+    },
+    error: function(error) {
+      console.log(error)
+    }
+  })
+
 }
 
 function resetExam(examPk) {

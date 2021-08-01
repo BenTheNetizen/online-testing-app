@@ -49,8 +49,9 @@ def file_upload(request):
                 break
 
             #create new exam
-            #for cell in row:
-                #print(cell.value)
+            for cell in row:
+                print(cell.value)
+
             if question_object is None:
                 exam_name = row[0].value
                 if Exam.objects.filter(name=exam_name).count() > 0:
@@ -67,8 +68,8 @@ def file_upload(request):
                 num_passages = 0
 
             #if we have a new section, then we create a new section
-            if current_section != row[1].value:
-                current_section = row[1].value
+            if current_section != row[1].value.lower():
+                current_section = row[1].value.lower()
                 num_questions = 0
                 time = 0
                 #resets the question_number to 1 for a new section
@@ -111,8 +112,11 @@ def file_upload(request):
 
 
             question_text = question_text.replace("\n", "\\n")
-            question_passage = row[2].value
+
+            # handling of non float values in the column
+            question_passage = int(row[2].value) if isinstance(row[2].value, float) else None
             correct_answer = row[8].value
+            question_categories = row[9].value
 
             if question_passage is not None:
                 if question_passage > num_passages:
@@ -125,7 +129,7 @@ def file_upload(request):
                 passage = question_passage,
                 correct_answer = correct_answer,
                 exam = exam_object,
-
+                categories = question_categories,
             )
             question_number += 1
 
@@ -249,6 +253,14 @@ def exam_list_reset_view(request, pk):
     student_answers = Student_Answer.objects.filter(user=user, exam=exam)
 
     return JsonResponse({})
+
+@login_required
+def exam_list_change_time_view(request, pk):
+    exam = Exam.objects.get(pk=pk)
+    user = request.user
+
+    return JsonResponse({'test':'hello'})
+
 
 @login_required
 # Deletes the 'Result' and 'Student_Answer' objects and redirects to the respective section directions URL
@@ -505,6 +517,8 @@ def save_section_view(request, pk, section_name):
         if SectionInstance.objects.filter(user=user, exam=exam, section=section).exists():
             SectionInstance.objects.get(user=user, exam=exam, section=section).delete()
 
+        #Checks if the
+
     return JsonResponse({'section_name':section_name})
 
 @login_required
@@ -525,7 +539,9 @@ def save_question_view(request, pk, section_name):
         #CONVERT THE QUOTATION ESCAPES BACK TO REGULAR QUOTES
         question_text = data['question'].replace('"', '&quot;')
         question = Question.objects.get(text=question_text, section=section)
+        import pdb; pdb.set_trace()
         answer_letter = Answer.objects.get(question=question, text=data['answer']).letter
+
 
         # Checks if there has already been an answer to the question and updates if true, otherwise created the student_answer object
         if Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number).exists():

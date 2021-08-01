@@ -101,62 +101,125 @@ function getPassage(value) {
     console.log('CHANGE PASSAGE TO NEXT')
     passageNum += 1
   }
-
+  let ajax_url = isMathSection ? `${url}data` : `${url}passage-` + passageNum + `/data`
   $.ajax({
     type: 'GET',
-    url: `${url}passage-` + passageNum + `/data`,
+    url: ajax_url,
     success: function(response) {
       console.log(response)
 
       const data = response.data
       console.log(data)
 
-      //clearing the images and questions
-      sectionBox.innerHTML = ''
-      sectionMaterial.innerHTML = ''
-
-      //handling the passage displaying
-      console.log(response.img_urls)
-      for (i in response.img_urls) {
-        console.log(response.img_urls[i])
-        sectionMaterial.innerHTML += `
-          <img src="${response.img_urls[i]}">
-          `
-      }
-      //handling the questions displaying
-      data.forEach(el => {
-        for (const [questionNum, questionData] of Object.entries(el)) {
-          //NOTE THAT 'questionData' IS AN ARRAY
-          //questionData[0] is question text; questionData[1] are the answers;
-          //questionData[2] is either '' or contains the answer that was previously selected
-          sectionBox.innerHTML += `
-            <hr>
-            <div class="mb-2">
-              <b>Question ${questionNum}</b>
-              <br>
-              <b>${questionData[0]}</b>
-            </div>
-          `
-          questionData[1].forEach(answer=>{
-            if (answer == questionData[2] && questionData[2] != null) {
+      //handling for math section only
+      if (isMathSection) {
+        data.forEach(el => {
+          for (const [questionNum, questionData] of Object.entries(el)) {
+            //NOTE THAT 'questionData' IS AN ARRAY
+            //questionData[0] are the question texts
+            //questionData[1] are the answers
+            //questionData[2] is either '' or contains the answer that was previously selected\
+            //questionData[3] is the image URL
+            if (questionData[3] != null) {
               sectionBox.innerHTML += `
-                <div>
-                  <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this)" checked>
-                  <label for="${questionData[0]}">${answer}</label>
+                <hr>
+                <img class="math-material" src="${questionData[3]}">
+                <div class="mb-2">
+                  <b>Question ${questionNum}</b>
+                  <br>
+                  <b>${questionData[0]}</b>
                 </div>
               `
             } else {
               sectionBox.innerHTML += `
-                <div>
-                  <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this)">
-                  <label for="${questionData[0]}">${answer}</label>
+                <hr>
+                <div id=""
+                <div class="mb-2">
+                  <b>Question ${questionNum}</b>
+                  <br>
+                  <b>${questionData[0]}</b>
                 </div>
               `
             }
 
-          })
+            questionData[1].forEach(answer=>{
+              if (answer == questionData[2] && questionData[2] != null) {
+                sectionBox.innerHTML += `
+                  <div>
+                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this)" checked>
+                    <label for="${questionData[0]}">${answer}</label>
+                  </div>
+                `
+              } else {
+                sectionBox.innerHTML += `
+                  <div>
+                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this)">
+                    <label for="${questionData[0]}">${answer}</label>
+                  </div>
+                `
+              }
+            })
+          }
+        })
+      } else {
+        //handling for non math sections
+        //clearing the images and questions
+        sectionBox.innerHTML = ''
+        sectionMaterial.innerHTML = ''
+
+        //handling the passage displaying
+        console.log(response.img_urls)
+        for (i in response.img_urls) {
+          console.log(response.img_urls[i])
+          sectionMaterial.innerHTML += `
+            <img src="${response.img_urls[i]}">
+            `
         }
-      })
+        //handling the questions displaying
+        data.forEach(el => {
+          for (const [questionNum, questionData] of Object.entries(el)) {
+            //NOTE THAT 'questionData' IS AN ARRAY
+            //questionData[0] is question text; questionData[1] are the answers;
+            //questionData[2] is either '' or contains the answer that was previously selected
+            if (questionData[0].includes('no question')) {
+              sectionBox.innerHTML += `
+                <hr>
+                <div class="mb-2">
+                  <b>Question ${questionNum}</b>
+                  <br>
+                </div>
+              `
+            } else {
+              sectionBox.innerHTML += `
+                <hr>
+                <div class="mb-2">
+                  <b>Question ${questionNum}</b>
+                  <br>
+                  <b>${questionData[0]}</b>
+                </div>
+              `
+            }
+            questionData[1].forEach(answer=>{
+              if (answer == questionData[2] && questionData[2] != null) {
+                sectionBox.innerHTML += `
+                  <div>
+                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this)" checked>
+                    <label for="${questionData[0]}">${answer}</label>
+                  </div>
+                `
+              } else {
+                sectionBox.innerHTML += `
+                  <div>
+                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this)">
+                    <label for="${questionData[0]}">${answer}</label>
+                  </div>
+                `
+              }
+
+            })
+          }
+        })
+      }
 
       // needed statement for MathJax functionality
       MathJax.typesetPromise();

@@ -10,6 +10,7 @@ class Question(models.Model):
     material = models.ImageField(null=True, blank=True)
     passage = models.IntegerField(null=True, blank=True)
     correct_answer = models.CharField(max_length=1, default="")
+    categories = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return str(self.text)
@@ -18,7 +19,7 @@ class Question(models.Model):
         return self.answer_set.all()
 
 class Answer(models.Model):
-    text = models.CharField(max_length=500, default="")
+    text = models.CharField(max_length=500, default="", null=True, blank=True)
     letter = models.CharField(max_length=1, default="")
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 

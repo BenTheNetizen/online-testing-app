@@ -9,7 +9,7 @@ Exam List
 {% block content %}
 
 
-<!-- Modal -->
+<!-- Open Exam Breakdown (Score Report) Modal -->
 <div class="modal fade" id="openExamBreakdownModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -39,7 +39,7 @@ Exam List
           id="{{exam.name}}-btn"
           data-exam="{{exam.name}}"
           class="btn btn-link modal-button"
-          onclick="showExamDetails(this.id, {{exam.pk}})">
+          onclick="getExamDetails(this.id, {{exam.pk}})">
           <h1>{{exam.name}} <i class="arrow right"></i></h1>
           <p>test</p>
         </button>
@@ -57,8 +57,8 @@ Exam List
         <div id="exam-details-header-inner">
           <h1>{{exam.name | title}}</h1>
           <div>
-            <button onclick="changeSectionTime('regular')">Regular</button>
-            <button onclick="changeSectionTime('extended')">Extended</button>
+            <button onclick="changeSectionTime('regular', {{exam.pk}})">Regular</button>
+            <button onclick="changeSectionTime('extended', {{exam.pk}})">Extended</button>
           </div>
         </div>
         <p>You must finish all sections of this exam to view a complete score breakdown.</p>
@@ -96,5 +96,7 @@ Exam List
 </div>
 
 <script src="{% static 'exam_list.js' %}" defer></script>
-
+<script>
+  var csrf = "{{ csrf_token }}"
+</script>
 {% endblock content %}
