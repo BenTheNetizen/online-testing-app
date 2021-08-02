@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'exams',
     'questions',
     'results',
+    'easy_pdf',
 ]
 
 MIDDLEWARE = [

@@ -9,7 +9,10 @@ from django.contrib.staticfiles import finders
 from questions.models import Student_Answer
 from exams.models import Exam, Section
 from openpyxl import load_workbook
+from easy_pdf.views import PDFTemplateView
+import easy_pdf
 import os
+
 
 def results(request, pk):
     user = request.user
@@ -75,3 +78,7 @@ def render_pdf_view(request, pk):
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+def render_pdf_of_results(request):
+    context = {'test': 'testvalue2', 'test2': 'testvalue2'}
+    return easy_pdf.rendering.render_to_pdf_response(request, 'results/pdf-of-results.html', context, using=None, download_filename=None, content_type='application/pdf', response_class=HttpResponse)
