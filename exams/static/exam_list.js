@@ -54,22 +54,22 @@ function getExamDetails(btnId, examPk) {
           //section_data[2] are the seconds left (if it exists)
           if (section_data[0] != null) {
             // Implies that the section has been finished
-            document.getElementById(section + '-score').innerHTML = `Raw Score: ${section_data[0]}`
+            document.getElementById(`exam${examPk}-${section}-score`).innerHTML = `Raw Score: ${section_data[0]}`
 
-            document.getElementById(section + '-start').style.display = 'none'
-            document.getElementById(section + '-time-remaining').style.display = 'none'
+            document.getElementById(`exam${examPk}-${section}-start`).style.display = 'none'
+            document.getElementById(`exam${examPk}-${section}-time-remaining`).style.display = 'none'
           }
           else if (section_data[1] != null) {
             // Implies that the section is in progress
-            document.getElementById(section + '-time-remaining').innerHTML = `${section_data[1]} minutes ${section_data[2]} seconds remaining`
-            document.getElementById(section + '-start').innerHTML = 'Resume this section'
-            document.getElementById(section + '-review').style.display = 'none'
+            document.getElementById(`exam${examPk}-${section}-time-remaining`).innerHTML = `${section_data[1]} minutes ${section_data[2]} seconds remaining`
+            document.getElementById(`exam${examPk}-${section}-start`).innerHTML = 'Resume this section'
+            document.getElementById(`exam${examPk}-${section}-review`).style.display = 'none'
           }
           else {
             // Implies that the section has not ever been started
-            document.getElementById(section + '-reset').style.display = 'none'
-            document.getElementById(section + '-review').style.display = 'none'
-            document.getElementById(section + '-time-remaining').style.display = 'none'
+            document.getElementById(`exam${examPk}-${section}-reset`).style.display = 'none'
+            document.getElementById(`exam${examPk}-${section}-review`).style.display = 'none'
+            document.getElementById(`exam${examPk}-${section}-time-remaining`).style.display = 'none'
           }
         }
       })

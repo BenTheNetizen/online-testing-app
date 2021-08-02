@@ -69,13 +69,13 @@ Exam List
             <span class="dot">{{section.time}}min</span>
             <div>
               <h1>{{section.name}}</h1>
-              <p id="{{section.type}}-score">Raw Score: </p>
+              <p id="exam{{exam.pk}}-{{section.type}}-score">Raw Score: </p>
               <p>Estimated Section Score Range: </p>
               <div class="section-begin">
-                <a id="{{section.type}}-start" href="{% url 'exams:section-directions-view' pk=exam.id section_name=section.type %}" class="btn btn-primary">Begin this section</a>
-                <a id="{{section.type}}-reset" href="{% url 'exams:section-reset-view' pk=exam.id section_name=section.type %}" class="btn btn-primary">Retake this section</a>
-                <p id="{{section.type}}-time-remaining">Timer goes here</p>
-                <a id="{{section.type}}-review" href="{% url 'exams:section-review-view' pk=exam.id section_name=section.type %}" class="btn btn-warning">View mistakes</a>
+                <a id="exam{{exam.pk}}-{{section.type}}-start" href="{% url 'exams:section-directions-view' pk=exam.id section_name=section.type %}" class="btn btn-primary">Begin this section</a>
+                <a id="exam{{exam.pk}}-{{section.type}}-reset" href="{% url 'exams:section-reset-view' pk=exam.id section_name=section.type %}" class="btn btn-primary">Retake this section</a>
+                <p id="exam{{exam.pk}}-{{section.type}}-time-remaining">Timer goes here</p>
+                <a id="exam{{exam.pk}}-{{section.type}}-review" href="{% url 'exams:section-review-view' pk=exam.id section_name=section.type %}" class="btn btn-warning">View mistakes</a>
               </div>
             </div>
         </div>
