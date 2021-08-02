@@ -359,8 +359,11 @@ def section_review_view(request, pk, section_name):
 
     for q in questions:
         for a in q.get_answers():
-            if a.letter == q.correct_answer:
-                text = a.text.replace('&quot;', '"') if a.text is not None else None
+            # Condition for the correct answer being the numeric free response answer
+            if not q.correct_answer.isalpha():
+                correct_answers.append(q.correct_answer)
+                break
+            elif a.letter == q.correct_answer:
                 correct_answers.append(a.text)
 
     context = {
@@ -398,8 +401,12 @@ def section_math_data_view(request, pk, section_name):
         student_answer = Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=q.question_number).first()
         student_answer_text = None
 
-        if student_answer is not None and student_answer.answer != 'N':
+        # Case where student answer is a multiple choice
+        if student_answer is not None and student_answer.answer != 'N' and student_answer.answer.isalpha():
             student_answer_text = Answer.objects.get(question=q, letter=student_answer.answer).text
+        # Case where student answer is free response
+        elif student_answer is not None and student_answer.answer != 'N':
+            student_answer_text = student_answer.answer
 
         #GETS THE IMAGE URLS
         image_url = None
@@ -469,7 +476,6 @@ def section_break_view(request, pk, break_num, next_section_name):
     }
     return render(request, 'exams/break.html', context)
 
-
 @login_required
 # SAVES THE SECTION TO THE DATABASE, CREATES RESULT OBJECT, DELETES SectionInstance object
 def save_section_view(request, pk, section_name):
@@ -490,25 +496,35 @@ def save_section_view(request, pk, section_name):
         exam = Exam.objects.get(pk=pk)
         raw_score = 0
 
-        student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section_name)
+        # below code isn't doing anything?
+        #student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section_name)
         questions = Question.objects.filter(exam=exam, section=section)
 
         for question in questions:
             if Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number).exists():
-                answer_letter = Student_Answer.objects.get(user=user, exam=exam, section=section_name, question_number=question.question_number).answer
-                if answer_letter == question.correct_answer:
-                    raw_score += 1
+                #'answer' is the student's answer
+                selected_answer = Student_Answer.objects.get(user=user, exam=exam, section=section_name, question_number=question.question_number).answer
+                correct_answer = question.correct_answer
+                if correct_answer.isalpha():
+                    if selected_answer == correct_answer:
+                        raw_score += 1
+                else:
+                    correct_answers = correct_answer.split(',')
+                    for correct_answer in correct_answers:
+                        if selected_answer == correct_answer:
+                            raw_score += 1
             else:
                 Student_Answer.objects.create(user=user, exam=exam, section=section_name, question_number=question.question_number, answer='N')
 
-        #CREATE SECTION RESULT OBJECT
-        Result.objects.create(section=section, user=user, exam=exam, score=raw_score)
+        #CREATE SECTION RESULT OBJECT ONLY IF IT DOES NOT EXIST
+        if not Result.objects.filter(user=user, exam=exam, section=section).exists():
+            Result.objects.create(section=section, user=user, exam=exam, score=raw_score)
 
         #Deletes SectionInstance object, since the section has been finished
         if SectionInstance.objects.filter(user=user, exam=exam, section=section).exists():
             SectionInstance.objects.get(user=user, exam=exam, section=section).delete()
 
-        #Checks if the
+
 
     return JsonResponse({'section_name':section_name})
 
@@ -531,17 +547,21 @@ def save_question_view(request, pk, section_name):
         question_text = data['question'].replace('"', '&quot;')
         question = Question.objects.get(text=question_text, section=section)
 
-        answer_letter = Answer.objects.get(question=question, text=data['answer']).letter
-
+        # Check if a the Answer object exists (implies multiple choice)
+        if Answer.objects.filter(question=question, text=data['answer']).exists():
+            selected_answer = Answer.objects.get(question=question, text=data['answer']).letter
+        else:
+            # Implies that this question is open ended math
+            selected_answer = data['answer'].replace(' ', '')
 
         # Checks if there has already been an answer to the question and updates if true, otherwise created the student_answer object
         if Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number).exists():
             student_answer = Student_Answer.objects.get(question_number=question.question_number, section=section_name, exam=exam, user=user)
-            student_answer.answer = answer_letter
+            student_answer.answer = selected_answer
             student_answer.save()
         else:
             Student_Answer.objects.create(
-                answer = answer_letter,
+                answer = selected_answer,
                 question_number = question.question_number,
                 section = section_name,
                 exam = exam,

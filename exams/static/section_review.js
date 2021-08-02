@@ -65,27 +65,41 @@ function getPassage(value) {
               `
             }
 
-            questionData[1].forEach(answer=>{
-              if (answer == questionData[2] && questionData[2] != null) {
-                sectionBox.innerHTML += `
-                  <div>
-                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" disabled=true onclick="radioChecked(this)" checked>
-                    <label for="${questionData[0]}" id="${questionData[0]}-${answer}-label">${answer}</label>
-                  </div>
-                `
-              } else {
-                sectionBox.innerHTML += `
-                  <div>
-                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" disabled=true onclick="radioChecked(this)">
-                    <label for="${questionData[0]}" id="${questionData[0]}-${answer}-label">${answer}</label>
-                  </div>
-                `
+            //checks if one of the answers are null, implies math fill in the answer box
+            if (questionData[1][0] == null) {
+              sectionBox.innerHTML += `
+                <div>
+                  <input type="text" class="ans" id="${questionNum}-textbox" name="${questionData[0]}" disabled=true">
+                  <p>Correct Answers: ${correctAnswers[questionNum-1]}</p>
+                </div>
+              `
+              if (questionData[2] != null) {
+                // CONDITION FOR FREE RESPONSE BEING PREVIOUSLY ANSWERED
+                document.getElementById(`${questionNum}-textbox`).setAttribute('value', questionData[2])
               }
-            })
-            // STYLE THE CORRECT ANSWER BELOW HERE
-            let question_text = questionData[0]
-            console.log(`Question ${questionNum}: ${question_text}-${correctAnswers[questionNum-1]}-label`)
-            document.getElementById(`${question_text}-${correctAnswers[questionNum-1]}-label`).style.color = "green";
+            } else {
+              questionData[1].forEach(answer=>{
+                if (answer == questionData[2] && questionData[2] != null) {
+                  sectionBox.innerHTML += `
+                    <div>
+                      <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" disabled=true onclick="radioChecked(this)" checked>
+                      <label for="${questionData[0]}" id="${questionData[0]}-${answer}-label">${answer}</label>
+                    </div>
+                  `
+                } else {
+                  sectionBox.innerHTML += `
+                    <div>
+                      <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" disabled=true onclick="radioChecked(this)">
+                      <label for="${questionData[0]}" id="${questionData[0]}-${answer}-label">${answer}</label>
+                    </div>
+                  `
+                }
+              })
+              // STYLE THE CORRECT ANSWER BELOW HERE
+              let question_text = questionData[0]
+              document.getElementById(`${question_text}-${correctAnswers[questionNum-1]}-label`).style.color = "green";
+            }
+
           }
         })
       } else {
@@ -107,14 +121,24 @@ function getPassage(value) {
             //NOTE THAT 'questionData' IS AN ARRAY
             //questionData[0] is question text; questionData[1] are the answers;
             //questionData[2] is either '' or contains the answer that was previously selected
-            sectionBox.innerHTML += `
-              <hr>
-              <div class="mb-2">
-                <b>Question ${questionNum}</b>
-                <br>
-                <b>${questionData[0]}</b>
-              </div>
-            `
+            if (questionData[0].includes('no question')) {
+              sectionBox.innerHTML += `
+                <hr>
+                <div class="mb-2">
+                  <b>Question ${questionNum}</b>
+                  <br>
+                </div>
+              `
+            } else {
+              sectionBox.innerHTML += `
+                <hr>
+                <div class="mb-2">
+                  <b>Question ${questionNum}</b>
+                  <br>
+                  <b>${questionData[0]}</b>
+                </div>
+              `
+            }
             questionData[1].forEach(answer=>{
               answer = answer.replaceAll('"', '&quot;')
               if (answer == questionData[2] && questionData[2] != null) {

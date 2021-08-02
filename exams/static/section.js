@@ -21,14 +21,19 @@ function sendData(isNextSection) {
   const data = {}
   data['csrfmiddlewaretoken'] = csrf[0].value
   elements.forEach(el=>{
-    if (el.checked) {
+    if (el.type == 'text') {
       data[el.name] = el.value
     } else {
-      //this checks if the question has been answered
-      if (!data[el.name]) {
-        data[el.name] = 'N'
+      if (el.checked) {
+        data[el.name] = el.value
+      } else {
+        //this checks if the question has been answered
+        if (!data[el.name]) {
+          data[el.name] = 'N'
+        }
       }
     }
+
   })
   console.log(data)
 
@@ -68,7 +73,7 @@ function sendData(isNextSection) {
 // makes ajax request to save the progress of the student each time they select an answer
 function radioChecked(elt, questionNum) {
   console.log('radio checked!')
-  console.log(elt.name)
+  console.log(`Name: ${elt.name}, Value: ${elt.value}`)
   let question = elt.name
   let answer = elt.value
 
@@ -123,6 +128,7 @@ function getPassage(value) {
             //questionData[2] is either '' or contains the answer that was previously selected\
             //questionData[3] is the image URL
             if (questionData[3] != null) {
+              //implies that there is an image to add to the question
               sectionBox.innerHTML += `
                 <hr>
                 <img class="math-material" src="${questionData[3]}">
@@ -143,27 +149,40 @@ function getPassage(value) {
                 </div>
               `
             }
-
-            questionData[1].forEach(answer=>{
-              // CONDITION FOR QUESTION BEING PREVIOUSLY ANSWERED
-              if (answer == questionData[2] && questionData[2] != null) {
-                // SETS THE PREVIOUSLY ANSWERED TO GREEN
+            //checks if one of the answers are null, implies math fill in the answer box
+            if (questionData[1][0] == null) {
+              sectionBox.innerHTML += `
+                <div>
+                  <input type="text" class="ans" id="${questionNum}-textbox" name="${questionData[0]}" onfocusout="radioChecked(this, ${questionNum})">
+                </div>
+              `
+              if (questionData[2] != null) {
+                // CONDITION FOR FREE RESPONSE BEING PREVIOUSLY ANSWERED
+                document.getElementById(`${questionNum}-textbox`).setAttribute('value', questionData[2])
                 document.getElementById(`question${questionNum}`).style.color = 'green'
-                sectionBox.innerHTML += `
-                  <div>
-                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this, ${questionNum})" checked>
-                    <label for="${questionData[0]}">${answer}</label>
-                  </div>
-                `
-              } else {
-                sectionBox.innerHTML += `
-                  <div>
-                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this, ${questionNum})">
-                    <label for="${questionData[0]}">${answer}</label>
-                  </div>
-                `
               }
-            })
+            } else {
+              questionData[1].forEach(answer=>{
+                // CONDITION FOR QUESTION BEING PREVIOUSLY ANSWERED
+                if (answer == questionData[2] && questionData[2] != null) {
+                  // SETS QUESTION TRACKER ON THE RIGHT TO GREEN
+                  document.getElementById(`question${questionNum}`).style.color = 'green'
+                  sectionBox.innerHTML += `
+                    <div>
+                      <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this, ${questionNum})" checked>
+                      <label for="${questionData[0]}">${answer}</label>
+                    </div>
+                  `
+                } else {
+                  sectionBox.innerHTML += `
+                    <div>
+                      <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this, ${questionNum})">
+                      <label for="${questionData[0]}">${answer}</label>
+                    </div>
+                  `
+                }
+              })
+            }
           }
         })
       } else {
