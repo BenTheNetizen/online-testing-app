@@ -49,8 +49,8 @@ def file_upload(request):
                 break
 
             #create new exam
-            for cell in row:
-                print(cell.value)
+            #for cell in row:
+                #print(cell.value)
 
             if question_object is None:
                 exam_name = row[0].value
@@ -114,14 +114,13 @@ def file_upload(request):
             question_text = question_text.replace("\n", "\\n")
 
             # handling of non float values in the column
-            question_passage = int(row[2].value) if isinstance(row[2].value, float) else None
+            question_passage = int(row[2].value) if isinstance(row[2].value, int) else None
             correct_answer = row[8].value
             question_categories = row[9].value
 
             if question_passage is not None:
                 if question_passage > num_passages:
                     num_passages = question_passage
-
             question_object, created = Question.objects.get_or_create(
                 question_number = question_number,
                 text = question_text,
@@ -227,6 +226,7 @@ def exam_list_data_view(request, pk):
     """
 
     for section in sections:
+        #import pdb; pdb.set_trace()
         minutes = None
         seconds = None
         score = None
@@ -342,12 +342,7 @@ def section_view(request, pk, section_name):
         'seconds_remaining': seconds_remaining,
     }
 
-    # NEEDS CLEANING - THIS SETS THE TEMPLATE BASED ON WHETHER OR NOT THE SECTION IS PASSAGE BASED OR MATH BASED
-    if section_name == 'math1' or section_name =='math2':
-        template = 'exams/math_section.html'
-    else:
-        template = 'exams/passage_section.html'
-
+    template = 'exams/section.html'
     return render(request, template, context)
 
 @login_required
@@ -365,7 +360,7 @@ def section_review_view(request, pk, section_name):
     for q in questions:
         for a in q.get_answers():
             if a.letter == q.correct_answer:
-                text = a.text.replace('&quot;', '"')
+                text = a.text.replace('&quot;', '"') if a.text is not None else None
                 correct_answers.append(a.text)
 
     context = {
@@ -375,11 +370,7 @@ def section_review_view(request, pk, section_name):
         'correct_answers':correct_answers,
     }
 
-    # NEEDS CLEANING - THIS SETS THE TEMPLATE BASED ON WHETHER OR NOT THE SECTION IS PASSAGE BASED OR MATH BASED
-    if section_name == 'math1' or section_name =='math2':
-        template = 'exams/math_section.html'
-    else:
-        template = 'exams/passage_section.html'
+    template = 'exams/section.html'
 
     return render(request, template, context)
 
@@ -539,7 +530,7 @@ def save_question_view(request, pk, section_name):
         #CONVERT THE QUOTATION ESCAPES BACK TO REGULAR QUOTES
         question_text = data['question'].replace('"', '&quot;')
         question = Question.objects.get(text=question_text, section=section)
-        import pdb; pdb.set_trace()
+
         answer_letter = Answer.objects.get(question=question, text=data['answer']).letter
 
 

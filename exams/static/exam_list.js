@@ -10,7 +10,6 @@ const guideMsg = document.getElementById("guide-msg");
 const url = window.location.href
 
 function getExamDetails(btnId, examPk) {
-
   const btn = document.getElementById(btnId);
   const examName = btn.getAttribute("data-exam");
   const examDetailsDiv = document.getElementById(examName + "-details");
@@ -64,6 +63,7 @@ function getExamDetails(btnId, examPk) {
             // Implies that the section is in progress
             document.getElementById(section + '-time-remaining').innerHTML = `${section_data[1]} minutes ${section_data[2]} seconds remaining`
             document.getElementById(section + '-start').innerHTML = 'Resume this section'
+            document.getElementById(section + '-review').style.display = 'none'
           }
           else {
             // Implies that the section has not ever been started

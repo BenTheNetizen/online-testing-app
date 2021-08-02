@@ -66,12 +66,14 @@ function sendData(isNextSection) {
 }
 
 // makes ajax request to save the progress of the student each time they select an answer
-function radioChecked(elt) {
+function radioChecked(elt, questionNum) {
   console.log('radio checked!')
   console.log(elt.name)
   let question = elt.name
   let answer = elt.value
 
+  //handles the question tracker column on the right
+  document.getElementById(`question${questionNum}`).style.color = 'green'
   $.ajax({
       type: 'POST',
       url: `${url}save-question`,
@@ -143,17 +145,20 @@ function getPassage(value) {
             }
 
             questionData[1].forEach(answer=>{
+              // CONDITION FOR QUESTION BEING PREVIOUSLY ANSWERED
               if (answer == questionData[2] && questionData[2] != null) {
+                // SETS THE PREVIOUSLY ANSWERED TO GREEN
+                document.getElementById(`question${questionNum}`).style.color = 'green'
                 sectionBox.innerHTML += `
                   <div>
-                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this)" checked>
+                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this, ${questionNum})" checked>
                     <label for="${questionData[0]}">${answer}</label>
                   </div>
                 `
               } else {
                 sectionBox.innerHTML += `
                   <div>
-                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this)">
+                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this, ${questionNum})">
                     <label for="${questionData[0]}">${answer}</label>
                   </div>
                 `
@@ -200,17 +205,20 @@ function getPassage(value) {
               `
             }
             questionData[1].forEach(answer=>{
+              // CONDITION FOR QUESTION BEING PREVIOUSLY ANSWERED
               if (answer == questionData[2] && questionData[2] != null) {
+                // SETS THE PREVIOUSLY ANSWERED TO GREEN
+                document.getElementById(`question${questionNum}`).style.color = 'green'
                 sectionBox.innerHTML += `
                   <div>
-                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this)" checked>
+                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this, ${questionNum})" checked>
                     <label for="${questionData[0]}">${answer}</label>
                   </div>
                 `
               } else {
                 sectionBox.innerHTML += `
                   <div>
-                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this)">
+                    <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this, ${questionNum})">
                     <label for="${questionData[0]}">${answer}</label>
                   </div>
                 `
