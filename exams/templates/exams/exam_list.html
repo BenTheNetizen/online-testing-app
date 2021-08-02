@@ -8,28 +8,6 @@ Exam List
 
 {% block content %}
 
-
-<!-- Open Exam Breakdown (Score Report) Modal -->
-<div class="modal fade" id="openExamBreakdownModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        You must finish the entire exam before viewing your complete breakdown.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Continue</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
 <div class="exam-list-container">
   <div class="exam-list">
     <h1>SAT MOCK EXAMS</h1>
@@ -52,6 +30,26 @@ Exam List
       <h1>Select an exam on the left to get started!</h1>
     </div>
     {% for exam in exams %}
+    <!-- Open Exam Breakdown (Score Report) Modal -->
+    <div class="modal fade" id="openExam{{exam.pk}}BreakdownModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Exam {{exam.pk}} Breakdown</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            You must finish the entire exam before viewing your complete breakdown.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="{{exam.name}}-details" style="display: none">
       <div class="exam-details-header">
         <div id="exam-details-header-inner">
@@ -85,7 +83,9 @@ Exam List
             <a href="{% url 'exams:start-exam-view' pk=exam.id %}" class="btn btn-primary">Begin this Exam</a>
             <a onclick="resetExam({{exam.id}})" class="btn btn-danger">Reset this Exam</a>
             <!-- trigger modal -->
-            <a href="{% url 'results:render-pdf-view' pk=exam.id %}" data-toggle="modal" data-target="#openExamBreakdownModal" class="btn btn-primary">Your complete breakdown</a>
+            <a data-url="{% url 'results:render-pdf-view' pk=exam.id %}" data-modal-id="#openExam{{exam.pk}}BreakdownModal" class="btn btn-primary" onclick="openBreakdown(this)">
+              Your complete breakdown
+            </a>
           </div>
         </div>
 
