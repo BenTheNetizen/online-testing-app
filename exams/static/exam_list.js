@@ -6,8 +6,20 @@ Javascript file for the exam list page
 
 //function to show the correct exam's details when button is clicked on the exam list
 var prevElement = null
+var allSectionsCompleted = true
 const guideMsg = document.getElementById("guide-msg");
 const url = window.location.href
+
+//function checks if all results have been completed
+function openBreakdown(elt) {
+  modalId = elt.dataset.modalId
+  if (allSectionsCompleted) {
+    console.log("ALL SECTION COMPLETED")
+  } else {
+    //display modal stating that the exam is not yet completed
+    $(modalId).modal()
+  }
+}
 
 function getExamDetails(btnId, examPk) {
   const btn = document.getElementById(btnId);
@@ -42,9 +54,10 @@ function getExamDetails(btnId, examPk) {
     url: `${url}exam-${examPk}/data`,
     success: function(response) {
       console.log(response.data)
-      //debugger;
       data = response.data
 
+      //reset the boolean for if all sections are done (if any are not finished, set this to false)
+      allSectionsCompleted = true
       data.forEach(el => {
         for (const [section, section_data] of Object.entries(el)) {
           //NOTE THAT 'section_data' IS AN ARRAY
@@ -55,18 +68,19 @@ function getExamDetails(btnId, examPk) {
           if (section_data[0] != null) {
             // Implies that the section has been finished
             document.getElementById(`exam${examPk}-${section}-score`).innerHTML = `Raw Score: ${section_data[0]}`
-
             document.getElementById(`exam${examPk}-${section}-start`).style.display = 'none'
             document.getElementById(`exam${examPk}-${section}-time-remaining`).style.display = 'none'
           }
           else if (section_data[1] != null) {
             // Implies that the section is in progress
+            allSectionsCompleted = false
             document.getElementById(`exam${examPk}-${section}-time-remaining`).innerHTML = `${section_data[1]} minutes ${section_data[2]} seconds remaining`
             document.getElementById(`exam${examPk}-${section}-start`).innerHTML = 'Resume this section'
             document.getElementById(`exam${examPk}-${section}-review`).style.display = 'none'
           }
           else {
             // Implies that the section has not ever been started
+            allSectionsCompleted = false
             document.getElementById(`exam${examPk}-${section}-reset`).style.display = 'none'
             document.getElementById(`exam${examPk}-${section}-review`).style.display = 'none'
             document.getElementById(`exam${examPk}-${section}-time-remaining`).style.display = 'none'

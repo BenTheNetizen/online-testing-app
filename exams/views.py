@@ -291,10 +291,25 @@ def start_exam_view(request, pk):
 @login_required
 def section_directions_view(request, pk, section_name):
     exam = Exam.objects.get(pk=pk)
-    section = Section.objects.get(exam=exam, type=section_name)
+    current_section = Section.objects.get(exam=exam, type=section_name)
+    user = request.user
+
+    #Check if this section has been completed before
+    if Result.objects.filter(user=user, exam=exam, section=current_section).exists():
+        # If completed before, look for a section that has not been completed
+        sections = exam.get_sections()
+        for section in sections:
+            # Check if this section has been done before
+            if not Result.objects.filter(user=user, exam=exam, section=section).exists():
+                return redirect('exams:section-directions-view', pk=pk, section_name=section.type)
+
+        # Reached end of for loop, thus all sections have been done, redirect to exam list view
+        return redirect('exams:exam-list-view')
+
+    # Section has not been completed before, continue as expected
     context = {
         'exam':exam,
-        'section':section,
+        'section':current_section,
     }
     return render(request, 'exams/section_directions.html', context)
 
@@ -469,10 +484,25 @@ def section_passage_data_view(request, pk, section_name, passage_num):
 @login_required
 def section_break_view(request, pk, break_num, next_section_name):
     exam = Exam.objects.get(pk=pk)
-    section = Section.objects.get(exam=exam, type=next_section_name)
+    next_section = Section.objects.get(exam=exam, type=next_section_name)
+    user = request.user
+
+    #Check if next section has been completed before
+    if Result.objects.filter(user=user, exam=exam, section=next_section).exists():
+        # If completed before, look for a section that has not been completed
+        sections = exam.get_sections()
+        for section in sections:
+            # Check if this section has been done before
+            if not Result.objects.filter(user=user, exam=exam, section=section).exists():
+                return redirect('exams:section-directions-view', pk=pk, section_name=section.type)
+
+        # Reached end of for loop, thus all sections have been done, redirect to exam list view
+        return redirect('exams:exam-list-view')
+
+
     context = {
         'exam':exam,
-        'next_section':section,
+        'next_section':next_section,
     }
     return render(request, 'exams/break.html', context)
 
