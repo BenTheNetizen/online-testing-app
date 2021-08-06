@@ -9,6 +9,13 @@
 
   <!-- Tab Icon -->
   <link href="{% static 'assets/img/alexander-academy-logo.png' %}" rel="icon">
+
+  <!-- Materialize Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Font(s) -->
+  <link href='https://fonts.googleapis.com/css?family=Pathway Gothic One' rel='stylesheet'>
+
   <!-- Vendor CSS Files -->
   <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
@@ -41,7 +48,9 @@
         {{ user }}
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+        <a class="dropdown-item" href="{% url 'logout' %}"><span class="material-icons" style='line-height: 24px; height: 24px;'>
+          logout
+          </span><span style='line-height: 24px; display: inline-block; position: absolute; margin-left: 10px'>Logout</span></a>
       </div>
     </div>
     {% else %}

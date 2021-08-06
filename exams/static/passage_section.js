@@ -63,9 +63,13 @@ const sendData = () => {
 
 function radioChecked(elt) {
   console.log('radio checked!')
-  console.log(elt.name)
-  let question = elt.name
-  let answer = elt.value
+  console.log($(elt).find('input').attr('name'))
+  $(elt).parent().find('label').css('backgroundColor', 'white')
+  $(elt).css('backgroundColor', '#f5f5f5')
+  $(elt).find('input').prop("checked", true);
+
+  let question = $(elt).find('input').attr('name')
+  let answer = $(elt).find('input').attr('value')
 
   $.ajax({
       type: 'POST',
@@ -126,33 +130,50 @@ function getPassage(value) {
           //NOTE THAT 'question_data' IS AN ARRAY
           //question_data[0] is question text; question_data[1] are the answers;
           //question_data[2] is either '' or contains the answer that was previously selected
-          sectionBox.innerHTML += `
-            <hr>
-            <div class="mb-2">
-              <b>Question ${question_number}</b>
-              <br>
-              <b>${question_data[0]}</b>
+          var sectionBoxString = ''
+          sectionBoxString += `
+            <div class="mb-2 testing">
+              <div class="ca-question-num">Question ${question_number}</div>
+              <div class="ca-question-data">${question_data[0]}</div>
             </div>
+            <div class="answers-container">
           `
           question_data[1].forEach(answer=>{
             if (answer == question_data[2] && question_data[2] != null) {
-              sectionBox.innerHTML += `
-                <div>
-                  <input type="radio" class="ans" id="${question_data[0]}-${answer}" name="${question_data[0]}" value="${answer}" onclick="radioChecked(this)" checked>
-                  <label for="${question_data[0]}">${answer}</label>
-                </div>
+              sectionBoxString += `
+                
+                  <!--<input type="radio" class="ans" id="${question_data[0]}-${answer}" name="${question_data[0]}" value="${answer}" onclick="radioChecked(this)" checked> -->
+                  <!--<label for="${question_data[0]}">${answer}</label> -->
+                  <label for="${question_data[0]}" class="answer-container" onclick="radioChecked(this)">
+                    <input type="radio" class="ans" id="${question_data[0]}-${answer}" name="${question_data[0]}" value="${answer}" checked>
+                    <span class="checkmark-con"><span class="material-icons checkmark">done</span>
+                    </span>
+                    ${answer}
+                  </label>
+                
               `
             } else {
-              sectionBox.innerHTML += `
-                <div>
-                  <input type="radio" class="ans" id="${question_data[0]}-${answer}" name="${question_data[0]}" value="${answer}" onclick="radioChecked(this)">
-                  <label for="${question_data[0]}">${answer}</label>
-                </div>
+              sectionBoxString += `
+                
+                  <!-- <input type="radio" class="ans" id="${question_data[0]}-${answer}" name="${question_data[0]}" value="${answer}" onclick="radioChecked(this)"> -->
+                  <!-- <label for="${question_data[0]}">${answer}</label> -->
+                  <label for="${question_data[0]}" class="answer-container" onclick="radioChecked(this)">
+                    <input type="radio" class="ans" id="${question_data[0]}-${answer}" name="${question_data[0]}" value="${answer}">
+                    <span class="checkmark-con"><span class="material-icons checkmark">done</span>
+                    </span>
+                    ${answer}
+                  </label>
+                
               `
             }
-
+            
           })
+          sectionBoxString += `
+            </div>
+            `
+          sectionBox.innerHTML += sectionBoxString
         }
+        
       })
 
       MathJax.typesetPromise();

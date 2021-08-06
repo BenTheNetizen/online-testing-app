@@ -28,7 +28,7 @@ SECRET_KEY = '$#0v&f0__!ii)$m)#ghtwe+ep=_@++j_ag&^r%#yoc1^tq5!0h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [".herokuapp.com", "http://127.0.0.1:8000/"]
+ALLOWED_HOSTS = [".herokuapp.com", "127.0.0.1"]
 
 
 # Application definition
@@ -134,11 +134,12 @@ LOGIN_URL = '/login'
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = BASE_DIR / 'static'
-#STATICFILES_DIRS = [
-#    BASE_DIR / 'static',
-#    BASE_DIR / 'exams' / 'static',
-#]
+#STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+    BASE_DIR / 'exams' / 'static',
+]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/assets/img/exam-materials')
 MEDIA_URL = '/exam-materials/'

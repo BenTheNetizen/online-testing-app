@@ -10,9 +10,19 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Pathway Gothic One';
+  font-size: 22px;
   color: #444444;
+}
+
+.btn {
+  font-size: 22px;
 }
 
 a {
@@ -24,15 +34,18 @@ a:hover {
   text-decoration: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Verdana", sans-serif;
-}
+
 
 .transition-page-wrapper {
-  margin-top: 40vh;
+  margin-top: 150px;
   text-align: center;
-  margin-left: 20vw;
-  margin-right: 20vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.transition-page-wrapper p {
+  width: 800px;
+  margin: auto;
 }
 
 
@@ -40,7 +53,7 @@ h1, h2, h3, h4, h5, h6 {
 # Registration and Login
 --------------------------------------------------------------*/
 .login-wrapper {
-  margin-top: 65px;
+  margin-top: 0px;
 }
 
 .login {
@@ -51,9 +64,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .login-right {
+  position: fixed;
+  top: 0px;
+  left: 50%;
   width: 50%;
   background-image: url("../img/register-bg.png");
-  height: 100vh;
+  background-position: center bottom;
+  height: 100%;
   background-size: cover;
 }
 
@@ -74,7 +91,6 @@ h1, h2, h3, h4, h5, h6 {
   width: 80%;
   margin-left: 5%;
   margin-right: 10%;
-  font-family: tgn-soft-round, sans-serif;
   font-style: normal;
   font-weight: bold;
   color: var(--main-color);
@@ -82,27 +98,114 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .form-group p {
-  font-family: tgn-soft-round, sans-serif;
   font-style: normal;
   font-weight: normal;
   margin-left: 5%;
 }
 
 #register-form {
-  margin-top: 8vh;
+  margin-top: 150px;
   margin-bottom: 10%;
 }
 
 #register-button {
   float: right;
   padding: 8px;
-  width: 8vw;
+  width: 150px;
   border-radius: 100px;
   margin-right: 5%;
   margin-bottom: 10%;
   background-color: var(--main-color);
   border-color: var(--main-color);
 }
+
+#register-form label {
+  display: none;
+}
+
+.text-muted {
+  display: none;
+}
+
+.form-control {
+  height: 42px;
+  border-radius: 21px;
+}
+
+.form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgb(215,215,215);
+  opacity: 1; /* Firefox */
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: red;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: red;
+}
+
+
+/* START OF EXAMS PATHWAY GRAPHIC */
+.exams-pathway {
+  margin:auto;
+  display: block;
+  width: 1200px;
+}
+
+
+.reading-min-container {
+  text-align: center;
+  display: inline-block;
+  font-size: 28px;
+}
+
+.reading-min {
+  display: inline-block;
+  background-color: #66a1a5;
+  border-radius: 50%;
+  height: 70px;
+  width: 70px;
+  position: relative;
+  margin-bottom: 10px;
+  line-height: 24px;
+}
+
+.reading-min span {
+  color: white;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.small-dots {
+  display: inline-block;
+  background-color: rgb(209,219,220);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  vertical-align: top;
+  margin-top: 31px;
+  margin-right: 8px;
+  margin-left: 8px;  
+}
+
+.ques-num-size {
+  font-size: 20px;
+  position: relative;
+  top: -8px;
+}
+
+.min-size {
+  font-size: 20px;
+  display: block;
+}
+/* END OF EXAMS PATHWAY GRAPHIC */
+
 
 
 /*--------------------------------------------------------------
@@ -187,7 +290,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #btn-start-exam a {
-  font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-size: 14px;
   letter-spacing: 0.5px;
@@ -207,6 +309,48 @@ h1, h2, h3, h4, h5, h6 {
 /*--------------------------------------------------------------
 # Exam Section
 --------------------------------------------------------------*/
+ .modal-dialog {
+  width: 550px;
+  min-width: 550px;
+ }
+
+.modal-header {
+  border-bottom-width: 0px;
+}
+
+.modal-header .close {
+  position: absolute;
+  right: 20px;
+}
+
+.modal-title {
+  display: block;
+  width: 100%;
+  padding-bottom: 20px;
+  border-bottom: 1px rgb(130,130,130) solid;
+}
+.modal-body {
+font-size: 16px;
+padding-top: 2px;
+}
+
+.modal-footer {
+  border-top-width: 0px;
+}
+
+.yes-finish, .yes-finish:hover {
+  border-radius: 23px;
+  background-color: white;
+  color: #66a1a5;
+  border-color: #66a1a5;
+  width: 180px;
+}
+
+.no-continue, .no-continue:hover {
+  border-radius: 23px;
+  background-color: #66a1a5;
+  width: 180px;
+}
 
 .section-wrapper {
   margin-top: 65px;
@@ -233,6 +377,11 @@ h1, h2, h3, h4, h5, h6 {
   overflow-y: scroll;
   height: 100vh;
   width: 30vw;
+}
+
+#section-material img {
+  width: 100%;
+  height: auto;
 }
 
 .math-material {
@@ -265,6 +414,88 @@ h1, h2, h3, h4, h5, h6 {
   border: 0;
   background-repeat: no-repeat;
   background-color: #FFFFFF;
+}
+
+.ca-question-num {
+  font-size: 18px;
+  font-weight: 900;
+  margin-bottom: 15px;
+}
+
+.ca-question-data {
+  margin-bottom: 20px;
+}
+
+.answer-container {
+  display: block;
+  position: relative;
+  padding: 10px 50px 10px 55px;
+  border: 1px rgb(224,224,224) solid;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: white;
+  margin-bottom: 0px;
+  margin-right: 20px;
+}
+.answers-container .answer-container:first-of-type {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.answers-container .answer-container:last-of-type {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.answers-container {
+  margin-bottom: 40px;
+}
+
+/* Hide the browser's default radio button */
+.answer-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark-con {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  height: 25px;
+  width: 25px;
+  background-color: white;
+  border: 1px rgb(224,224,224) solid;
+  border-radius: 50%;
+  line-height: 25px; 
+}
+.checkmark {
+  border-radius: 50%;
+  height: 27px;
+  width: 27px;
+  border-radius: 50%;
+  color: rgb(174,198,200);
+  font-size: 22px;
+  text-align: center;
+  line-height: 27px;
+  opacity: 0;
+}
+
+/* When the radio button is checked */
+.answer-container input:checked ~ .checkmark-con {
+  border-width: 0px;
+}
+
+/* When the radio button is checked */
+.answer-container input:checked ~ .checkmark-con .checkmark {
+  background-color: rgb(102,161,165);
+  opacity: 1;
 }
 
 /*--------------------------------------------------------------
@@ -373,7 +604,6 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--main-color);
   z-index: 997;
   padding: 15px 0;
-  border-bottom: 1px solid #e6f2fb;
   display: flex;
   justify-content: space-between;
 }
@@ -387,6 +617,8 @@ h1, h2, h3, h4, h5, h6 {
   width: 140px;
   height: 36px;
   margin-left: 89px;
+  position: relative;
+  top: 3px;
 }
 
 #header .username{
@@ -394,7 +626,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0;
   font-size: 25px;
   color: #FFFFFF;
-  font-family: tgn-soft-round, sans-serif;
   font-weight:lighter;
 }
 
@@ -408,7 +639,6 @@ h1, h2, h3, h4, h5, h6 {
 
   color: var(--main-color);
   text-align: center;
-  font-family: tgn-soft-round, sans-serif;
   font-style: normal;
   /*font-weight: bold;*/
   font-size: 22px;
@@ -426,6 +656,39 @@ h1, h2, h3, h4, h5, h6 {
   #header .logo {
     font-size: 28px;
   }
+}
+
+#dropdownMenuButton {
+  background-color: #66A1A5;
+  border-width: 0px;
+  border-radius: 0px;
+}
+
+header .dropdown-menu {
+  min-width: 100px;
+  background-color: #66A1A5;
+  left: -3px !important;
+  top: 5px !important;
+  border-radius: 0px !important;
+  border-width: 0px;
+}
+
+header .dropdown-menu a {
+  color: white;
+}
+
+header .dropdown-menu a:hover {
+  background-color: #66A1A5;
+  color: white;
+}
+
+header .dropdown {
+  margin-right: 80px;
+}
+
+header .dropdown-item {
+  height: 24px;
+  padding: 0px 0px 0px 12px;
 }
 
 /*--------------------------------------------------------------
@@ -545,23 +808,23 @@ h1, h2, h3, h4, h5, h6 {
 # Hero Section
 --------------------------------------------------------------*/
 #hero {
-  margin-top: 65px;
+  margin-top: 0px;
   background-image: url("../img/new_bg.png");
-  height: 100vh;
+  height: 100%;
+  width: 100%;
   background-size: cover;
+  background-position: center center;
 }
 
-
-#hero-text-wrapper {
-  margin-top: 25vh;
+#hero .container {
+  top: 50%;
+  transform: translateY(-50%);
 }
-
 
 #hero h1 {
-  font-family: tgn-soft-round, sans-serif;
   font-style: normal;
   font-weight: bold;
-  font-size: 46px;
+  font-size: 52px;
   line-height: 130%;
   /* identical to box height, or 62px */
 
@@ -574,26 +837,22 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 25px;
   color: #FFFFFF;
   font-style:italic;
+  font-size: 22px;
 }
 
 #hero .login-btn {
-  margin-top: 25px;
-  padding: 12px;
-  width: 222px;
-  border-radius: 109px;
-  background: var(--main-color);
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
+  background-color: #66a1a5;
+  height: 48px;
   display: inline-block;
-  color: #FFFFFF;
-  text-align: center;
-  font-family: tgn-soft-round, sans-serif;
-  font-style: normal;
+  width: 200px;
+  position: relative;
+  border-radius: 24px;
+  cursor: pointer;
   /*font-weight: bold;*/
   font-size: 22px;
 }
 
 .btn-get-started {
-  font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-size: 14px;
   letter-spacing: 0.5px;
@@ -604,11 +863,44 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 30px;
   color: #fff;
   background: var(--main-color);
+  height: 36px;
 }
 
 .btn-get-started:hover {
   background: var(--main-light);
   color: white;
+}
+
+.ca-get-started-btn {
+  background-color: #66a1a5;
+  height: 48px;
+  display: inline-block;
+  width: 175px;
+  position: relative;
+  border-radius: 24px;
+  cursor: pointer;
+}
+
+.ca-get-started-btn .material-icons {
+  color: #66a1a5;
+  background-color: white;
+  border-radius: 50%;
+  line-height: 36px;
+  width: 36px;
+  font-size: 30px;
+  margin: 6px 6px;
+  position: absolute;
+  right: 0;
+  text-align: center;
+}
+
+.get-started-txt {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 22px;
+  margin-left: 40px;
 }
 
 /* HERO UNUSED ELEMENTS
