@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Section, Exam, SectionInstance
 from django.views.generic import ListView
 from django.http import JsonResponse
@@ -51,6 +51,7 @@ def file_upload(request):
             #create new exam
             #for cell in row:
                 #print(cell.value)
+
             if question_object is None:
                 exam_name = row[0].value
                 if Exam.objects.filter(name=exam_name).count() > 0:
@@ -67,8 +68,8 @@ def file_upload(request):
                 num_passages = 0
 
             #if we have a new section, then we create a new section
-            if current_section != row[1].value:
-                current_section = row[1].value
+            if current_section != row[1].value.lower():
+                current_section = row[1].value.lower()
                 num_questions = 0
                 time = 0
                 #resets the question_number to 1 for a new section
@@ -111,13 +112,15 @@ def file_upload(request):
 
 
             question_text = question_text.replace("\n", "\\n")
-            question_passage = row[2].value
+
+            # handling of non float values in the column
+            question_passage = int(row[2].value) if isinstance(row[2].value, int) else None
             correct_answer = row[8].value
+            question_categories = row[9].value
 
             if question_passage is not None:
                 if question_passage > num_passages:
                     num_passages = question_passage
-
             question_object, created = Question.objects.get_or_create(
                 question_number = question_number,
                 text = question_text,
@@ -125,7 +128,7 @@ def file_upload(request):
                 passage = question_passage,
                 correct_answer = correct_answer,
                 exam = exam_object,
-
+                categories = question_categories,
             )
             question_number += 1
 
@@ -204,6 +207,7 @@ def exam_list_view(request):
     }
     return render(request, 'exams/exam_list.html', context)
 
+@login_required
 def exam_list_data_view(request, pk):
 
     exam = Exam.objects.get(pk=pk)
@@ -222,6 +226,7 @@ def exam_list_data_view(request, pk):
     """
 
     for section in sections:
+        #import pdb; pdb.set_trace()
         minutes = None
         seconds = None
         score = None
@@ -239,6 +244,43 @@ def exam_list_data_view(request, pk):
         'data': data,
     })
 
+@login_required
+def exam_list_reset_view(request, pk):
+    exam = Exam.objects.get(pk=pk)
+    user = request.user
+
+    section_instances = SectionInstance.objects.filter(user=user, exam=exam)
+    student_answers = Student_Answer.objects.filter(user=user, exam=exam)
+
+    return JsonResponse({})
+
+@login_required
+def exam_list_change_time_view(request, pk):
+    exam = Exam.objects.get(pk=pk)
+    user = request.user
+
+    return JsonResponse({'test':'hello'})
+
+
+@login_required
+# Deletes the 'Result' and 'Student_Answer' objects and redirects to the respective section directions URL
+def section_reset_view(request, pk, section_name):
+    exam = Exam.objects.get(pk=pk)
+    section = Section.objects.get(exam=exam, type=section_name)
+    user = request.user
+
+    if Result.objects.filter(user=user, exam=exam, section=section).exists():
+        Result.objects.filter(user=user, exam=exam, section=section).delete()
+
+    if Student_Answer.objects.filter(user=user, exam=exam, section=section_name).exists():
+        Student_Answer.objects.filter(user=user, exam=exam, section=section_name).delete()
+
+    if SectionInstance.objects.filter(user=user, exam=exam, section=section).exists():
+        SectionInstance.objects.filter(user=user, exam=exam, section=section).delete()
+
+    return redirect('exams:section-directions-view', pk=pk, section_name=section_name)
+
+@login_required
 def start_exam_view(request, pk):
     exam = Exam.objects.get(pk=pk)
     context = {
@@ -246,15 +288,32 @@ def start_exam_view(request, pk):
     }
     return render(request, 'exams/start_exam.html', context)
 
+@login_required
 def section_directions_view(request, pk, section_name):
     exam = Exam.objects.get(pk=pk)
-    section = Section.objects.get(exam=exam, type=section_name)
+    current_section = Section.objects.get(exam=exam, type=section_name)
+    user = request.user
+
+    #Check if this section has been completed before
+    if Result.objects.filter(user=user, exam=exam, section=current_section).exists():
+        # If completed before, look for a section that has not been completed
+        sections = exam.get_sections()
+        for section in sections:
+            # Check if this section has been done before
+            if not Result.objects.filter(user=user, exam=exam, section=section).exists():
+                return redirect('exams:section-directions-view', pk=pk, section_name=section.type)
+
+        # Reached end of for loop, thus all sections have been done, redirect to exam list view
+        return redirect('exams:exam-list-view')
+
+    # Section has not been completed before, continue as expected
     context = {
         'exam':exam,
-        'section':section,
+        'section':current_section,
     }
     return render(request, 'exams/section_directions.html', context)
 
+@login_required
 def save_timer_view(request, pk, section_name):
 
     data = request.POST
@@ -262,13 +321,16 @@ def save_timer_view(request, pk, section_name):
     exam = Exam.objects.get(pk=pk)
     user = request.user
 
-    section_instance = SectionInstance.objects.get(user=user, exam=exam, section=section)
-    section_instance.minutes_left = data['minutes']
-    section_instance.seconds_left = data['seconds']
-    section_instance.save()
+    if SectionInstance.objects.filter(user=user, exam=exam, section=section):
+        section_instance = SectionInstance.objects.get(user=user, exam=exam, section=section)
+        section_instance.minutes_left = data['minutes']
+        section_instance.seconds_left = data['seconds']
+        section_instance.save()
 
     return JsonResponse({})
 
+@login_required
+# DISPLAYS THE SECTION
 def section_view(request, pk, section_name):
     section = Section.objects.get(exam_id=pk, type=section_name)
     exam = Exam.objects.get(pk=pk)
@@ -295,13 +357,42 @@ def section_view(request, pk, section_name):
         'seconds_remaining': seconds_remaining,
     }
 
-    if section_name == 'math1' or section_name =='math2':
-        template = 'exams/math_section.html'
-    else:
-        template = 'exams/passage_section.html'
+    template = 'exams/section.html'
+    return render(request, template, context)
+
+@login_required
+# DISPLAYS THE SECTION BUT ALSO PASSES IN THE CORRECT ANSWERS
+def section_review_view(request, pk, section_name):
+    section = Section.objects.get(exam_id=pk, type=section_name)
+    exam = Exam.objects.get(pk=pk)
+    questions = section.get_questions()
+    user = request.user
+
+    correct_answers = []
+    # since the previously selected answers will already be handled by the section_data view,
+    # we only need to worry about the correct answers that need to be displayed
+
+    for q in questions:
+        for a in q.get_answers():
+            # Condition for the correct answer being the numeric free response answer
+            if not q.correct_answer.isalpha():
+                correct_answers.append(q.correct_answer)
+                break
+            elif a.letter == q.correct_answer:
+                correct_answers.append(a.text)
+
+    context = {
+        'section':section,
+        'exam':exam,
+        'questions':questions,
+        'correct_answers':correct_answers,
+    }
+
+    template = 'exams/section.html'
 
     return render(request, template, context)
 
+@login_required
 def section_math_data_view(request, pk, section_name):
     # CURRENTLY HANDLES RETIEVING DATA FOR THE MATH SECTION
     section = Section.objects.get(exam=pk, type=section_name)
@@ -325,15 +416,19 @@ def section_math_data_view(request, pk, section_name):
         student_answer = Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=q.question_number).first()
         student_answer_text = None
 
-        if student_answer is not None and student_answer.answer != 'N':
+        # Case where student answer is a multiple choice
+        if student_answer is not None and student_answer.answer != 'N' and student_answer.answer.isalpha():
             student_answer_text = Answer.objects.get(question=q, letter=student_answer.answer).text
+        # Case where student answer is free response
+        elif student_answer is not None and student_answer.answer != 'N':
+            student_answer_text = student_answer.answer
 
         #GETS THE IMAGE URLS
         image_url = None
 
         if q.material.name:
             image_url = q.material.url
-        data.append({str(q): [answers, student_answer_text, image_url]})
+        data.append({q.question_number: [str(q), answers, student_answer_text, image_url]})
 
     return JsonResponse({
         'data': data,
@@ -342,6 +437,7 @@ def section_math_data_view(request, pk, section_name):
         'section': section.type,
     })
 
+@login_required
 def section_passage_data_view(request, pk, section_name, passage_num):
     section = Section.objects.get(exam=pk, type=section_name)
     exam = Exam.objects.get(pk=pk)
@@ -359,7 +455,7 @@ def section_passage_data_view(request, pk, section_name, passage_num):
             if question.material.name:
                 image_urls.append(question.material.url)
 
-    questions = []
+    data = []
     #gives key, value pairs to "questions," which are the questions and the answers
     for q in Question.objects.filter(exam=exam, section=section, passage=passage_num):
         answers = []
@@ -376,21 +472,42 @@ def section_passage_data_view(request, pk, section_name, passage_num):
 
         if student_answer is not None and student_answer.answer != 'N':
             student_answer_text = Answer.objects.get(question=q, letter=student_answer.answer).text
-        questions.append({q.question_number: [str(q), answers, student_answer_text]})
+        data.append({q.question_number: [str(q), answers, student_answer_text]})
 
     return JsonResponse({
-        'data': questions,
+        'data': data,
         'time': section.time,
         'img_urls': image_urls,
         'section': section.type,
     })
 
-def section_break_view(request, pk, break_num):
-    if break_num == 1:
-        return render(request, 'exams/break1.html', {})
-    elif break_num == 2:
-        return render(request, 'exams/break2.html', {})
+@login_required
+def section_break_view(request, pk, break_num, next_section_name):
+    exam = Exam.objects.get(pk=pk)
+    next_section = Section.objects.get(exam=exam, type=next_section_name)
+    user = request.user
 
+    #Check if next section has been completed before
+    if Result.objects.filter(user=user, exam=exam, section=next_section).exists():
+        # If completed before, look for a section that has not been completed
+        sections = exam.get_sections()
+        for section in sections:
+            # Check if this section has been done before
+            if not Result.objects.filter(user=user, exam=exam, section=section).exists():
+                return redirect('exams:section-directions-view', pk=pk, section_name=section.type)
+
+        # Reached end of for loop, thus all sections have been done, redirect to exam list view
+        return redirect('exams:exam-list-view')
+
+
+    context = {
+        'exam':exam,
+        'next_section':next_section,
+    }
+    return render(request, 'exams/break.html', context)
+
+@login_required
+# SAVES THE SECTION TO THE DATABASE, CREATES RESULT OBJECT, DELETES SectionInstance object
 def save_section_view(request, pk, section_name):
     print(request.POST)
     if request.is_ajax():
@@ -409,22 +526,39 @@ def save_section_view(request, pk, section_name):
         exam = Exam.objects.get(pk=pk)
         raw_score = 0
 
-        student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section_name)
+        # below code isn't doing anything?
+        #student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section_name)
         questions = Question.objects.filter(exam=exam, section=section)
 
         for question in questions:
             if Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number).exists():
-                answer_letter = Student_Answer.objects.get(user=user, exam=exam, section=section_name, question_number=question.question_number).answer
-                if answer_letter == question.correct_answer:
-                    raw_score += 1
+                #'answer' is the student's answer
+                selected_answer = Student_Answer.objects.get(user=user, exam=exam, section=section_name, question_number=question.question_number).answer
+                correct_answer = question.correct_answer
+                if correct_answer.isalpha():
+                    if selected_answer == correct_answer:
+                        raw_score += 1
+                else:
+                    correct_answers = correct_answer.split(',')
+                    for correct_answer in correct_answers:
+                        if selected_answer == correct_answer:
+                            raw_score += 1
             else:
                 Student_Answer.objects.create(user=user, exam=exam, section=section_name, question_number=question.question_number, answer='N')
 
-        #CREATE SECTION RESULT OBJECT
-        Result.objects.create(section=section, user=user, exam=exam, score=raw_score)
+        #CREATE SECTION RESULT OBJECT ONLY IF IT DOES NOT EXIST
+        if not Result.objects.filter(user=user, exam=exam, section=section).exists():
+            Result.objects.create(section=section, user=user, exam=exam, score=raw_score)
+
+        #Deletes SectionInstance object, since the section has been finished
+        if SectionInstance.objects.filter(user=user, exam=exam, section=section).exists():
+            SectionInstance.objects.get(user=user, exam=exam, section=section).delete()
+
+
 
     return JsonResponse({'section_name':section_name})
 
+@login_required
 def save_question_view(request, pk, section_name):
     print("received request")
 
@@ -442,16 +576,22 @@ def save_question_view(request, pk, section_name):
         #CONVERT THE QUOTATION ESCAPES BACK TO REGULAR QUOTES
         question_text = data['question'].replace('"', '&quot;')
         question = Question.objects.get(text=question_text, section=section)
-        answer_letter = Answer.objects.get(question=question, text=data['answer']).letter
+
+        # Check if a the Answer object exists (implies multiple choice)
+        if Answer.objects.filter(question=question, text=data['answer']).exists():
+            selected_answer = Answer.objects.get(question=question, text=data['answer']).letter
+        else:
+            # Implies that this question is open ended math
+            selected_answer = data['answer'].replace(' ', '')
 
         # Checks if there has already been an answer to the question and updates if true, otherwise created the student_answer object
         if Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number).exists():
             student_answer = Student_Answer.objects.get(question_number=question.question_number, section=section_name, exam=exam, user=user)
-            student_answer.answer = answer_letter
+            student_answer.answer = selected_answer
             student_answer.save()
         else:
             Student_Answer.objects.create(
-                answer = answer_letter,
+                answer = selected_answer,
                 question_number = question.question_number,
                 section = section_name,
                 exam = exam,

@@ -9,7 +9,8 @@ class Question(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
     material = models.ImageField(null=True, blank=True)
     passage = models.IntegerField(null=True, blank=True)
-    correct_answer = models.CharField(max_length=1, default="")
+    correct_answer = models.CharField(max_length=100, default="")
+    categories = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return str(self.text)
@@ -18,7 +19,7 @@ class Question(models.Model):
         return self.answer_set.all()
 
 class Answer(models.Model):
-    text = models.CharField(max_length=500, default="")
+    text = models.CharField(max_length=500, default="", null=True, blank=True)
     letter = models.CharField(max_length=1, default="")
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
@@ -36,7 +37,7 @@ class Result(models.Model):
         return f"User: {self.user}, Exam: {self.exam.name}, Section: {self.section.type}, Raw Score: {self.score}"
 
 class Student_Answer(models.Model):
-    answer = models.CharField(max_length=1, default="")
+    answer = models.CharField(max_length=100, default="")
     question_number = models.IntegerField(default=0)
     section = models.CharField(max_length=30, default="")
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)

@@ -31,10 +31,11 @@
 
       </div>
     </div>
-    <div class="text-center">
+    <div class="text-center" style='display: none'>
       <a href="{% url 'exams:exam-list-view' %}" class="btn-get-started scrollto">Take Exam!</a>
       <a href="{% url 'register' %}" class="btn-get-started scrollto">Sign Up!</a>
       <a href="{% url 'exams:file-upload' %}" class="btn-get-started scrollto">Upload to Database</a>
+      <a href="{% url 'results:render_pdf_of_results' %}" class="btn-get-started scrollto" target='_blank'>View PDF of Results</a>
     </div>
 
 

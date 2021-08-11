@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="transition-page-wrapper">
+  <h1 style='font-size: 28px' class='font-weight-bold'>5 Minute Break</h1>
+  <br />
+  <h2 id="timer">TIMER</h2>
+  <p><br />Congratulations on finishing the section. Before you continue with the exam,
+     you<br />will have a five minute break.</p>
+     <br />
+  <a id="go-to-next-section" href="{% url 'exams:section-directions-view' pk=exam.id section_name=next_section.type %}" class="btn green-btn">Skip break</a>
+</div>
+
+<script>
+  //count-down timer where '5' is the number of minutes
+  var distance = 5 * 60000
+
+  var timer = setInterval(function() {
+    var now = new Date().getTime();
+    distance -= 1000
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    // Display the result in the element with id="demo"
+    document.getElementById("timer").innerHTML = minutes + "&nbsp;&nbsp;<span style='font-size: 34px; font-weight: 900;'>:</span>&nbsp;&nbsp;" + seconds;
+
+    if (distance < 0) {
+      clearInterval(x);
+      let url = document.getElementById('go-to-next-section').getAttribute('href')
+      window.location.href = url
+      document.getElementById("timer").innerHTML = "EXPIRED";
+    }
+  }, 1000);
+
+</script>
+
+{% endblock content %}

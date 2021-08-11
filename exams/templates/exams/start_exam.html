@@ -8,64 +8,82 @@ Start Exam
 
 {% block content %}
 
+<script>
+   $('body').css('height', 'auto')
+ </script>
+
+<div class="transition-page-wrapper start-exam-page">
 
 
-   
-<div class="transition-page-wrapper">
+   <div class='reading-min-container' style='margin-right: 5px;'>
+      <div class='reading-min'><span>65<br>
+            <div class='min-size'>min</div>
+         </span></div><br>Reading<div class='ques-num-size'>52 Question</div>
+   </div>
+
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+
+   <div class='reading-min-container' style='margin-left:-55px; margin-right: -55px'>
+      <div class='reading-min'><span>35<br>
+            <div class='min-size'>min</div>
+         </span></div><br>Writing and Language<div class='ques-num-size'>44 Question</div>
+   </div>
+
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+
+   <div class='reading-min-container' style='margin-left:-50px; margin-right: -50px'>
+      <div class='reading-min'><span>25<br>
+            <div class='min-size'>min</div>
+         </span></div><br>Math (No calculator)<div class='ques-num-size'>20 Question</div>
+   </div>
+
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='small-dots'></div>
+   <div class='reading-min-container' style='margin-left:-35px;'>
+      <div class='reading-min'><span>55<br>
+            <div class='min-size'>min</div>
+         </span></div><br>Math (Calculator)<div class='ques-num-size'>38 Question</div>
+   </div>
 
 
-   <div class='reading-min-container' style='margin-right: 5px;'><div class='reading-min'><span>65<br><div class='min-size'>min</div></span></div><br>Reading<div class='ques-num-size'>52 Question</div></div>
-   
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   
-   <div class='reading-min-container' style='margin-left:-55px; margin-right: -55px'><div class='reading-min'><span>35<br><div class='min-size'>min</div></span></div><br>Writing and Language<div class='ques-num-size'>44 Question</div></div>
-   
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   
-   <div class='reading-min-container'style='margin-left:-50px; margin-right: -50px'><div class='reading-min'><span>25<br><div class='min-size'>min</div></span></div><br>Math (No calculator)<div class='ques-num-size'>20 Question</div></div>
-   
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='small-dots'></div>
-   <div class='reading-min-container' style='margin-left:-35px;'><div class='reading-min'><span>55<br><div class='min-size'>min</div></span></div><br>Math (Calculator)<div class='ques-num-size'>38 Question</div></div>
-     
-   
-<br><br><br><br>
+   <br><br><br><br>
 
 
-  <h1 style='font-size:32px'><b>Welcome to {{exam.name}}</b></h1>
-  <br>
-  <p>{{exam.name}} is a full length mock SAT exam. For a realistic assessment, we recommend taking the
-     test in a single sitting, in a quiet place, and strictly abiding by the time constraints. Students can
-     choose to submit a section at any time, or pause the test if needed, and answer choices are saved automatically
-     as you go.
-  </p>
-  <br>
-  <p>Section scores are uploaded directly to your account upon completing each section, and a full score breakdown
-     upon completing the test.</p>
-  <a href="{% url 'exams:section-directions-view' pk=exam.id section_name='reading' %}">Start exam</a>
+   <h1 style='font-size:32px'><b>Welcome to {{exam.name}}</b></h1>
+   <br>
+   <p>{{exam.name}} is a full length mock SAT exam. For a realistic assessment, we recommend taking the
+      test in a single sitting, in a quiet place, and strictly abiding by the time constraints. Students can
+      choose to submit a section at any time, or pause the test if needed, and answer choices are saved automatically
+      as you go.
+   </p>
+   <br>
+   <p>Section scores are uploaded directly to your account upon completing each section, and a full score breakdown
+      upon completing the test.</p>
+      <br />
+   <a href="{% url 'exams:section-directions-view' pk=exam.id section_name='reading' %}" class='btn green-btn'>Start exam</a>
 </div>
 
 
