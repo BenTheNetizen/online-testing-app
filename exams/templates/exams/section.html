@@ -124,16 +124,19 @@
       {% endif %}
     </div>
   </div>
-  <hr>
-  <div id="section-content" class="mt-3">
+  
+  <div id="section-content">
     {% if not correct_answers %}
     <button type="button" class="btn btn-primary finish-this-section-btn" data-toggle="modal" data-target="#finishSectionModal">
       Finish section
     </button>
     {% endif %}
     {% if 'math' not in section.type %}
+    <div class='section-material-placeholder'></div>
+    <div class='section-material-container'>
     <div id="section-material">
       <!-- DYNAMICALLY ADDED IMAGES FROM section.js HERE -->
+    </div>
     </div>
     {% endif %}
     <form id="section-form">
