@@ -277,14 +277,14 @@
       <div class="general-info">
         <div><span class="general-info-label ca-bold">Name: </span> {{test}}</div>
         <div><span class="general-info-label ca-bold">Test Date: </span> VAR </div>
-        <div><span class="general-info-label ca-bold">Test Number: </span> VAR</div>
+        <div><span class="general-info-label ca-bold">Test Number: </span>{{exam.name}}</div>
       </div>
 
       <div class="total-score-info ca-flex ca-vert-center">
         <div class="total-score-details ca-flex ca-flex-half">
           <h2 class="total-score-heading ca-flex-full">Your Total Score</h2>
           <div class="total-score-and-range ca-flex ca-flex-full ca-vert-center">
-            <div class="total-score ca-bold ca-inline-b">VAR</div>
+            <div class="total-score ca-bold ca-inline-b">{{total_score}}</div>
             <div class="total-score-range ca-italic ca-inline-b">400 to<br />1600</div>
           </div>
 
@@ -311,7 +311,7 @@
       <h2>Section Scores</h2>
       <div class='ca-flex'>
         <div class='ca-flex-two-fifths ca-flex ca-vert-center'>
-          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>200 to
+          <span class="ca-font-big ca-bold">{{reading_score|add:writing_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>200 to
               800</span></span>
           <div class="ca-flex-full">Your Evidence-Based<br>Reading and Writing<br>Score</div>
         </div>
@@ -327,7 +327,7 @@
         <div class="ca-flex-full"><br></div>
 
         <div class='ca-flex-two-fifths ca-flex ca-vert-center'>
-          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>200 to
+          <span class="ca-font-big ca-bold">{{math_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>200 to
               800</span></span>
           <div class="ca-flex-full">Your Math Score</div>
         </div>
@@ -426,78 +426,78 @@
           <hr class="ca-flex-full" />
           <h3 class='ca-bold ca-flex-full'>Reading</h3>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>52</div>
             <div class='ca-font-small'>Total Questions</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>{{raw_reading_score}}</div>
             <div class='ca-font-small'>Correct Answers</div>
           </div>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>{{incorrect_reading}}</div>
             <div class='ca-font-small'>Incorrect Answers</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>{{omitted_reading}}</div>
             <div class='ca-font-small'>Omitted Answers</div>
           </div>
           <hr class="ca-flex-full" />
 
           <h3 class='ca-bold ca-flex-full'>Writing and Language</h3>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>44</div>
             <div class='ca-font-small'>Total Questions</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>{{raw_writing_score}}</div>
             <div class='ca-font-small'>Correct Answers</div>
           </div>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>{{incorrect_writing}}</div>
             <div class='ca-font-small'>Incorrect Answers</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>{{omitted_writing}}</div>
             <div class='ca-font-small'>Omitted Answers</div>
           </div>
           <hr class="ca-flex-full" />
 
           <h3 class='ca-bold ca-flex-full'>Math - No Calculator</h3>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>25</div>
             <div class='ca-font-small'>Total Questions</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>{{raw_math1_score}}</div>
             <div class='ca-font-small'>Correct Answers</div>
           </div>
           <div class="ca-flex-full"></div>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>{{incorrect_math1}}</div>
             <div class='ca-font-small'>Incorrect Answers</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>{{omitted_math1}}</div>
             <div class='ca-font-small'>Omitted Answers</div>
           </div>
           <hr class="ca-flex-full" />
 
           <h3 class='ca-bold ca-flex-full'>Math - Calculator</h3>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>38</div>
             <div class='ca-font-small'>Total Questions</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>{{raw_math2_score}}</div>
             <div class='ca-font-small'>Correct Answers</div>
           </div>
           <div class="ca-flex-full"></div>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>{{incorrect_math2}}</div>
             <div class='ca-font-small'>Incorrect Answers</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>VAR</div>
+            <div class='ca-font-big ca-bold'>{{omitted_math2}}</div>
             <div class='ca-font-small'>Omitted Answers</div>
           </div>
           <hr class="ca-flex-full" />
@@ -524,7 +524,7 @@
 
         <div class='answer-sheet math ca-flex ca-flex-half ca-padding ca-horz-center'
           style='align-content: flex-start; text-align: center; box-sizing: border-box'>
-          <h3 class='ca-bold ca-flex-full'>Math - No Calculator</h3>
+          <h3 class='ca-bold ca-flex-full'>Reading</h3>
 
           <div class='ca-flex-full' style='height:40px'></div>
 
@@ -534,244 +534,20 @@
           <div class='col-name ca-flex-one-fourth'>Difficulty</div>
 
           <div class='ca-flex-full' style='height:40px'></div>
+
+          {% for question, student_answer in reading_questions_answers %}
           <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
+            <div class='ca-cell ca-flex-one-fourth'>{{question.question_number}}</div>
+            <div class='ca-cell ca-flex-one-fourth'>{{question.correct_answer}}</div>
+            {% if student_answer == question.correct_answer %}
             <div class='ca-cell ca-flex-one-fourth'>&check;</div>
+            {% else %}
+            <div class='ca-cell ca-flex-one-fourth'>{{student_answer}}</div>
+            {% endif %}
             <div class='ca-cell ca-flex-one-fourth'><span
                 class="difficulty-level easy"><span></span><span></span><span></span></span></div>
           </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
-          <div class='ca-cells ca-flex ca-flex-full'>
-            <div class='ca-cell ca-flex-one-fourth'>1</div>
-            <div class='ca-cell ca-flex-one-fourth'>A</div>
-            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-            <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-          </div>
+          {% endfor %}
         </div>
       </div>
 
@@ -801,7 +577,7 @@
             <div class='ca-cell ca-flex-one-fourth'>A</div>
             <div class='ca-cell ca-flex-one-fourth'>&check;</div>
             <div class='ca-cell ca-flex-one-fourth'><span
-                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
+                class="difficulty-level medium"><span></span><span></span><span></span></span></div>
           </div>
           <div class='ca-cells ca-flex ca-flex-full'>
             <div class='ca-cell ca-flex-one-fourth'>1</div>

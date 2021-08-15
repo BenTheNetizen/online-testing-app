@@ -15,7 +15,7 @@ function openBreakdown(elt) {
   modalId = elt.dataset.modalId
   resultsUrl = elt.dataset.url
   if (allSectionsCompleted) {
-    window.open(resultsUrl, '_blank');
+    window.open(resultsUrl);
   } else {
     //display modal stating that the exam is not yet completed
     $(modalId).modal()

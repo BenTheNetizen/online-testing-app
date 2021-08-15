@@ -334,7 +334,7 @@ def save_timer_view(request, pk, section_name):
 def section_view(request, pk, section_name):
     section = Section.objects.get(exam_id=pk, type=section_name)
     exam = Exam.objects.get(pk=pk)
-    questions = section.get_questions()
+    questions = section.get_questions() 
     user = request.user
     minutes_remaining = None
     seconds_remaining = None

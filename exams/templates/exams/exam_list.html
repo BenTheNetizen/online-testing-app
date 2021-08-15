@@ -83,7 +83,7 @@ Exam List
             <a href="{% url 'exams:start-exam-view' pk=exam.id %}" class="btn btn-primary">Begin this Exam</a>
             <a onclick="resetExam({{exam.id}})" class="btn btn-danger">Reset this Exam</a>
             <!-- trigger modal -->
-            <a data-url="{% url 'results:render-pdf-view' pk=exam.id %}" data-modal-id="#openExam{{exam.pk}}BreakdownModal" class="btn btn-primary" onclick="openBreakdown(this)">
+            <a data-url="{% url 'results:render_pdf_of_results' pk=exam.id %}" data-modal-id="#openExam{{exam.pk}}BreakdownModal" class="btn btn-primary" onclick="openBreakdown(this)">
               Your complete breakdown
             </a>
           </div>
