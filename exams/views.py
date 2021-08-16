@@ -280,10 +280,21 @@ def index(request):
 
 @login_required
 def exam_list_view(request):
+    user = request.user
     exams = Exam.objects.all()
+    # Calculate the number of sections completed for each exam
+    num_sections = []
+    sections_completed = []
+    for exam in exams:
+        num_sections.append(len(exam.get_sections()))
+        sections_completed.append(Result.objects.filter(user=user, exam=exam).count())
 
+    exam_info = zip(exams, sections_completed, num_sections)
     context = {
         'exams':exams,
+        'exam_info':exam_info,
+        'sections_completed':sections_completed,
+        'num_sections':num_sections
     }
     return render(request, 'exams/exam_list.html', context)
 

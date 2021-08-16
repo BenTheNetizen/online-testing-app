@@ -9,18 +9,11 @@ var prevElement = null
 var allSectionsCompleted = true
 const guideMsg = document.getElementById("guide-msg");
 const url = window.location.href
+const examDropdown = document.getElementById('select-exam');
+const examButtons = document.getElementsByClassName('choose-exam-btn');
 
-//function checks if all results have been completed
-function openBreakdown(elt) {
-  modalId = elt.dataset.modalId
-  resultsUrl = elt.dataset.url
-  if (allSectionsCompleted) {
-    window.open(resultsUrl);
-  } else {
-    //display modal stating that the exam is not yet completed
-    $(modalId).modal()
-  }
-}
+//run this function to filter by default (SAT)
+filterExamType()
 
 function getExamDetails(btnId, examPk, elt) {
   const btn = document.getElementById(btnId)
@@ -102,6 +95,34 @@ function getExamDetails(btnId, examPk, elt) {
   })
 }
 
+function filterExamType() {
+  let examType = examDropdown.value
+
+  if (examType == 'SAT Mock Exams') {
+    //hide all exam buttons
+    [...examButtons].forEach(element => {
+      element.style.display = "none";
+    })
+
+    //show the queried exam buttons
+    let query = document.querySelectorAll("[data-exam-type='SAT']")
+    query.forEach(element => {
+      element.style.display = "block";
+    })
+  } else if (examType == 'ACT Mock Exams') {
+    //hide all exam buttons
+    [...examButtons].forEach(element => {
+      element.style.display = "none";
+    })
+
+    //show the queried exam buttons
+    let query = document.querySelectorAll("[data-exam-type='ACT']")
+    query.forEach(element => {
+      element.style.display = "block";
+    })
+  }
+
+}
 function changeSectionTime(value, examPk, elt) {
   // change button colors when clicked
   $(elt).parent().find('button').css('backgroundColor', 'white')
@@ -133,6 +154,18 @@ function changeSectionTime(value, examPk, elt) {
     }
   })
 
+}
+
+//function checks if all results have been completed
+function openBreakdown(elt) {
+  modalId = elt.dataset.modalId
+  resultsUrl = elt.dataset.url
+  if (allSectionsCompleted) {
+    window.open(resultsUrl);
+  } else {
+    //display modal stating that the exam is not yet completed
+    $(modalId).modal()
+  }
 }
 
 function resetExam(examPk) {

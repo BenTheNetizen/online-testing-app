@@ -10,17 +10,17 @@ Exam List
 
 <div class="exam-list-container">
   <div class="exam-list">
-    <select name="exam-titles">
+    <select id="select-exam" name="exam-titles" onchange="filterExamType()">
       <option value="SAT Mock Exams" selected>SAT Mock Exams</option>
       <option value="ACT Mock Exams">ACT Mock Exams</option>
       <option value="SAT/ACT Diagnostic Test">SAT/ACT Diagnostic Test</option>
     </select>
 
     <p>Select the test or section you would like to work on and click START to begin.</p>
-    {% for exam in exams %}
-    <button id="{{exam.name}}-btn" data-exam="{{exam.name}}" class="btn btn-link modal-button choose-exam-btn"
+    {% for exam, sections_completed, num_sections in exam_info %}
+    <button id="{{exam.name}}-btn" data-exam="{{exam.name}}" data-exam-type="{{exam.type}}" class="btn btn-link modal-button choose-exam-btn"
       onclick="getExamDetails(this.id, {{exam.pk}}, this)">
-      <span>{{exam.name}}</span><br><span>VAR of VAR sections completed</span>
+      <span>{{exam.name}}</span><br><span id='{{exam.pk}}-sections-completed'>{{ sections_completed }} of {{num_sections}} sections completed</span>
       <i class="arrow right"></i>
     </button>
     <br>

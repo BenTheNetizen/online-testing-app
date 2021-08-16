@@ -19,4 +19,4 @@ class StudentRegisterForm(forms.ModelForm):
     #parent_email = forms.CharField(max_length=30, required=True, help_text="")
     #parent_phone_number = forms.CharField(max_length=30, required=False, help_text="")
     #student_access_code = forms.CharField(max_length=30, required=False, help_text="")
-    #email = forms.EmailField(max_length=254, help_text='')
+    #email = forms.EmailField(max_length=254, help_text='') 

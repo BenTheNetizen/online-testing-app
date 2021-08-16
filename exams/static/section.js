@@ -108,7 +108,7 @@ function radioChecked(elt, questionNum) {
   }
   // else, when label containing input with type radio is passed as arg, do this
   else {
-    console.log('radio checked!') 
+    console.log('radio checked!')
     console.log($(elt).find('input').attr('name'))
     $(elt).parent().find('label').css('backgroundColor', 'white')
     $(elt).css('backgroundColor', '#f5f5f5')
@@ -141,12 +141,19 @@ function getPassage(value) {
   {
     console.log('CHANGE PASSAGE TO PREV')
     passageNum -= 1
+
   }
   if (value == 'next' && passageNum < maxPassages)
   {
     console.log('CHANGE PASSAGE TO NEXT')
     passageNum += 1
   }
+
+  //display the passage num
+  if (!isMathSection) {
+    document.getElementById('passage-num').innerHTML = `Passage ${passageNum} of ${maxPassages}`
+  }
+
   let ajax_url = isMathSection ? `${url}data` : `${url}passage-` + passageNum + `/data`
   $.ajax({
     type: 'GET',
@@ -171,10 +178,10 @@ function getPassage(value) {
             //questionData[3] is the image URL
             var sectionBoxString = ''
             if (questionData[3] != null) {
-              //implies that there is an image to add to the question              
+              //implies that there is an image to add to the question
                 sectionBoxString += `
                 <div class='question-container question-container-math'>
-                <img class="math-material" src="${questionData[3]}">                
+                <img class="math-material" src="${questionData[3]}">
                 <div class="mb-2 testing">
                   <b class="ca-question-num">Question ${questionNum}</b>
                   <br>
@@ -265,7 +272,7 @@ function getPassage(value) {
             <img src="${response.img_urls[i]}">
             `
         }
-        
+
         //handling the questions displaying
         data.forEach(el => {
           for (const [questionNum, questionData] of Object.entries(el)) {
