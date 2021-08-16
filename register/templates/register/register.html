@@ -16,10 +16,16 @@
         {{student_form|crispy}}
         {% csrf_token %}
         <button id="register-button" type="submit" class="btn btn-primary">Sign up</button>
+        <p style='clear: both'>Already Registered? <a href='/login/'>Sign in</a>
+        </p>
       </form>
+      <script>
+        $('#id_username').attr('placeholder', 'Username*');
+        $('#id_email').attr('placeholder', 'Your Email*');
+        $('#id_password1').attr('placeholder', 'Password*');
+        $('#id_password2').attr('placeholder', 'Confirm Password*');
+      </script>
     </div>
-    <div class="login-right">
-    </div>
+    <div class="login-right"></div>
   </div>
-</div>
-{% endblock %}
+  {% endblock %}

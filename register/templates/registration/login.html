@@ -13,12 +13,18 @@ Login Here
   <div class="login">
     <div class="login-left">
       <form id="register-form" method="POST" class="form-group">
-        <h1>Login</h1>
+        <h1>Sign in to your account</h1>
+        <p class='mb-5'>Sign into your account to begin taking practice exams and accessing your score reports.</p>
            {% csrf_token %}
            {{form|crispy}}
-           <p>Don't have an account? Create one <a href="/register">here</a></p>
-        <button id="register-button" type="submit" class="btn btn-success">Login</button>
+        <p style='margin-top: -20px;'><a href="#" style='color: black; font-size: 14px;'>Forgot Password?</a></p>
+        <button id="register-button" type="submit" class="btn btn-success">Sign in</button>
+        <p style='clear: both'>Not Registered? <a href="/register">Sign up</a></p>
       </form>
+      <script>
+        $('#id_username').attr('placeholder', 'Username*');
+        $('#id_password').attr('placeholder', 'Password*');
+      </script>
     </div>
     <div class="login-right">
     </div>

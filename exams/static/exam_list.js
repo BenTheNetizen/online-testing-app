@@ -22,10 +22,17 @@ function openBreakdown(elt) {
   }
 }
 
-function getExamDetails(btnId, examPk) {
-  const btn = document.getElementById(btnId);
-  const examName = btn.getAttribute("data-exam");
-  const examDetailsDiv = document.getElementById(examName + "-details");
+function getExamDetails(btnId, examPk, elt) {
+  const btn = document.getElementById(btnId)
+  const examName = btn.getAttribute("data-exam")
+  const examDetailsDiv = document.getElementById(examName + "-details")
+
+  // highlight clicked button
+  $(elt).parent().find('button').css('backgroundColor', 'transparent')
+  $(elt).css('backgroundColor', 'rgb(234,237,237)')
+  // hide arrow of clicked button
+  $(elt).parent().find('button .arrow').css('display', 'inline-block')
+  $(elt).find('.arrow').css('display', 'none')
 
   if (examDetailsDiv.style.display == "none")
   {
@@ -75,8 +82,8 @@ function getExamDetails(btnId, examPk) {
           else if (section_data[1] != null) {
             // Implies that the section is in progress
             allSectionsCompleted = false
-            document.getElementById(`exam${examPk}-${section}-time-remaining`).innerHTML = `${section_data[1]} minutes ${section_data[2]} seconds remaining`
-            document.getElementById(`exam${examPk}-${section}-start`).innerHTML = 'Resume this section'
+            document.getElementById(`exam${examPk}-${section}-time-remaining`).innerHTML = `${section_data[1]}:${section_data[2]} minutes remaining`
+            document.getElementById(`exam${examPk}-${section}-start`).innerHTML = '<span class="material-icons material-icons-round">play_arrow</span>Resume this section'
             document.getElementById(`exam${examPk}-${section}-review`).style.display = 'none'
           }
           else {
@@ -95,7 +102,13 @@ function getExamDetails(btnId, examPk) {
   })
 }
 
-function changeSectionTime(value, examPk) {
+function changeSectionTime(value, examPk, elt) {
+  // change button colors when clicked
+  $(elt).parent().find('button').css('backgroundColor', 'white')
+  $(elt).parent().find('button').css('color', 'black')
+  $(elt).css('backgroundColor', '#66A1A5')
+  $(elt).css('color', 'white')
+
   console.log('change time')
   let isExtendedTime
   if (value === 'regular') {

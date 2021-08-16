@@ -10,18 +10,20 @@ Exam List
 
 <div class="exam-list-container">
   <div class="exam-list">
-    <h1>SAT MOCK EXAMS</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
+    <select name="exam-titles">
+      <option value="SAT Mock Exams" selected>SAT Mock Exams</option>
+      <option value="ACT Mock Exams">ACT Mock Exams</option>
+      <option value="SAT/ACT Diagnostic Test">SAT/ACT Diagnostic Test</option>
+    </select>
+
+    <p>Select the test or section you would like to work on and click START to begin.</p>
     {% for exam in exams %}
-      <button
-          id="{{exam.name}}-btn"
-          data-exam="{{exam.name}}"
-          class="btn btn-link modal-button"
-          onclick="getExamDetails(this.id, {{exam.pk}})">
-          <h1>{{exam.name}} <i class="arrow right"></i></h1>
-          <p>test</p>
-        </button>
-        <br>
+    <button id="{{exam.name}}-btn" data-exam="{{exam.name}}" class="btn btn-link modal-button choose-exam-btn"
+      onclick="getExamDetails(this.id, {{exam.pk}}, this)">
+      <span>{{exam.name}}</span><br><span>VAR of VAR sections completed</span>
+      <i class="arrow right"></i>
+    </button>
+    <br>
     {% endfor %}
   </div>
 
@@ -31,13 +33,14 @@ Exam List
     </div>
     {% for exam in exams %}
     <!-- Open Exam Breakdown (Score Report) Modal -->
-    <div class="modal fade" id="openExam{{exam.pk}}BreakdownModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="openExam{{exam.pk}}BreakdownModal" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Exam {{exam.pk}} Breakdown</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+              <span class='material-icons' aria-hidden="true">close</span>
             </button>
           </div>
           <div class="modal-body">
@@ -54,28 +57,47 @@ Exam List
       <div class="exam-details-header">
         <div id="exam-details-header-inner">
           <h1>{{exam.name | title}}</h1>
-          <div>
-            <button onclick="changeSectionTime('regular', {{exam.pk}})">Regular</button>
-            <button onclick="changeSectionTime('extended', {{exam.pk}})">Extended</button>
+
+          <div class='section-time'>
+            <span class="material-icons material-icons-outlined">
+              schedule
+            </span>
+            <div class='section-time-btns'>
+              <button onclick="changeSectionTime('regular', {{exam.pk}}, this)">Regular</button>
+              <button onclick="changeSectionTime('extended', {{exam.pk}}, this)">Extended</button>
+            </div>
           </div>
         </div>
-        <p>You must finish all sections of this exam to view a complete score breakdown.</p>
       </div>
       <div class="section-details-wrapper">
         {% for section in exam.get_sections %}
         <div class="section-details">
-            <span class="dot">{{section.time}}min</span>
-            <div>
-              <h1>{{section.name}}</h1>
-              <p id="exam{{exam.pk}}-{{section.type}}-score">Raw Score: </p>
-              <p>Estimated Section Score Range: </p>
-              <div class="section-begin">
-                <a id="exam{{exam.pk}}-{{section.type}}-start" href="{% url 'exams:section-directions-view' pk=exam.id section_name=section.type %}" class="btn btn-primary">Begin this section</a>
-                <a id="exam{{exam.pk}}-{{section.type}}-reset" href="{% url 'exams:section-reset-view' pk=exam.id section_name=section.type %}" class="btn btn-primary">Retake this section</a>
-                <p id="exam{{exam.pk}}-{{section.type}}-time-remaining">Timer goes here</p>
-                <a id="exam{{exam.pk}}-{{section.type}}-review" href="{% url 'exams:section-review-view' pk=exam.id section_name=section.type %}" class="btn btn-warning">View mistakes</a>
-              </div>
+          <div class='reading-min-container' style='margin-right: 15px;'>
+            <div class='reading-min'>
+              <span>{{section.time}}<br>
+                <div class='min-size'>min</div>
+              </span>
             </div>
+          </div>
+          <div style='flex-basis: calc(100% - 85px);'>
+            <div style='display:flex; justify-content: space-between'>
+              <h1>{{section.name}}</h1>
+              <a id="exam{{exam.pk}}-{{section.type}}-review" class='view-mistakes-link'
+                href="{% url 'exams:section-review-view' pk=exam.id section_name=section.type %}">View mistakes</a>
+            </div>
+            <div id="exam{{exam.pk}}-{{section.type}}-score">Raw Score: N/A</div>
+            <div>Estimated Section Score Range: N/A</div>
+            <div class="section-begin">
+              <a id="exam{{exam.pk}}-{{section.type}}-start"
+                href="{% url 'exams:section-directions-view' pk=exam.id section_name=section.type %}"
+                class="ca-btn begin">Begin this section</a>
+              <p id="exam{{exam.pk}}-{{section.type}}-time-remaining" class="time-remaining">Timer goes here</p>
+            </div>
+            <a id="exam{{exam.pk}}-{{section.type}}-reset"
+              href="{% url 'exams:section-reset-view' pk=exam.id section_name=section.type %}"
+              class="ca-btn retake"><span class="material-icons material-icons-sharp">replay</span>Retake this
+              section</a>
+          </div>
         </div>
         {% endfor %}
         <div class="section-details">
@@ -83,7 +105,8 @@ Exam List
             <a href="{% url 'exams:start-exam-view' pk=exam.id %}" class="btn btn-primary">Begin this Exam</a>
             <a onclick="resetExam({{exam.id}})" class="btn btn-danger">Reset this Exam</a>
             <!-- trigger modal -->
-            <a data-url="{% url 'results:render_pdf_of_results' pk=exam.id %}" data-modal-id="#openExam{{exam.pk}}BreakdownModal" class="btn btn-primary" onclick="openBreakdown(this)">
+            <a data-url="{% url 'results:render-pdf-view' pk=exam.id %}"
+              data-modal-id="#openExam{{exam.pk}}BreakdownModal" class="btn btn-primary" onclick="openBreakdown(this)">
               Your complete breakdown
             </a>
           </div>
