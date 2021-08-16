@@ -97,12 +97,12 @@ function getExamDetails(btnId, examPk) {
 
 function changeSectionTime(value, examPk) {
   console.log('change time')
-  let timeMultiplier
+  let isExtendedTime
   if (value === 'regular') {
-    timeMultiplier = 1.0
+    isExtendedTime = false
   }
   else if (value === 'extended') {
-    timeMultiplier = 1.5
+    isExtendedTime = true
   }
 
   $.ajax({
@@ -110,7 +110,7 @@ function changeSectionTime(value, examPk) {
     url: `${url}exam-${examPk}/change-time`,
     data: {
       csrfmiddlewaretoken: csrf,
-      multiplier: timeMultiplier,
+      is_extended_time: isExtendedTime,
     },
     success: function(response) {
       console.log(response)

@@ -3,25 +3,44 @@
 {% block content %}
 <div class="section-wrapper">
   <h2>Upload</h2>
+  <div style="display:flex;">
+    <button id="upload-act-button" class="btn-get-started scrollto" onclick="uploadExam('ACT')">Upload ACT</button>
+    <button id="upload-sat-button" class="btn-get-started scrollto" onclick="uploadExam('SAT')">Upload SAT</button>
+  </div>
   <form id="upload-files" method="post" enctype="multipart/form-data">
       {% csrf_token %}
+
       <label>Upload a file for the questions</label>
       <input id="id_docfile" type="file" name="questions_file"/>
       <hr>
-      <label>Upload images for the reading passage materials</label>
-      <input id="id_docfile" type="file" multiple name="reading_passages"/>
-      <hr>
-      <label>Upload images for the writing passage materials</label>
-      <input id="id_docfile" type="file" multiple name="writing_passages"/>
-      <hr>
-      <label>Upload images for the no-calculator section</label>
-      <input id="id_docfile" type="file" multiple name="nocalc_materials"/>
-      <hr>
-      <label>Upload images for the calculator section</label>
-      <input id="id_docfile" type="file" multiple name="calc_materials"/>
-      <hr>
-      <label>Upload a file for the scoring sheet</label>
-      <input id="id_docfile" type="file" name="scoring_file"/>
+      <div id="upload-sat" style="display:none">
+        <label>Upload images for the reading passage materials</label>
+        <input id="id_docfile" type="file" multiple name="sat_reading_passages"/>
+        <hr>
+        <label>Upload images for the writing passage materials</label>
+        <input id="id_docfile" type="file" multiple name="sat_writing_passages"/>
+        <hr>
+        <label>Upload images for the no-calculator section</label>
+        <input id="id_docfile" type="file" multiple name="sat_nocalc_materials"/>
+        <hr>
+        <label>Upload images for the calculator section</label>
+        <input id="id_docfile" type="file" multiple name="sat_calc_materials"/>
+        <hr>
+      </div>
+      <div id="upload-act" style="display:none">
+        <label>Upload images for the English passage materials</label>
+        <input id="id_docfile" type="file" multiple name="act_english_passages"/>
+        <hr>
+        <label>Upload images for the Math section</label>
+        <input id="id_docfile" type="file" multiple name="act_math_materials"/>
+        <hr>
+        <label>Upload images for the Reading passage materials</label>
+        <input id="id_docfile" type="file" multiple name="act_reading_passages"/>
+        <hr>
+        <label>Upload images for the Science passage materials</label>
+        <input id="id_docfile" type="file" multiple name="act_science_passages"/>
+        <hr>
+      </div>
       <button type="submit">Upload</button>
   </form>
   <br>
@@ -31,4 +50,16 @@
   <h3>Message: {{ success }}</h3>
   {% endif %}
 </div>
+
+<script>
+  function uploadExam(examType) {
+    if (examType == 'SAT') {
+      document.getElementById('upload-sat').style.display = 'block';
+      document.getElementById('upload-act').style.display = 'none';
+    } else {
+      document.getElementById('upload-act').style.display = 'block';
+      document.getElementById('upload-sat').style.display = 'none';
+    }
+  }
+</script>
 {% endblock content %}

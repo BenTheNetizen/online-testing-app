@@ -9,12 +9,12 @@ Section Directions
 {% block content %}
 <div class="transition-page-wrapper">
   <h1>Section Directions</h1>
-  {% if section.type == "reading" %}
+  {% if section.type == "reading" and exam.type == "SAT" %}
   <p>Each passage or pair of passages below is followed by a number of questions. After reading
      each passage or pair, choose the best answer to each question based on what is stated or
      implied in the passage or passages and in any accompanying graphics (such as a table or graph).</p>
      <a href="{% url 'exams:section-view' pk=exam.id section_name='reading' %}">Continue</a>
-  {% elif section.type == "writing" %}
+  {% elif section.type == "writing" and exam.type == "SAT"%}
   <p>Each passage below is accompanied by a number of questions. For some questions, you will consider
      how the passage might be revised to improve the expression of ideas. For other questions,
      you will consider how the passage might be edited to correct errors in sentence structure, usage,
@@ -27,18 +27,19 @@ Section Directions
      Many questions include a “NO CHANGE” option. Choose that option if you think the best choice is to leave
      the relevant portion of the passage as it is. </p>
      <a href="{% url 'exams:section-view' pk=exam.id section_name='writing' %}">Continue</a>
-  {% elif section.type == "math1" %}
+  {% elif section.type == "math1" and exam.type == "SAT" %}
   <p>For questions 1-15, solve each problem, choose the best answer from the choices provided, and
      fill in the corresponding circle on your answer sheet. For questions 16-20, solve the problem and enter
      your answer in the grid on the answer sheet. Please refer to the directions before question 16 on how to
       enter your answers in the grid. You may use any available space in your test booklet for scratch work.</p>
      <a href="{% url 'exams:section-view' pk=exam.id section_name='math1' %}">Continue</a>
-  {% elif section.type == "math2" %}
+  {% elif section.type == "math2" and exam.type == "SAT" %}
   <p>For questions 1-30, solve each problem, choose the best answer from the choices provided, and fill in the
      corresponding circle on your answer sheet. For questions 31-38, solve the problem and enter your answer in
      the grid on the answer sheet. Please refer to the directions before question 31 on how to enter your answers
      in the grid. You may use any available space in your test booklet for scratch work.</p>
      <a href="{% url 'exams:section-view' pk=exam.id section_name='math2' %}">Continue</a>
+    
   {% endif %}
 </div>
 

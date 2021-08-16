@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'questions',
     'results',
     'easy_pdf',
+    'django_cleanup',
 ]
 
 MIDDLEWARE = [

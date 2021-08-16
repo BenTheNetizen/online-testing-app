@@ -1,20 +1,28 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
-
-# Create your models here.
 from django.urls import reverse
+from django.dispatch import receiver
+# Create your models here.
 
 class Student(models.Model):
-    #user is the username of the student account
-    user = models.CharField(primary_key=True, max_length=20, unique=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    parent_name = models.CharField(max_length=50, blank=True, null=True)
+    parent_email = models.CharField(max_length=100, blank=True, null=True)
+    parent_phone_number = models.CharField(max_length=50, blank=True, null=True)
+    student_access_code = models.CharField(max_length=50, blank=True, null=True)
+
 
     def __str__(self):
-        return str(self.user)
+        return f'{self.user.username} Profile'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
 #model for the Exam
 class Exam(models.Model):
     name = models.CharField(max_length=100, default=" ")
+    type = models.CharField(max_length=100, default='SAT')
 
     class Meta:
         verbose_name_plural = "Exams"
@@ -28,6 +36,12 @@ class Exam(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+#model for an exam instance
+class ExamInstance(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    is_extended_time = models.BooleanField(default=False)
 
 class Section(models.Model):
     name = models.CharField(max_length=100, default=" ")

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Section, Exam, SectionInstance
+from .models import Section, Exam, SectionInstance, ExamInstance
 from django.views.generic import ListView
 from django.http import JsonResponse
 from questions.models import Question, Answer, Result, Student_Answer
@@ -17,10 +17,6 @@ def file_upload(request):
     if request.method == 'POST':
 
         questions_file = request.FILES['questions_file']
-        reading_passages = request.FILES.getlist('reading_passages')
-        writing_passages = request.FILES.getlist('writing_passages')
-        nocalc_materials = request.FILES.getlist('nocalc_materials')
-        calc_materials = request.FILES.getlist('calc_materials')
 
         #TODO: CANNOT ASSUME THAT THE FILES BEING UPLOADED ARE IN ORDER
         material_files_index = 0
@@ -42,10 +38,11 @@ def file_upload(request):
         exam_object = None
         section_object = None
         question_object = None
+        exam_type = None
 
         for row in worksheet.iter_rows(min_row=2):
             #checks if the 'section' column is empty - this is when processing should stop
-            if row[1].value is None:
+            if row[2].value is None:
                 break
 
             #create new exam
@@ -55,10 +52,16 @@ def file_upload(request):
             if question_object is None:
                 exam_name = row[0].value
                 if Exam.objects.filter(name=exam_name).count() > 0:
-                    Exam.objects.get(name=exam_name).delete()
+                    #Exam.objects.get(name=exam_name).delete()
+                    return render(request, 'exams/file_upload.html', {'error': 'An exam with the same name is already in the database. Please rename this exam.'})
 
+                #EXAM TYPE IS SAT OR ACT
+                exam_type = row[1].value
+                if exam_type is None or not (exam_type == 'ACT' or exam_type == 'SAT'):
+                    return render(request, 'exams/file_upload.html', {'error': 'The exam has been uploaded without an accepted exam type. Please specify the type in the Excel file (SAT or ACT)'})
                 exam_object, created = Exam.objects.get_or_create(
-                    name = exam_name
+                    name = exam_name,
+                    type = row[1].value,
                 )
 
             #update the previous section's num_passage field
@@ -67,31 +70,56 @@ def file_upload(request):
                 section_object.save()
                 num_passages = 0
 
+            #Checks if the cell in the section column is empty
+            if row[2].value is None:
+                Exam.objects.get(name=exam_name).delete()
+                return render(request, 'exams/file_upload.html', {'error': 'A question has a missing section, please specify the section in the Excel file.'})
             #if we have a new section, then we create a new section
-            if current_section != row[1].value.lower():
-                current_section = row[1].value.lower()
+            if current_section != row[2].value.lower():
+                current_section = row[2].value.lower()
+
                 num_questions = 0
                 time = 0
                 #resets the question_number to 1 for a new section
                 question_number = 1
                 section_name = None
 
-                if current_section == 'reading':
-                    num_questions = 52
-                    time = 65
-                    section_name = 'Reading'
-                elif current_section == 'writing':
-                    num_questions = 44
-                    time = 35
-                    section_name = 'Writing and Language'
-                elif current_section == 'math1':
-                    num_questions = 20
-                    time = 25
-                    section_name = 'Math (No calculator)'
-                elif current_section =='math2':
-                    num_questions = 38
-                    time = 55
-                    section_name = 'Math (Calculator)'
+                if exam_type == 'SAT':
+                    if current_section == 'reading':
+                            num_questions = 52
+                            time = 65
+                            section_name = 'Reading'
+                    elif current_section == 'writing':
+                        num_questions = 44
+                        time = 35
+                        section_name = 'Writing and Language'
+                    elif current_section == 'math1':
+                        num_questions = 20
+                        time = 25
+                        section_name = 'Math (No calculator)'
+                    elif current_section =='math2':
+                        num_questions = 38
+                        time = 55
+                        section_name = 'Math (Calculator)'
+                else:
+                    # SECTION NAMES OF THE ACT
+                    if current_section == 'english':
+                        num_questions = 75
+                        time = 45
+                        section_name = 'English'
+                    elif current_section == 'math':
+                        num_questions = 60
+                        time = 60
+                        section_name = 'Math'
+                    elif current_section == 'reading':
+                        num_questions = 40
+                        time = 35
+                        section_name = 'Reading'
+                    elif current_section == 'science':
+                        num_questions = 40
+                        time = 35
+                        section_name = 'Science'
+
                 section_object, created = Section.objects.get_or_create(
                     name = section_name,
                     type = current_section,
@@ -100,9 +128,8 @@ def file_upload(request):
                     time = time,
                 )
 
-
             #create questions
-            question_text = row[3].value
+            question_text = row[4].value
 
             if question_text is not None:
                 question_text = question_text.replace('"', '&quot;')
@@ -110,13 +137,12 @@ def file_upload(request):
                 question_text = "no question" + str(no_question_index)
                 no_question_index += 1
 
-
             question_text = question_text.replace("\n", "\\n")
 
             # handling of non float values in the column
-            question_passage = int(row[2].value) if isinstance(row[2].value, int) else None
-            correct_answer = row[8].value
-            question_categories = row[9].value
+            question_passage = int(row[3].value) if isinstance(row[3].value, int) else None
+            correct_answer = row[10].value
+            question_categories = row[11].value
 
             if question_passage is not None:
                 if question_passage > num_passages:
@@ -134,68 +160,122 @@ def file_upload(request):
 
             #create answers to question
             answer_object_A, created = Answer.objects.get_or_create(
-                text = row[4].value,
+                text = row[5].value,
                 letter = 'A',
                 question = question_object
             )
 
             answer_object_B, created = Answer.objects.get_or_create(
-                text = row[5].value,
+                text = row[6].value,
                 letter = 'B',
                 question = question_object
             )
 
             answer_object_C, created = Answer.objects.get_or_create(
-                text = row[6].value,
+                text = row[7].value,
                 letter = 'C',
                 question = question_object
             )
 
             answer_object_D, created = Answer.objects.get_or_create(
-                text = row[7].value,
+                text = row[8].value,
                 letter = 'D',
                 question = question_object
             )
 
+            #Creates the fifth answer choice for the ACT exam
+            if exam_type == 'ACT':
+                if row[9].value is not None:
+                    answer_object_E, created = Answer.objects.get_or_create(
+                        text = row[9].value,
+                        letter = 'E',
+                        question = question_object
+                    )
 
         #assign images to the respective questions in each section
         #NOTE: for reading passages, the image should be representative of the entire passage
-        for file in reading_passages:
-            filename = file.name
-            passage_num = int(re.findall(r'\d+', filename)[0])
-            section_object = Section.objects.get(type='reading', exam=exam_object)
-            question_object = Question.objects.filter(section=section_object, passage=passage_num).order_by('question_number')[0]
-            question_object.material = file
-            question_object.save()
+        if exam_type == 'SAT':
+            sat_reading_passages = request.FILES.getlist('sat_reading_passages')
+            sat_writing_passages = request.FILES.getlist('sat_writing_passages')
+            sat_nocalc_materials = request.FILES.getlist('sat_nocalc_materials')
+            sat_calc_materials = request.FILES.getlist('sat_calc_materials')
+            for file in sat_reading_passages:
+                filename = file.name
+                passage_num = int(re.findall(r'\d+', filename)[0])
+                section_object = Section.objects.get(type='reading', exam=exam_object)
+                question_object = Question.objects.filter(section=section_object, passage=passage_num).order_by('question_number')[0]
+                question_object.material = file
+                question_object.save()
 
-        for file in writing_passages:
-            filename = file.name
-            passage_num = int(re.findall(r'\d+', filename)[0])
-            section_object = Section.objects.get(type='writing', exam=exam_object)
-            question_object = Question.objects.filter(section=section_object, passage=passage_num).order_by('question_number')[0]
-            question_object.material = file
-            question_object.save()
+            for file in sat_writing_passages:
+                filename = file.name
+                passage_num = int(re.findall(r'\d+', filename)[0])
+                section_object = Section.objects.get(type='writing', exam=exam_object)
+                question_object = Question.objects.filter(section=section_object, passage=passage_num).order_by('question_number')[0]
+                question_object.material = file
+                question_object.save()
 
-        for file in nocalc_materials:
-            filename = file.name
-            question_no = int(re.findall(r'\d+', filename)[0])
-            section_object = Section.objects.get(type='math1', exam=exam_object)
-            question_object = Question.objects.get(question_number=question_no, section=section_object)
-            question_object.material = file
-            question_object.save()
+            for file in sat_nocalc_materials:
+                filename = file.name
+                question_no = int(re.findall(r'\d+', filename)[0])
+                section_object = Section.objects.get(type='math1', exam=exam_object)
+                question_object = Question.objects.get(question_number=question_no, section=section_object)
+                question_object.material = file
+                question_object.save()
 
-        for file in calc_materials:
-            filename = file.name
-            question_no = int(re.findall(r'\d+', filename)[0])
-            section_object = Section.objects.get(type='math2', exam=exam_object)
-            question_object = Question.objects.get(question_number=question_no, section=section_object)
-            question_object.material = file
-            question_object.save()
+            for file in sat_calc_materials:
+                filename = file.name
+                question_no = int(re.findall(r'\d+', filename)[0])
+                section_object = Section.objects.get(type='math2', exam=exam_object)
+                question_object = Question.objects.get(question_number=question_no, section=section_object)
+                question_object.material = file
+                question_object.save()
+        elif exam_type == 'ACT':
+            act_english_passages = request.FILES.getlist('act_english_passages')
+            act_math_materials = request.FILES.getlist('act_math_materials')
+            act_reading_passages = request.FILES.getlist('act_reading_passages')
+            act_science_passages = request.FILES.getlist('act_science_passages')
+            for file in act_english_passages:
+                filename = file.name
+                passage_num = int(re.findall(r'\d+', filename)[0])
+                section_object = Section.objects.get(type='english', exam=exam_object)
+                question_object = Question.objects.filter(section=section_object, passage=passage_num).order_by('question_number')[0]
+                question_object.material = file
+                question_object.save()
 
-    return render(request, 'exams/file_upload.html', {'success': 'Exam successfully uploaded to database.'})
+            for file in act_math_materials:
+                filename = file.name
+                question_no = int(re.findall(r'\d+', filename)[0])
+                section_object = Section.objects.get(type='math', exam=exam_object)
+                question_object = Question.objects.get(question_number=question_no, section=section_object)
+                question_object.material = file
+                question_object.save()
+
+            for file in act_reading_passages:
+                filename = file.name
+                passage_num = int(re.findall(r'\d+', filename)[0])
+                section_object = Section.objects.get(type='reading', exam=exam_object)
+                question_object = Question.objects.filter(section=section_object, passage=passage_num).order_by('question_number')[0]
+                question_object.material = file
+                question_object.save()
+
+            for file in act_science_passages:
+                filename = file.name
+                passage_num = int(re.findall(r'\d+', filename)[0])
+                section_object = Section.objects.get(type='science', exam=exam_object)
+                question_object = Question.objects.filter(section=section_object, passage=passage_num).order_by('question_number')[0]
+                question_object.material = file
+                question_object.save()
+
+        return render(request, 'exams/file_upload.html', {'success': 'Exam successfully uploaded to database.'})
+
+    return render(request, 'exams/file_upload.html')
 
 def index(request):
     print(request.user)
+    #REDIRECTS TO THE EXAM LIST VIEW IF THE USER IS ALREADY LOGGED IN
+    if request.user.is_authenticated:
+        return redirect('exams:exam-list-view')
     return render(request, 'index.html', {})
 
 @login_required
@@ -256,10 +336,17 @@ def exam_list_reset_view(request, pk):
 
 @login_required
 def exam_list_change_time_view(request, pk):
+
     exam = Exam.objects.get(pk=pk)
     user = request.user
+    is_extended_time = request.POST['is_extended_time']
+    is_extended_time = True if is_extended_time == 'true' else False
 
-    return JsonResponse({'test':'hello'})
+    exam_instance, updated = ExamInstance.objects.get_or_create(exam=exam, user=user)
+    exam_instance.is_extended_time = is_extended_time
+    exam_instance.save()
+
+    return JsonResponse({'is_extended_time': exam_instance.is_extended_time})
 
 
 @login_required
@@ -334,19 +421,23 @@ def save_timer_view(request, pk, section_name):
 def section_view(request, pk, section_name):
     section = Section.objects.get(exam_id=pk, type=section_name)
     exam = Exam.objects.get(pk=pk)
-    questions = section.get_questions() 
+    questions = section.get_questions()
     user = request.user
     minutes_remaining = None
     seconds_remaining = None
 
+    # Check if a SectionInstance exists (section has been previously started)
     if SectionInstance.objects.filter(user=user, exam=exam, section=section).exists():
         section_instance = SectionInstance.objects.get(user=user, exam=exam, section=section)
         minutes_remaining = section_instance.minutes_left
         seconds_remaining = section_instance.seconds_left
+    # Create a SectionInstance object and modify the time if extended time has been selected
     else:
-        section_minutes = section.time
-        time_object = SectionInstance.objects.create(user=user, exam=exam, section=section, minutes_left = section_minutes, seconds_left = 0)
-        minutes_remaining = section.time
+        # Default ExamInstance object has is_extended_time set to false
+        exam_instance, created = ExamInstance.objects.get_or_create(user=user, exam=exam)
+        section_minutes = (section.time * 1.5) if exam_instance.is_extended_time else section.time
+        time_object = SectionInstance.objects.create(user=user, exam=exam, section=section, minutes_left=section_minutes, seconds_left=0)
+        minutes_remaining = section_minutes
         seconds_remaining = 0
 
     context = {

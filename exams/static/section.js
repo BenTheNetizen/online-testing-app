@@ -46,7 +46,8 @@ function sendData(isNextSection) {
         //THIS IS A HORRIBLE WAY TO REDIRECT THE URLs
         sectionName = response.section_name
 
-        if (isNextSection) {
+        // ROUTING FOR THE SAT EXAM
+        if (isNextSection && examType == 'SAT') {
           if (sectionName == "reading") {
             window.location.href="../break1/writing"
           }
@@ -57,6 +58,20 @@ function sendData(isNextSection) {
             window.location.href="../break2/math2"
           }
           else if (sectionName =="math2") {
+            window.location.href="../results"
+          }
+        // ROUTING FOR THE ACT EXAM
+        } else if (isNextSection && examType =='ACT') {
+          if (sectionName == "english") {
+            window.location.href="../math/section-directions"
+          }
+          else if (sectionName == "math") {
+            window.location.href="../break1/reading"
+          }
+          else if (sectionName == "reading") {
+            window.location.href="../science/section-directions"
+          }
+          else if (sectionName =="science") {
             window.location.href="../results"
           }
         }

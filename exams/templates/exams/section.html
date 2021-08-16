@@ -178,6 +178,7 @@
   /* Cannot pass Django templates to JavaScript files, so the timer and other features using
      template variables are all implemented in this script tag
   */
+  const examType = '{{ exam.type }}'
   const isMathSection = ('{{ section.type|safe }}'.includes('math')) ? true : false
   const maxPassages = {{ section.num_passages }}
   const sectionTimer = document.getElementById('section-timer')
