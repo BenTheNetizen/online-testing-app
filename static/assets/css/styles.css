@@ -17,31 +17,55 @@ body {
   line-height: 1;
 }
 
-body {
-  font-family: "Pathway Gothic One";
-  font-size: 22px;
-  color: #444444;
+@font-face {
+  font-family: mainFont;
+  src: url(http://127.0.0.1:8000/static/assets/fonts/TradeGothicLTStd-Cn18.otf);
 }
+
+body {
+  font-family: "mainFont";
+  font-size: 18px;
+  color: #444444;
+  letter-spacing: 0px;
+}
+
+
 
 /* scrollbar width */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
+}
+
+/* scrollbar width */
+#section-form::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+.question-tracker::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track:not(select, option) {
-  background: lightgrey;
+  background: rgb(245, 245, 245);
+  border-radius: 3px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb:not(select, option) {
-  background: darkgrey;
+  background: rgb(219, 225, 225);
+  border-radius: 3px;
+  border-right: 2px rgb(245, 245, 245) solid;
+  border-left: 2px rgb(245, 245, 245) solid;
+  background-clip: padding-box;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover:not(select, option) {
-  background: grey;
+  background: lightgrey;
 }
 
 .btn {
@@ -71,7 +95,7 @@ a:hover {
 }
 
 .transition-page-wrapper.start-exam-page {
-  margin-top: 150px;
+  margin-top: 140px;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -143,7 +167,7 @@ a:hover {
 }
 
 #register-form {
-  margin-top: 150px;
+  margin-top: 140px;
   margin-bottom: 10%;
 }
 
@@ -271,7 +295,7 @@ a:hover {
 
 .exam-list {
   flex-basis: 35%;
-  margin-top: 75px;
+  margin-top: 65px;
   max-width: 40%;
   padding-top: 40px;
   padding-left: 55px;
@@ -376,7 +400,7 @@ a:hover {
   padding-left: 40px;
   padding-top: 40px;
   padding-bottom: 40px;
-  margin-top: 75px;
+  margin-top: 65px;
   background-color: #d1dbdc;
   height: calc(100% - 75px);
   overflow-y: auto;
@@ -603,7 +627,7 @@ a:hover {
 }
 
 .section-wrapper {
-  max-width: 1290px;
+  max-width: 1250px;
   padding-left: 20px;
   padding-right: 20px;
   margin: 65px auto 0px auto;
@@ -614,9 +638,13 @@ a:hover {
 }
 
 .section-header {
-  padding-top: 60px;
+  padding-top: 50px;
   display: flex;
   justify-content: space-between;
+  z-index:3;
+  border-bottom: 1px lightgray solid;
+  max-width: 1250px;
+  background-color: white;
 }
 
 .section-header h1 {
@@ -635,9 +663,12 @@ a:hover {
 }
 
 #section-material {
-  overflow-y: scroll;
-  height: calc(100vh - 200px);
   flex-basis: 42%;
+  overflow-y: auto;
+  height: calc(100vh - 202px);
+  padding-left: 28px;
+  padding-right: 10px;
+  margin-top: 28px;
 }
 
 #section-material img {
@@ -651,9 +682,10 @@ a:hover {
 
 #section-form {
   overflow-y: scroll;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 174px);
   flex-basis: 42%;
-  padding: 0px 10px;
+  padding: 23px 18px;
+  border-right: 1px lightgray solid;
 }
 
 #section-form img {
@@ -681,9 +713,10 @@ a:hover {
 
 .question-tracker {
   flex-basis: 16%;
-  height: calc(100vh - 275px);
-  overflow-y: scroll;
-  padding-left: 20px;
+  height: calc(100vh - 255px);
+  overflow-y: auto;
+  padding-left: 25px;
+  padding-top: 23px;
 }
 
 .question-tracker > div {
@@ -957,6 +990,8 @@ a:hover {
   padding: 15px 0;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  height: 65px;
 }
 
 #header.header-scrolled {
@@ -967,9 +1002,21 @@ a:hover {
 #header .logo {
   width: 140px;
   height: 36px;
-  margin-left: 89px;
+  margin-left: calc((100vw - 1225px) / 2);
   position: relative;
-  top: 3px;
+  top: 0px;
+}
+
+@media (max-width: 1250px) {
+  #header .logo {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 1250px) {
+  #header {
+    padding: 0px 20px;
+  }
 }
 
 #header .username {
@@ -985,13 +1032,19 @@ a:hover {
   border-radius: 100px;
   background: #ffffff;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
-  margin-right: 100px;
   line-height: 36px !important;
   color: var(--main-color);
   text-align: center;
   font-style: normal;
   /*font-weight: bold;*/
   font-size: 22px;
+  margin-right: calc((100vw - 1225px) / 2);
+}
+
+@media (max-width: 1250px) {
+  #header .login-btn {
+    margin-right: 0;
+  }
 }
 #header .logo a {
   color: #16507b;
@@ -1011,6 +1064,9 @@ a:hover {
   background-color: #66a1a5;
   border-width: 0px;
   border-radius: 0px;
+  font-size: 32px;
+  font-weight: normal;
+  padding-right: 0px;
 }
 
 #dropdownMenuButton::after {
@@ -1041,7 +1097,13 @@ header .dropdown-menu a:hover {
 }
 
 header .dropdown {
-  margin-right: 80px;
+  margin-right: calc((100vw - 1225px) / 2);
+}
+
+@media (max-width: 1250px) {
+  header .dropdown {
+    margin-right: 0;
+  }
 }
 
 header .dropdown-item {
@@ -1177,6 +1239,9 @@ header .dropdown-item {
 #hero .container {
   top: 50%;
   transform: translateY(-50%);
+}
+#hero-text-wrapper {
+  margin-bottom: 63px;
 }
 
 #hero h1 {
