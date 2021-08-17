@@ -17,39 +17,55 @@ body {
   line-height: 1;
 }
 
+@font-face {
+  font-family: mainFont;
+  src: url(http://127.0.0.1:8000/static/assets/fonts/TradeGothicLTStd-Cn18.otf);
+}
+
 body {
-  font-family: "Pathway Gothic One";
-  font-size: 22px;
+  font-family: "mainFont";
+  font-size: 18px;
   color: #444444;
+  letter-spacing: 0px;
 }
 
 
 
 /* scrollbar width */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
 }
 
 /* scrollbar width */
-body::-webkit-scrollbar {
+#section-form::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+.question-tracker::-webkit-scrollbar {
   width: 0px;
   height: 0px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track:not(select, option) {
-  background: lightgrey;
+  background: rgb(245, 245, 245);
+  border-radius: 3px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb:not(select, option) {
-  background: darkgrey;
+  background: rgb(219, 225, 225);
+  border-radius: 3px;
+  border-right: 2px rgb(245, 245, 245) solid;
+  border-left: 2px rgb(245, 245, 245) solid;
+  background-clip: padding-box;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover:not(select, option) {
-  background: grey;
+  background: lightgrey;
 }
 
 .btn {
@@ -625,13 +641,10 @@ a:hover {
   padding-top: 50px;
   display: flex;
   justify-content: space-between;
-  position: fixed;
-  top: 60px;
   z-index:3;
   border-bottom: 1px lightgray solid;
   max-width: 1250px;
   background-color: white;
-  width: calc(100% - (100% - 1210px));
 }
 
 .section-header h1 {
@@ -647,35 +660,20 @@ a:hover {
   display: flex;
   justify-content: center;
   position: relative;
-  margin-top: 166px;
 }
 
-.section-material-placeholder {
+#section-material {
   flex-basis: 42%;
-}
-
-.section-material-container {
-  overflow-y: scroll;
-  height: calc(100vh - 201px);
-  position: fixed;
-  top: 195px;
-  z-index: 4;
-  left: calc((100vw - 1210px) / 2);
-  width: calc((100vw - (100vw - 1200px)) * .42);
-}
-
-@media (max-width: 1210px) {
-  .section-material-container {
-    width: calc(42vw - 15px);
-    left: 20px;
-  }
+  overflow-y: auto;
+  height: calc(100vh - 202px);
+  padding-left: 28px;
+  padding-right: 10px;
+  margin-top: 28px;
 }
 
 #section-material img {
-  width: 85%;
+  width: 100%;
   height: auto;
-  display: block;
-  margin: auto;
 }
 
 .math-material {
@@ -683,12 +681,11 @@ a:hover {
 }
 
 #section-form {
-  /*
   overflow-y: scroll;
-  height: calc(100vh - 200px);
-  */
+  height: calc(100vh - 174px);
   flex-basis: 42%;
   padding: 23px 18px;
+  border-right: 1px lightgray solid;
 }
 
 #section-form img {
@@ -715,12 +712,9 @@ a:hover {
 }
 
 .question-tracker {
-  border-left: 1px lightgray solid;
   flex-basis: 16%;
-  /*
-  height: calc(100vh - 275px);
-  overflow-y: scroll;
-  */
+  height: calc(100vh - 255px);
+  overflow-y: auto;
   padding-left: 25px;
   padding-top: 23px;
 }
@@ -1014,6 +1008,12 @@ a:hover {
 }
 
 @media (max-width: 1250px) {
+  #header .logo {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 1250px) {
   #header {
     padding: 0px 20px;
   }
@@ -1032,13 +1032,19 @@ a:hover {
   border-radius: 100px;
   background: #ffffff;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
-  margin-right: 100px;
   line-height: 36px !important;
   color: var(--main-color);
   text-align: center;
   font-style: normal;
   /*font-weight: bold;*/
   font-size: 22px;
+  margin-right: calc((100vw - 1225px) / 2);
+}
+
+@media (max-width: 1250px) {
+  #header .login-btn {
+    margin-right: 0;
+  }
 }
 #header .logo a {
   color: #16507b;
@@ -1092,6 +1098,12 @@ header .dropdown-menu a:hover {
 
 header .dropdown {
   margin-right: calc((100vw - 1225px) / 2);
+}
+
+@media (max-width: 1250px) {
+  header .dropdown {
+    margin-right: 0;
+  }
 }
 
 header .dropdown-item {
@@ -1227,6 +1239,9 @@ header .dropdown-item {
 #hero .container {
   top: 50%;
   transform: translateY(-50%);
+}
+#hero-text-wrapper {
+  margin-bottom: 63px;
 }
 
 #hero h1 {

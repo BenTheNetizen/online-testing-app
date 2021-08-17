@@ -120,6 +120,9 @@
       {% if not correct_answers %}
         <!-- Timer -->
         <button id="pause-btn" data-toggle="modal" data-target="#pauseSectionModal" onclick="toggleTimer()"></button>
+        <span class="material-icons material-icons-outlined" style='color: #7d120b; font-size: 30px;'>
+          pause_circle_filled
+          </span>
         <p id="section-timer">TIMER</p>
       {% endif %}
     </div>
@@ -132,11 +135,8 @@
     </button>
     {% endif %}
     {% if 'math' not in section.type %}
-    <div class='section-material-placeholder'></div>
-    <div class='section-material-container'>
     <div id="section-material">
       <!-- DYNAMICALLY ADDED IMAGES FROM section.js HERE -->
-    </div>
     </div>
     {% endif %}
     <form id="section-form">
