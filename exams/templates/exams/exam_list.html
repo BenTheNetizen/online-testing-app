@@ -10,7 +10,8 @@ Exam List
 
 <div class="exam-list-container">
   <div class="exam-list">
-    <select id="select-exam" name="exam-titles" onchange="filterExamType()">
+  <div class="exam-list-inner-container">
+    <select id="select-exam" name="exam-titles" onchange="filterExamType()" style='display: none'>
       <option value="SAT Mock Exams" selected>SAT Mock Exams</option>
       <option value="ACT Mock Exams">ACT Mock Exams</option>
       <option value="SAT/ACT Diagnostic Test">SAT/ACT Diagnostic Test</option>
@@ -26,8 +27,10 @@ Exam List
     <br>
     {% endfor %}
   </div>
+</div>
 
   <div class="exam-details">
+  <div class='exam-details-inner-container'>
     <div id="guide-msg" class="exam-details-header">
       <h1>Select an exam on the left to get started!</h1>
     </div>
@@ -57,7 +60,6 @@ Exam List
       <div class="exam-details-header">
         <div id="exam-details-header-inner">
           <h1>{{exam.name | title}}</h1>
-
           <div class='section-time'>
             <span class="material-icons material-icons-outlined">
               schedule
@@ -70,9 +72,10 @@ Exam List
         </div>
       </div>
       <div class="section-details-wrapper">
+        <!-- <div class='ca-notice'>You must finish all sections of this exam to view a complete score breakdown.</div> -->
         {% for section in exam.get_sections %}
         <div class="section-details">
-          <div class='reading-min-container' style='margin-right: 15px;'>
+          <div class='reading-min-container' style='margin-right: 20px;'>
             <div class='reading-min'>
               <span>{{section.time}}<br>
                 <div class='min-size'>min</div>
@@ -85,8 +88,8 @@ Exam List
               <a id="exam{{exam.pk}}-{{section.type}}-review" class='view-mistakes-link'
                 href="{% url 'exams:section-review-view' pk=exam.id section_name=section.type %}">View mistakes</a>
             </div>
-            <div id="exam{{exam.pk}}-{{section.type}}-score">Raw Score: N/A</div>
-            <div>Estimated Section Score Range: N/A</div>
+            <div id="exam{{exam.pk}}-{{section.type}}-score" class="exam-list-score-data">Raw Score: N/A</div>
+            <div class="exam-list-score-data">Estimated Section Score Range: N/A</div>
             <div class="section-begin">
               <a id="exam{{exam.pk}}-{{section.type}}-start"
                 href="{% url 'exams:section-directions-view' pk=exam.id section_name=section.type %}"
@@ -95,26 +98,27 @@ Exam List
             </div>
             <a id="exam{{exam.pk}}-{{section.type}}-reset"
               href="{% url 'exams:section-reset-view' pk=exam.id section_name=section.type %}"
-              class="ca-btn retake"><span class="material-icons material-icons-sharp">replay</span>Retake this
-              section</a>
+              class="ca-btn retake"><span class="material-icons material-icons-sharp">replay</span><span>Retake this
+              section</span></a>
           </div>
         </div>
         {% endfor %}
         <div class="section-details">
-          <div>
-            <a href="{% url 'exams:start-exam-view' pk=exam.id %}" class="btn btn-primary">Begin this Exam</a>
-            <a onclick="resetExam({{exam.id}})" class="btn btn-danger">Reset this Exam</a>
-            <!-- trigger modal -->
-            <a data-url="{% url 'results:render-pdf-view' pk=exam.id %}"
-              data-modal-id="#openExam{{exam.pk}}BreakdownModal" class="btn btn-primary" onclick="openBreakdown(this)">
-              Your complete breakdown
-            </a>
-          </div>
+          <!--
+          <a href="{% url 'exams:start-exam-view' pk=exam.id %}" class="btn btn-primary">Begin this Exam</a>
+          <a onclick="resetExam({{exam.id}})" class="btn btn-danger">Reset this Exam</a>
+          -->
+          <!-- trigger modal -->
+          <a data-url="{% url 'results:render-pdf-view' pk=exam.id %}"
+            data-modal-id="#openExam{{exam.pk}}BreakdownModal" class="btn green-btn" onclick="openBreakdown(this)">
+            Your complete breakdown
+          </a>          
         </div>
 
       </div>
     </div>
     {% endfor %}
+  </div>
   </div>
 </div>
 
@@ -122,4 +126,5 @@ Exam List
 <script>
   var csrf = "{{ csrf_token }}"
 </script>
+<script src="{% static 'dropdown-list.js' %}" defer></script>
 {% endblock content %}

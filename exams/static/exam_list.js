@@ -75,7 +75,11 @@ function getExamDetails(btnId, examPk, elt) {
           else if (section_data[1] != null) {
             // Implies that the section is in progress
             allSectionsCompleted = false
-            document.getElementById(`exam${examPk}-${section}-time-remaining`).innerHTML = `${section_data[1]}:${section_data[2]} minutes remaining`
+            var secondsLeft = section_data[2]
+            if (secondsLeft <= 9) {
+              secondsLeft = '0' + secondsLeft
+            } 
+            document.getElementById(`exam${examPk}-${section}-time-remaining`).innerHTML = `${section_data[1]}:` + secondsLeft + ` minutes remaining`
             document.getElementById(`exam${examPk}-${section}-start`).innerHTML = '<span class="material-icons material-icons-round">play_arrow</span>Resume this section'
             document.getElementById(`exam${examPk}-${section}-review`).style.display = 'none'
           }
@@ -95,8 +99,8 @@ function getExamDetails(btnId, examPk, elt) {
   })
 }
 
-function filterExamType() {
-  let examType = examDropdown.value
+function filterExamType(selection) {
+  let examType = $(selection).text()
 
   if (examType == 'SAT Mock Exams') {
     //hide all exam buttons

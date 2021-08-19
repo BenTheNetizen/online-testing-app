@@ -30,6 +30,55 @@
   <!-- Template Main CSS File -->
   <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}">
 
+  <style>
+    .styledSelect:after {
+    content:url("{% static 'assets/img/down.svg' %}");
+    width:0;
+    height:0;
+    position:absolute;
+    top:7px;
+    right: 30px;
+    }
+    /*
+    @font-face {
+      font-family: 'TradeGothic LT';
+      src: url('fonts/TradeGothicLT-Bold.woff2') format('woff2'),
+          url('fonts/TradeGothicLT-Bold.woff') format('woff');
+      font-weight: bold;
+      font-style: normal;
+      font-display: swap;
+    }
+    */
+
+    @font-face {
+      font-family: mainFont;
+      src: url("{% static 'assets/fonts/TradeGothicLTStd-Cn18.otf' %}");
+    }
+
+    @font-face {
+      font-family: mainFontBold;
+      src: url("{% static 'assets/fonts/TradeGothicLTStd-BdCn20.otf' %}");
+    }
+    /*
+    @font-face{
+      font-family:"Trade Gothic LT W05 Light";
+      src:url("http://127.0.0.1:8000/static/assets/fonts/b575f73d-ccf6-4456-99fc-c52d5c2d6cf6.woff2") format("woff2"),url("http://127.0.0.1:8000/static/assets/fonts/e3691e95-03c3-47b0-89e4-ce734777e917.woff") format("woff");
+    }
+    */
+    @font-face{
+      font-family:"Trade Gothic LT W05 Roman";
+      src: url("{% static 'assets/fonts/d4a722a6-2380-42f5-9390-886fdba5ba81.woff2' %}") format("woff2"),url("{% static 'assets/fonts/580bd5b6-412a-4178-b3eb-4e2046897cbf.woff' %}") format("woff");
+    }
+    @font-face{
+      font-family:"Trade Gothic LT W05 Bold No-_2";
+      src: url("{% static 'assets/fonts/334b425c-a58c-43f9-afb6-6255df98c587.woff2' %}") format("woff2"),url("{% static 'assets/fonts/1bcada2d-2e8e-461a-b44e-af7b830ee768.woff' %}") format("woff");
+    }
+    @font-face{
+      font-family:"Trade Gothic LT W05 Bold";
+      src: url("{% static 'assets/fonts/30aba873-93af-406b-b54a-66c5b5e82896.woff2' %}") format("woff2"),url("{% static 'assets/fonts/59cd5e10-9d20-4b86-850d-78b9beb6dfcd.woff' %}") format("woff");
+    }
+  </style>
+
   <title>{% block title %}{% endblock title %}</title>
 </head>
 
@@ -37,7 +86,7 @@
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top">
     <a href="{% url 'exams:exam-list-view' %}" class="logo">
-      <img src="{% static 'assets/img/logo.png' %}" alt="" class="img-fluid">
+      <img src="{% static 'assets/img/logo-scaled-72-percent.png' %}" alt="" class="img-fluid">
     </a>
     {% if user.is_authenticated %}
     <!--
@@ -66,6 +115,13 @@
 
   {% block content %}
   {% endblock %}
+
+  <script>
+    // show icons after page has finished loading
+    $(window).on('load', function() {
+      $('.material-icons').css('opacity','1');
+    });
+  </script>
   <!-- ======= Footer =======
   <footer id="footer">
     <div class="footer-top">
