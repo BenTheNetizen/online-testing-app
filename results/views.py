@@ -9,8 +9,8 @@ from django.contrib.staticfiles import finders
 from questions.models import Student_Answer, Question, Result
 from exams.models import Exam, Section
 from openpyxl import load_workbook
-from easy_pdf.views import PDFTemplateView
-import easy_pdf
+#from easy_pdf.views import PDFTemplateView
+#import easy_pdf
 import os
 
 
