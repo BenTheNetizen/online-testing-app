@@ -117,13 +117,14 @@ function radioChecked(elt, questionNum) {
     question = $(elt).find('input').attr('name')
     answer = $(elt).find('input').attr('value')
   }
-
+  console.log(`questionNum: ${questionNum}`)
   $.ajax({
       type: 'POST',
       url: `${url}save-question`,
       data: {
         csrfmiddlewaretoken: csrf[0].value,
         question: question,
+        question_number: questionNum,
         answer: answer,
       },
       success: function(response) {
@@ -174,12 +175,12 @@ function getPassage(value) {
             //NOTE THAT 'questionData' IS AN ARRAY
             //questionData[0] are the question texts
             //questionData[1] are the answers
-            //questionData[2] is either '' or contains the answer that was previously selected\
+            //questionData[2] is either '' or contains the answer that was previously selected
             //questionData[3] is the image URL
             var sectionBoxString = ''
             if (questionData[3] != null) {
               //implies that there is an image to add to the question
-                sectionBoxString += `
+                sectionBox.innerHTML += `
                 <div class='question-container question-container-math'>
                 <img class="math-material" src="${questionData[3]}">
                 <div class="mb-2 testing">
@@ -190,7 +191,7 @@ function getPassage(value) {
                 <div class="answers-container">
               `
             } else {
-                sectionBoxString += `
+                sectionBox.innerHTML += `
                 <div class='question-container question-container-math'>
                 <div class="mb-2 testing">
                   <b class="ca-question-num">Question ${questionNum}</b>
@@ -202,7 +203,7 @@ function getPassage(value) {
             }
             //checks if one of the answers are null, implies math fill in the answer box
             if (questionData[1][0] == null) {
-              sectionBoxString += `
+              sectionBox.innerHTML += `
                 <div>
                   <input type="text" class="ans ca-textbox" id="${questionNum}-textbox" name="${questionData[0]}" onfocusout="radioChecked(this, ${questionNum})">
                 </div>
@@ -219,7 +220,7 @@ function getPassage(value) {
                 if (answer == questionData[2] && questionData[2] != null) {
                   // SETS QUESTION TRACKER ON THE RIGHT TO GREEN
                   $(`#question${questionNum}`).parent().find('.material-icons').addClass('answered')
-                  sectionBoxString += `
+                  sectionBox.innerHTML += `
                     <!--
                     <div>
                       <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this, ${questionNum})" checked>
@@ -234,7 +235,8 @@ function getPassage(value) {
                     </label>
                   `
                 } else {
-                  sectionBoxString += `
+
+                  sectionBox.innerHTML += `
                     <!--
                     <div>
                       <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this, ${questionNum})">
@@ -250,11 +252,11 @@ function getPassage(value) {
                 }
               })
             }
-            sectionBoxString += `
+            sectionBox.innerHTML += `
             </div>
             </div>
             `
-            sectionBox.innerHTML += sectionBoxString
+            //sectionBox.innerHTML += sectionBoxString
             $('.answers-container').css('width', '50%')
           }
         })
@@ -313,7 +315,9 @@ function getPassage(value) {
                 <div class="answers-container">
               `
             }
+            // Handle the answer displaying
             questionData[1].forEach(answer=>{
+              answer = answer.replaceAll('\"', '&quot;')
               // CONDITION FOR QUESTION BEING PREVIOUSLY ANSWERED
               if (answer == questionData[2] && questionData[2] != null) {
                 // SETS THE PREVIOUSLY ANSWERED TO GREEN

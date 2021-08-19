@@ -12,7 +12,7 @@ class Question(models.Model):
     correct_answer = models.CharField(max_length=100, default="")
     categories = models.CharField(max_length=100, null=True, blank=True)
 
-    
+
     def __str__(self):
         return str(self.text)
 

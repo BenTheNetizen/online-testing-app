@@ -564,16 +564,13 @@ def section_passage_data_view(request, pk, section_name, passage_num):
         for a in q.get_answers():
             answers.append(a.text)
 
-        # ERROR OCCURS WHEN UNCOMMENTED
-        #if 'no question' in q.text:
-        #    q.text = ''
-
         # Get's the previously answered question if possible
         student_answer = Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=q.question_number).first()
         student_answer_text = None
-
+        #import pdb; pdb.set_trace()
         if student_answer is not None and student_answer.answer != 'N':
             student_answer_text = Answer.objects.get(question=q, letter=student_answer.answer).text
+            student_answer_text = student_answer_text.replace('"', '&quot;')
         data.append({q.question_number: [str(q), answers, student_answer_text]})
 
     return JsonResponse({
@@ -677,7 +674,7 @@ def save_question_view(request, pk, section_name):
 
         #CONVERT THE QUOTATION ESCAPES BACK TO REGULAR QUOTES
         question_text = data['question'].replace('"', '&quot;')
-        question = Question.objects.get(text=question_text, section=section)
+        question = Question.objects.get(text=question_text, section=section, exam=exam, question_number=data['question_number'])
 
         # Check if a the Answer object exists (implies multiple choice)
         if Answer.objects.filter(question=question, text=data['answer']).exists():
