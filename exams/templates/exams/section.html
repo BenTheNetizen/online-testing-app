@@ -119,13 +119,16 @@
       <!-- 'correct_answers' is only passed to the template when in review mode -->
       {% if not correct_answers %}
         <!-- Timer -->
-        <button id="pause-btn" data-toggle="modal" data-target="#pauseSectionModal" onclick="toggleTimer()"></button>
+        <!-- <button id="pause-btn" data-toggle="modal" data-target="#pauseSectionModal" onclick="toggleTimer()"></button> -->
+        <span id="pause-btn" class="material-icons material-icons-outlined" data-toggle="modal" data-target="#pauseSectionModal" onclick="toggleTimer()">
+          pause_circle_filled
+          </span>
         <p id="section-timer">TIMER</p>
       {% endif %}
     </div>
   </div>
-  <hr>
-  <div id="section-content" class="mt-3">
+  
+  <div id="section-content">
     {% if not correct_answers %}
     <button type="button" class="btn btn-primary finish-this-section-btn" data-toggle="modal" data-target="#finishSectionModal">
       Finish section
@@ -158,9 +161,12 @@
       <h3>Questions</h3>
       {% for question in questions %}
       <div style='display: none'>
+        <!--
         <span class="material-icons material-icons-round">
           check
         </span>
+      -->
+      <span class="material-icons checkmark" style='opacity: 1;'>done</span>
         <p id="question{{question.question_number}}">
           Question {{ question.question_number }}
         </p>
@@ -226,12 +232,12 @@
   function toggleTimer() {
     if (isTimerOn) {
       stopTimer();
-      timerBtn.style.backgroundImage = "url({% static 'assets/img/start-btn.png' %})"
+      //timerBtn.style.backgroundImage = "url({% static 'assets/img/start-btn.png' %})"
       isTimerOn = false;
     }
     else if (!isTimerOn) {
       timer = setInterval(startTimer, 1000);
-      timerBtn.style.backgroundImage = "url({% static 'assets/img/pause-btn.png' %})"
+      //timerBtn.style.backgroundImage = "url({% static 'assets/img/pause-btn.png' %})"
       isTimerOn = true;
     }
   }

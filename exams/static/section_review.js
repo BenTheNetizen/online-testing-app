@@ -110,6 +110,7 @@ function getPassage(value) {
               else {
                 $('#question'+questionNum).parent().find('.material-icons').addClass('answered')
                 $('#question'+questionNum).parent().find('.material-icons').text('close')
+                $('#question'+questionNum).parent().find('.material-icons').addClass('material-icons-close')
                 $('#question'+questionNum).parent().find('.material-icons').css('backgroundColor', '#7d120b')
                 $('#question'+questionNum).parent().show()
                 if (questionData[2] != null) {
@@ -161,7 +162,7 @@ function getPassage(value) {
                     -->
                     <label for="${questionData[0]}" id="${questionData[0]}-${answer}-label" class="answer-container" onclick="radioChecked(this)">
                       <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" disabled=true checked>
-                      <span class="checkmark-con"><span class="material-icons checkmark" style="background-color: #7d120b; color: white; opacity: 1">close</span></span>
+                      <span class="checkmark-con"><span class="material-icons material-icons-close checkmark" style="background-color: #7d120b; color: white; opacity: 1">close</span></span>
                     ${answer}
                     </label>
                   `
@@ -170,6 +171,7 @@ function getPassage(value) {
                   if ( `${answer}` ==  `${correctAnswers[questionNum-1]}`) {
                     $('#question'+questionNum).parent().find('.material-icons').addClass('answered')
                     $('#question'+questionNum).parent().find('.material-icons').text('close')
+                    $('#question'+questionNum).parent().find('.material-icons').addClass('material-icons-close')
                     $('#question'+questionNum).parent().find('.material-icons').css('backgroundColor', '#7d120b')
                     $('#question'+questionNum).parent().show()
 
@@ -304,7 +306,7 @@ function getPassage(value) {
                 -->
                 <label for="${questionData[0]}" id="${questionData[0]}-${answer}-label" class="answer-container" onclick="radioChecked(this)">
                       <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" disabled=true checked>
-                      <span class="checkmark-con"><span class="material-icons checkmark" style="background-color: #7d120b; color: white; opacity: 1">close</span></span>
+                      <span class="checkmark-con"><span class="material-icons material-icons-close checkmark" style="background-color: #7d120b; color: white; opacity: 1">close</span></span>
                     ${answer}
                 </label>
                 `
@@ -314,6 +316,7 @@ function getPassage(value) {
                   console.log('wrong!!!' + questionNum)
                   $('#question'+questionNum).parent().find('.material-icons').addClass('answered')
                   $('#question'+questionNum).parent().find('.material-icons').text('close')
+                  $('#question'+questionNum).parent().find('.material-icons').addClass('material-icons-close')
                   $('#question'+questionNum).parent().find('.material-icons').css('backgroundColor', '#7d120b')
                   $('#question'+questionNum).parent().show()
 

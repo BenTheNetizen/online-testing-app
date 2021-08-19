@@ -14,34 +14,55 @@ html,
 body {
   height: 100%;
   width: 100%;
-  line-height: 1;
+  line-height: 1.2;
 }
 
 body {
-  font-family: "Pathway Gothic One";
-  font-size: 22px;
+  font-family: "mainFont";
+  font-size: 18px;
   color: #444444;
+  letter-spacing: 0px;
+}
+
+.material-icons{
+  opacity: 0;
 }
 
 /* scrollbar width */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
+}
+
+/* scrollbar width */
+#section-form::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+.question-tracker::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track:not(select, option) {
-  background: lightgrey;
+  background: rgb(245, 245, 245);
+  border-radius: 3px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb:not(select, option) {
-  background: darkgrey;
+  background: rgb(219, 225, 225);
+  border-radius: 3px;
+  border-right: 2px rgb(245, 245, 245) solid;
+  border-left: 2px rgb(245, 245, 245) solid;
+  background-clip: padding-box;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover:not(select, option) {
-  background: grey;
+  background: lightgrey;
 }
 
 .btn {
@@ -71,7 +92,7 @@ a:hover {
 }
 
 .transition-page-wrapper.start-exam-page {
-  margin-top: 150px;
+  margin-top: 140px;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -109,11 +130,13 @@ a:hover {
 .login-left {
   width: 50%;
   background-color: #f5f5f5;
+  height: 100vh;
+  overflow: auto;
 }
 
 .form-group {
-  width: 90%;
-  margin-left: 5%;
+  width: 100%;
+  margin-left: 0px;
 }
 
 .form-group a, .form-group a:hover {
@@ -121,21 +144,24 @@ a:hover {
 }
 
 .form-group h1 {
-  font-size: 2em;
-  margin-top: 15vh;
-  width: 80%;
-  margin-left: 5%;
-  margin-right: 10%;
+  font-size: 46px;
+  margin-top: 100px;
+  width: 100%;
+  margin-left: 0px;
+  margin-right: 0px;
   font-style: normal;
   font-weight: bold;
   color: var(--main-color);
+  font-family: 'mainFontBold';
 }
 
 .form-group p {
   font-style: normal;
   font-weight: normal;
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 0px;
+  margin-right: 0px;
+  font-size: 23px;
+  color: rgb(130, 130, 130);
 }
 
 .form-group p:not(:first-of-type) {
@@ -143,13 +169,25 @@ a:hover {
 }
 
 #register-form {
-  margin-top: 150px;
-  margin-bottom: 10%;
+  width: 100%;
+  max-width: 570px;
+  padding-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-right: 60px;
+  margin-left: 0px;
+  padding-right: 20px;
+}
+
+@media (min-width: 1251px) {
+  #register-form {
+    margin-left: calc(50vw - 620px);
+  }
 }
 
 #register-form .alert {
-  width: 90%;
-  margin-left: 5%;
+  width: 100%;
+  margin-left: 0px;
 }
 
 #register-button {
@@ -157,8 +195,9 @@ a:hover {
   padding: 8px;
   width: 150px;
   border-radius: 100px;
-  margin-right: 5%;
+  margin-right: 0px;
   margin-bottom: 20px;
+  margin-top: 10px;
   background-color: var(--main-color);
   border-color: var(--main-color);
 }
@@ -172,17 +211,19 @@ a:hover {
 }
 
 .form-control {
-  height: 42px;
-  border-radius: 21px;
+  border-radius: 30px;
   font-family: Arial, Helvetica, sans-serif;
+  border-color: rgb(237,237,237);
+  height: 48px;
+  padding-left: 25px;
 }
 
 .form-control::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: rgb(215, 215, 215);
   opacity: 1; /* Firefox */
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 15px;
+  font-family: "Trade Gothic LT W05 Roman";
+  font-size: 17px;
 }
 
 :-ms-input-placeholder {
@@ -198,12 +239,13 @@ a:hover {
 #timer {
   display: inline-block;
   background-color: var(--main-color);
-  padding: 10px 50px;
+  padding: 10px 40px;
   border-radius: 5px;
   font-size: 40px;
   color: white;
   font-weight: 900;
 }
+/* START OF START EXAM PAGE */
 
 /* START OF EXAMS PATHWAY GRAPHIC */
 .exams-pathway {
@@ -215,10 +257,21 @@ a:hover {
 .reading-min-container {
   text-align: center;
   display: inline-block;
-  font-size: 28px;
+  font-size: 24px;
+}
+
+.start-exam-page .reading-min-container {
+  width: 200px;
+  text-align: center;
+  display: inline-block;
+  font-size: 23px;
+  margin-left: -56px !important;
+  margin-right: -56px !important;
 }
 
 .reading-min {
+  font-family: 'Trade Gothic LT W05 Bold No-_2';
+  font-size: 22px;
   display: inline-block;
   background-color: #66a1a5;
   border-radius: 50%;
@@ -236,6 +289,7 @@ a:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  margin-top: -1px;
 }
 
 .small-dots {
@@ -246,20 +300,52 @@ a:hover {
   border-radius: 50%;
   vertical-align: top;
   margin-top: 31px;
-  margin-right: 8px;
-  margin-left: 8px;
+  margin-right: 7px;
+  margin-left: 7px;
 }
 
 .ques-num-size {
-  font-size: 20px;
+  font-size: 18px;
   position: relative;
 }
 
 .min-size {
-  font-size: 20px;
-  display: block;
+  font-size: 15px;
+  line-height: 1;
+  display: block;  
 }
 /* END OF EXAMS PATHWAY GRAPHIC */
+
+.start-exam-page h1 {
+  font-size: 23px;
+  text-transform: uppercase;
+  font-family: mainFontBold;
+  margin-bottom: 25px;
+}
+
+.start-exam-page p {
+  font-size: 19px;
+}
+
+/* END OF START EXAM PAGE */
+
+/* START OF SECTION DIRECTIONS PAGE */
+
+.section-directions h1 {
+  font-size: 23px;
+  font-family: mainFontBold;
+  margin-bottom: 45px;
+}
+
+.section-directions p {
+  font-size: 19px;
+}
+
+.section-directions .btn {
+  margin-top: 20px;
+}
+
+/* START OF SECTION DIRECTIONS PAGE */
 
 /*--------------------------------------------------------------
 # Exam List
@@ -269,24 +355,31 @@ a:hover {
   height: 100%;
 }
 
-.exam-list {
-  flex-basis: 35%;
-  margin-top: 75px;
-  max-width: 40%;
-  padding-top: 40px;
-  padding-left: 55px;
-  padding-right: 0px;
-  background: #f5f5f5;
-  height: calc(100% - 75px);
+.exam-list-inner-container {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  overflow-y: auto;
+  max-width: 460px;
+  padding-left: 40px;
 }
 
+
+.exam-list {
+  display: flex;
+  align-content: flex-start;
+  justify-content: flex-end;
+  flex-basis: calc(((100vw - 1250px) / 2) + 460px);
+  margin-top: 65px;
+  padding-top: 40px;
+  padding-right: 0px;
+  background: #f5f5f5;
+  height: calc(100% - 65px);
+  overflow-y: auto;
+}
+/*
 .exam-list select {
-  -moz-appearance: none; /* Firefox */
-  -webkit-appearance: none; /* Safari and Chrome */
+  -moz-appearance: none; 
+  -webkit-appearance: none;
   appearance: none;
   flex-basis: calc(100% - 25px);
   height: 40px;
@@ -311,11 +404,129 @@ a:hover {
 .exam-list select > option:checked {
   background: rgb(240, 240, 240) !important;
 }
+*/
 
-.exam-list > p {
-  margin: 20px 0px;
+/* dropdown list *?
+
+/*
+body {
+    padding:50px;
+    background-color:white;
+}
+*/
+select {
+  -o-appearance: none;
+  -ms-appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+/*
+.container{
+ width: 100vw;
+ height: 100vh;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+*/
+.wrapper{
+ width: calc(100% - 40px);
+ height: auto;
+}
+
+.s-hidden {
+   visibility:hidden;
+   padding-right:10px;
+}
+.select {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  font-size: 20px;
+  line-height: 24px;
+  font-family: 'mainFontBold';
+  color: #4F4F4F;
+  text-transform: uppercase;
+  border: 1px solid #333;
+  border-radius: 5px;
+  width: calc(100% - 25px);
+  height: 40px;
+  margin-left: -15px;
+}
+
+
+.styledSelect {
+   position:absolute;
+   top:0;
+   right:0;
+   bottom:0;
+   left:0;
+   background-color:white;
+   border-radius: 5px;
+   padding: 9px 0px 0px 17px;
+   font-weight:bold;
+}
+
+.styledSelect:after {
+   content:url(assets/down.svg);
+   width:0;
+   height:0;
+   position:absolute;
+   top:7px;
+   right: 30px;
+}
+
+
+.styledSelect:active, .styledSelect.active {
+   background-color:#FFF;
+}
+.options {
+  display: none;
+  position: absolute;
+  right: 0;
+  left: -1px;
+  top: 38px;
+  z-index: 999;
+  margin: 0 0;
+  padding: 0 0;
+  list-style: none;
+  border: 1px solid #333;
+  background-color: white;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  margin-top: -2px;
+  width: calc(100% + 2px);
+  cursor: pointer;
+}
+
+.options li {
+   padding:0 6px;
+   margin:0 0;
+   padding: 8px 17px;
+   border-top: 1px solid #333;
+}
+
+.options li:first-child {
+   border-top: none;
+}
+
+.options li:hover {
+   background-color:#F0F0F0;
+   color:#4F4F4F;
+}
+
+
+/* end of dropdown list */
+
+
+
+
+
+.exam-list-inner-container > p {
+  margin: 25px 0px 32px;
   flex-basis: calc(100% - 40px);
-  font-size: 18px;
+  font-size: 19px;
 }
 
 .choose-exam-btn {
@@ -343,14 +554,15 @@ a:hover {
 
 .choose-exam-btn span:first-of-type {
   font-size: 24px;
-  font-weight: 900;
+  font-family: mainFontBold;
   float: left;
 }
 
 .choose-exam-btn span:nth-of-type(2) {
   clear: both;
-  font-size: 16px;
+  font-size: 17px;
   float: left;
+  margin-top: -3px;
 }
 
 .choose-exam-btn .arrow {
@@ -371,42 +583,49 @@ a:hover {
 }
 
 .exam-details {
-  flex-basis: 65%;
-  padding-right: 40px;
+  flex-basis: calc(((100vw - 1250px) / 2) + 790px);
   padding-left: 40px;
   padding-top: 40px;
   padding-bottom: 40px;
-  margin-top: 75px;
+  margin-top: 65px;
   background-color: #d1dbdc;
-  height: calc(100% - 75px);
+  height: calc(100% - 65px);
   overflow-y: auto;
 }
 
-.exam-details h1 {
+.exam-details-inner-container {
+  max-width: 750px;
+  padding-right: 20px;
+}
+
+.exam-details-inner-container h1 {
   margin-top: -8px;
-  font-weight: 900;
+  font-family: mainFontBold;
   font-size: 34px;
+  margin-bottom: 25px;
 }
 
 #exam-details-header-inner {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .section-time {
   height: 33px;
   position: relative;
   display: flex;
   align-items: center;
+  margin-bottom: 25px;
 }
 
 .section-time .material-icons {
   font-size: 36px;
-  margin-right: 20px;
+  margin-right: 18px;
 }
 
 .section-time-btns {
   background-color: white;
-  font-size: 18px;
+  font-size: 16px;
   height: 33px;
   border-radius: 5px;
   display: inline-block;
@@ -423,17 +642,24 @@ a:hover {
 .section-time-btns button:first-of-type {
   background-color: #66a1a5;
   color: white;
-  padding-left: 18px;
-  padding-right: 18px;
+  padding-left: 21px;
+  padding-right: 21px;
 }
 
 .section-time-btns button:nth-of-type(2) {
-  padding-left: 13px;
-  padding-right: 13px;
+  padding-left: 17px;
+  padding-right: 17px;
+}
+
+.section-details-wrapper .ca-notice {
+  margin-top: 5px;
+  margin-bottom: 50px;
+  font-style: italic;
+  font-size: 16px;
 }
 
 .section-details {
-  margin-top: 40px;
+  margin-top: 55px;
   display: flex;
 }
 
@@ -447,13 +673,20 @@ a:hover {
 }
 
 .section-details h1 {
-  font-size: 28px;
+  margin-bottom: 5px;
+  font-size: 26px;
+}
+
+.exam-list-score-data {
+  font-size: 22px;
+  margin-bottom: -2px;
 }
 
 .view-mistakes-link,
 .view-mistakes-link:hover {
   color: black;
   text-decoration: underline;
+  font-size: 22px;
 }
 
 .section-begin {
@@ -475,15 +708,14 @@ a:hover {
 }
 
 .ca-btn.begin {
-  padding: 0 10px 0px 10px;
+  padding: 0 31px 0px 31px;
   display: flex;
   align-items: center;
 }
 
 .ca-btn.begin .material-icons {
   font-size: 16px;
-  margin-right: 4px;
-  margin-left: -3px;
+  margin-right: 8px;
 }
 
 .time-remaining {
@@ -498,13 +730,15 @@ a:hover {
   max-width: 130px;
   display: flex;
   align-items: center;
-  flex-basis: 130px;
-  min-width: 130px;
+  flex-basis: 161px;
+  min-width: 161px;
 }
 
 .ca-btn.retake .material-icons {
   transform: rotateY(180deg) rotateZ(0deg);
   font-size: 23px;
+  margin-right: 7px;
+  margin-left: 6px;
 }
 /*
 .dot {
@@ -550,6 +784,12 @@ a:hover {
 .btn-danger, .btn-danger:hover {
   background-color: #7d120b;
   border-color: #7d120b
+}
+
+.section-details {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 }
 /*--------------------------------------------------------------
 # Exam Section
@@ -603,7 +843,7 @@ a:hover {
 }
 
 .section-wrapper {
-  max-width: 1290px;
+  max-width: 1250px;
   padding-left: 20px;
   padding-right: 20px;
   margin: 65px auto 0px auto;
@@ -614,13 +854,18 @@ a:hover {
 }
 
 .section-header {
-  padding-top: 60px;
+  padding-top: 50px;
   display: flex;
   justify-content: space-between;
+  z-index:3;
+  border-bottom: 1px rgb(192,192,192) solid;
+  max-width: 1250px;
+  background-color: white;
 }
 
 .section-header h1 {
-  font-weight: 900;
+  font-family: 'Trade Gothic LT W05 Bold';
+  font-size: 37px;
 }
 
 #header-timer {
@@ -635,9 +880,12 @@ a:hover {
 }
 
 #section-material {
-  overflow-y: scroll;
-  height: calc(100vh - 200px);
-  flex-basis: 42%;
+  flex-basis: 41%;
+  overflow-y: auto;
+  height: calc(100vh - 212px);
+  padding-left: 28px;
+  padding-right: 10px;
+  margin-top: 29px;
 }
 
 #section-material img {
@@ -651,9 +899,10 @@ a:hover {
 
 #section-form {
   overflow-y: scroll;
-  height: calc(100vh - 200px);
-  flex-basis: 42%;
-  padding: 0px 10px;
+  height: calc(100vh - 169px);
+  flex-basis: 43%;
+  padding: 28px 21px;
+  border-right: 1px rgb(192,192,192) solid;
 }
 
 #section-form img {
@@ -681,9 +930,21 @@ a:hover {
 
 .question-tracker {
   flex-basis: 16%;
-  height: calc(100vh - 275px);
-  overflow-y: scroll;
-  padding-left: 20px;
+  height: calc(100vh - 243px);
+  overflow-y: auto;
+  padding-left: 27px;
+  padding-top: 25px;
+  line-height: 1;
+}
+
+.question-tracker h3 {
+  font-size: 23px;
+  margin-bottom: 14px;
+}
+
+.question-tracker p {
+  font-size: 19px;
+  margin-bottom: 12px;
 }
 
 .question-tracker > div {
@@ -692,15 +953,16 @@ a:hover {
 }
 
 .question-tracker .material-icons {
-  margin-bottom: 16px;
-  font-size: 12px;
-  margin-right: 5px;
+  margin-bottom: 12px;
+  margin-left: 4px;
+  font-size: 13px;
+  margin-right: 7px;
   border-radius: 50%;
   color: white;
-  height: 20px;
-  width: 20px;
-  min-width: 20px;
-  line-height: 18px;
+  height: 17px;
+  width: 17px;
+  min-width: 17px;
+  line-height: 15px;
   text-align: center;
   border: 1px rgb(217, 217, 217) solid;
 }
@@ -708,6 +970,7 @@ a:hover {
 .question-tracker .material-icons.answered {
   background-color: #66a1a5;
   border: 1px #66a1a5 solid;
+  color: rgb(174, 198, 200);
 }
 
 .finish-this-section-btn, .finish-this-section-btn:hover, .finish-this-section-btn:active {
@@ -726,19 +989,17 @@ a:hover {
 }
 
 #pause-btn {
-  height: 28px;
-  width: 28px;
-  background-image: url("../img/pause-btn.png");
-  background-size: cover;
-  border: 0;
-  background-repeat: no-repeat;
-  background-color: #ffffff;
-  margin-bottom: 16px;
+  margin-bottom: 4px;
   margin-right: 10px;
+  color: #7d120b;
+  font-size: 28px;
+  cursor: pointer;
 }
 
+
 #section-timer {
-  font-size: 28px;
+  font-size: 23px;
+  margin-bottom: 4px;
 }
 
 .question-container {
@@ -752,7 +1013,7 @@ a:hover {
 }
 
 .question-container-wrong {
-  padding: 20px 10px;
+  padding: 25px 15px;
   margin: 0px 0px 40px 0px;
   border: 2px #7d120b solid;
   box-sizing: border-box;
@@ -764,16 +1025,19 @@ a:hover {
 }
 
 .ca-question-num {
-  font-size: 18px;
-  font-weight: 900;
+  font-size: 17px;
+  font-weight: normal !important;
   margin-bottom: 15px;
   display: inline-block;
+  font-family: mainFontBold;
 }
 
 .ca-question-data {
   margin-bottom: 20px;
+  margin-top: 10px;
   display: inline-block;
   font-weight: normal;
+  font-size: 23px;
 }
 
 .answer-container {
@@ -782,7 +1046,7 @@ a:hover {
   padding: 10px 50px 10px 55px;
   border: 1px rgb(224, 224, 224) solid;
   cursor: pointer;
-  font-size: 22px;
+  font-size: 23px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -790,6 +1054,9 @@ a:hover {
   background-color: white;
   margin-bottom: 0px;
   margin-right: 0px;
+}
+.answer-container:not(:last-of-type) {
+  border-bottom-width: 0px;
 }
 .answers-container .answer-container:first-of-type {
   border-top-left-radius: 5px;
@@ -829,14 +1096,24 @@ a:hover {
 }
 .checkmark {
   border-radius: 50%;
-  height: 27px;
-  width: 27px;
+  height: 25px;
+  width: 25px;
   border-radius: 50%;
   color: rgb(174, 198, 200);
-  font-size: 22px;
+  font-size: 20px;
   text-align: center;
-  line-height: 27px;
+  line-height: 25px;
   opacity: 0;
+}
+.checkmark-con .material-icons-close {
+  font-size: 14px;
+}
+
+.question-tracker .material-icons.material-icons-close {
+  color: white !important;
+  border-color: #7d120b !important;
+  font-size: 9px;
+  padding-right: 1px;
 }
 
 /* When the radio button is checked */
@@ -848,6 +1125,10 @@ a:hover {
 .answer-container input:checked ~ .checkmark-con .checkmark {
   background-color: rgb(102, 161, 165);
   opacity: 1;
+}
+
+.MathJax {
+  display: inline-block !important;
 }
 
 /*--------------------------------------------------------------
@@ -957,6 +1238,8 @@ a:hover {
   padding: 15px 0;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  height: 65px;
 }
 
 #header.header-scrolled {
@@ -966,10 +1249,22 @@ a:hover {
 
 #header .logo {
   width: 140px;
-  height: 36px;
-  margin-left: 89px;
+  height: 37px;
+  margin-left: calc((100vw - 1225px) / 2);
   position: relative;
-  top: 3px;
+  top: 2px;
+}
+
+@media (max-width: 1250px) {
+  #header .logo {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 1250px) {
+  #header {
+    padding: 0px 20px;
+  }
 }
 
 #header .username {
@@ -985,13 +1280,19 @@ a:hover {
   border-radius: 100px;
   background: #ffffff;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
-  margin-right: 100px;
   line-height: 36px !important;
   color: var(--main-color);
   text-align: center;
   font-style: normal;
   /*font-weight: bold;*/
   font-size: 22px;
+  margin-right: calc((100vw - 1225px) / 2);
+}
+
+@media (max-width: 1250px) {
+  #header .login-btn {
+    margin-right: 0;
+  }
 }
 #header .logo a {
   color: #16507b;
@@ -1011,6 +1312,9 @@ a:hover {
   background-color: #66a1a5;
   border-width: 0px;
   border-radius: 0px;
+  font-size: 32px;
+  font-weight: normal;
+  padding-right: 0px;
 }
 
 #dropdownMenuButton::after {
@@ -1041,7 +1345,13 @@ header .dropdown-menu a:hover {
 }
 
 header .dropdown {
-  margin-right: 80px;
+  margin-right: calc((100vw - 1225px) / 2);
+}
+
+@media (max-width: 1250px) {
+  header .dropdown {
+    margin-right: 0;
+  }
 }
 
 header .dropdown-item {
@@ -1178,17 +1488,18 @@ header .dropdown-item {
   top: 50%;
   transform: translateY(-50%);
 }
+#hero-text-wrapper {
+  margin-top: 65px;
+}
 
 #hero h1 {
-  font-style: normal;
-  font-weight: bold;
-  font-size: 52px;
   line-height: 130%;
   /* identical to box height, or 62px */
 
   text-align: center;
-
   color: #ffffff;
+  font-size: 46px;
+  font-family: 'Trade Gothic LT W05 Bold';
 }
 
 #hero p {
@@ -1231,11 +1542,11 @@ header .dropdown-item {
 
 .ca-get-started-btn {
   background-color: #66a1a5;
-  height: 48px;
+  height: 52px;
   display: inline-block;
-  width: 175px;
+  width: 215px;
   position: relative;
-  border-radius: 24px;
+  border-radius: 30px;
   cursor: pointer;
 }
 
@@ -1243,10 +1554,10 @@ header .dropdown-item {
   color: #66a1a5;
   background-color: white;
   border-radius: 50%;
-  line-height: 36px;
-  width: 36px;
-  font-size: 30px;
-  margin: 6px 6px;
+  line-height: 33px;
+  width: 33px;
+  font-size: 29px;
+  margin: 10px 6px;
   position: absolute;
   right: 0;
   text-align: center;
@@ -1257,8 +1568,9 @@ header .dropdown-item {
   top: 50%;
   transform: translateY(-50%);
   color: white;
-  font-size: 22px;
+  font-size: 24px;
   margin-left: 40px;
+  font-family: mainFontBold;
 }
 
 /* HERO UNUSED ELEMENTS
