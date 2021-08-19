@@ -8,10 +8,16 @@ class AnswerInline(admin.TabularInline):
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerInline]
 
+class QuestionInline(admin.TabularInline):
+    model = Question
+
+class SectionAdmin(admin.ModelAdmin):
+    inlines = [QuestionInline]
+
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer)
 admin.site.register(Result)
-admin.site.register(Section)
+admin.site.register(Section, SectionAdmin)
 admin.site.register(Student_Answer)
 
 """

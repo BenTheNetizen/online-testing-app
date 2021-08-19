@@ -318,6 +318,7 @@ function getPassage(value) {
             // Handle the answer displaying
             questionData[1].forEach(answer=>{
               answer = answer.replaceAll('\"', '&quot;')
+
               // CONDITION FOR QUESTION BEING PREVIOUSLY ANSWERED
               if (answer == questionData[2] && questionData[2] != null) {
                 // SETS THE PREVIOUSLY ANSWERED TO GREEN

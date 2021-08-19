@@ -15,6 +15,9 @@ const examButtons = document.getElementsByClassName('choose-exam-btn');
 //run this function to filter by default (SAT)
 filterExamType()
 
+//run this function to open the first exam by default
+//getExamDetails()
+
 function getExamDetails(btnId, examPk, elt) {
   const btn = document.getElementById(btnId)
   const examName = btn.getAttribute("data-exam")
@@ -78,6 +81,7 @@ function getExamDetails(btnId, examPk, elt) {
             document.getElementById(`exam${examPk}-${section}-time-remaining`).innerHTML = `${section_data[1]}:${section_data[2]} minutes remaining`
             document.getElementById(`exam${examPk}-${section}-start`).innerHTML = '<span class="material-icons material-icons-round">play_arrow</span>Resume this section'
             document.getElementById(`exam${examPk}-${section}-review`).style.display = 'none'
+            document.getElementById(`exam${examPk}-${section}-reset`).style.display = 'none'
           }
           else {
             // Implies that the section has not ever been started

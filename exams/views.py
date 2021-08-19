@@ -546,16 +546,16 @@ def section_passage_data_view(request, pk, section_name, passage_num):
     user = request.user
 
     image_urls = []
-    if section_name == 'reading' or section_name == 'writing':
+    if section_name == 'reading' or section_name == 'writing' or section_name == 'english' or section_name == 'science':
         image = Question.objects.filter(section=section, passage=passage_num).order_by('question_number')[0].material
         # MAKES SURE THAT A URL EXISTS
         if image.name != '':
             image_urls.append(image.url)
 
-    if section_name == 'math1' or section_name == 'math2':
-        for question in section.get_questions():
-            if question.material.name:
-                image_urls.append(question.material.url)
+    # if section_name == 'math1' or section_name == 'math2':
+    #     for question in section.get_questions():
+    #         if question.material.name:
+    #             image_urls.append(question.material.url)
 
     data = []
     #gives key, value pairs to "questions," which are the questions and the answers

@@ -25,6 +25,12 @@ function getPassage(value) {
     console.log('CHANGE PASSAGE TO NEXT')
     passageNum += 1
   }
+
+  //display the passage num
+  if (!isMathSection) {
+    document.getElementById('passage-num').innerHTML = `Passage ${passageNum} of ${maxPassages}`
+  }
+
   let ajax_url = isMathSection ? `${url}data` : `${url}passage-` + passageNum + `/data`
   $.ajax({
     type: 'GET',
@@ -38,7 +44,7 @@ function getPassage(value) {
       if (isMathSection) {
         // make math section form wider than in reading section
         $('#section-form').css('flex-basis', '84%')
-        
+
         data.forEach(el => {
           for (const [questionNum, questionData] of Object.entries(el)) {
             //NOTE THAT 'questionData' IS AN ARRAY
@@ -48,7 +54,7 @@ function getPassage(value) {
             //questionData[3] is the image URL
             var sectionBoxString = ''
             if (questionData[3] != null) {
-              sectionBoxString += `              
+              sectionBoxString += `
                 <!--
                 <div class="mb-2 testing">
                   <b class="ca-question-num">Question ${questionNum}</b>
@@ -129,7 +135,7 @@ function getPassage(value) {
                   if ( `${answer}` ==  `${correctAnswers[questionNum-1]}`) {
                     console.log('correct!!!' + questionNum)
                     $('#question'+questionNum).parent().find('.material-icons').addClass('answered')
-                    $('#question'+questionNum).parent().show()  
+                    $('#question'+questionNum).parent().show()
 
                     sectionBoxString += `
                     <!--
@@ -302,7 +308,7 @@ function getPassage(value) {
                     ${answer}
                 </label>
                 `
-                }                
+                }
               } else {
                 if ( `${answerWithQuotes}` ==  `${correctAnswers[questionNum-1]}`) {
                   console.log('wrong!!!' + questionNum)
