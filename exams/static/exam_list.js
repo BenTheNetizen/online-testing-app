@@ -16,7 +16,6 @@ const examButtons = document.getElementsByClassName('choose-exam-btn');
 filterExamType('<li>SAT Mock Exams</li>')
 
 //run this function to open the first exam by default
-getExamDetails('SAT Mock Test 1-btn')
 
 function getExamDetails(btnId) {
   const btn = document.getElementById(btnId)
