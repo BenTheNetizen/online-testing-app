@@ -19,8 +19,8 @@ Exam List
 
     <p>Select the test or section you would like to work on and click START to begin.</p>
     {% for exam, sections_completed, num_sections in exam_info %}
-    <button id="{{exam.name}}-btn" data-exam="{{exam.name}}" data-exam-type="{{exam.type}}" class="btn btn-link modal-button choose-exam-btn"
-      onclick="getExamDetails(this.id, {{exam.pk}}, this)">
+    <button id="{{exam.name}}-btn" data-exam-name="{{exam.name}}" data-exam-type="{{exam.type}}" data-exam-pk="{{exam.pk}}" class="btn btn-link modal-button choose-exam-btn"
+      onclick="getExamDetails(this.id)">
       <span>{{exam.name}}</span><br><span id='{{exam.pk}}-sections-completed'>{{ sections_completed }} of {{num_sections}} sections completed</span>
       <i class="arrow right"></i>
     </button>
@@ -59,7 +59,7 @@ Exam List
     <div id="{{exam.name}}-details" style="display: none">
       <div class="exam-details-header">
         <div id="exam-details-header-inner">
-          <h1>{{exam.name | title}}</h1>
+          <h1>{{exam.name}}</h1>
           <div class='section-time'>
             <span class="material-icons material-icons-outlined">
               schedule

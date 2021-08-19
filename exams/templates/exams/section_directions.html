@@ -86,6 +86,7 @@ Section Directions
         <li>The word average indicates arithmetic mean.</li>
       </ol>
     </p>
+     <a href="{% url 'exams:section-view' pk=exam.id section_name='math' %}">Continue</a>
    {% elif section.type == "reading" and exam.type == "ACT" %}
    <p>There are several passages in this test.
       Each passage is accompanied by several questions.

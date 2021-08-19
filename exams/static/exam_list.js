@@ -13,22 +13,23 @@ const examDropdown = document.getElementById('select-exam');
 const examButtons = document.getElementsByClassName('choose-exam-btn');
 
 //run this function to filter by default (SAT)
-filterExamType()
+filterExamType('<li>SAT Mock Exams</li>')
 
 //run this function to open the first exam by default
-//getExamDetails()
+getExamDetails('SAT Mock Test 1-btn')
 
-function getExamDetails(btnId, examPk, elt) {
+function getExamDetails(btnId) {
   const btn = document.getElementById(btnId)
-  const examName = btn.getAttribute("data-exam")
+  const examName = btn.getAttribute("data-exam-name")
+  const examPk = btn.getAttribute("data-exam-pk")
   const examDetailsDiv = document.getElementById(examName + "-details")
 
   // highlight clicked button
-  $(elt).parent().find('button').css('backgroundColor', 'transparent')
-  $(elt).css('backgroundColor', 'rgb(234,237,237)')
+  $(btn).parent().find('button').css('backgroundColor', 'transparent')
+  $(btn).css('backgroundColor', 'rgb(234,237,237)')
   // hide arrow of clicked button
-  $(elt).parent().find('button .arrow').css('display', 'inline-block')
-  $(elt).find('.arrow').css('display', 'none')
+  $(btn).parent().find('button .arrow').css('display', 'inline-block')
+  $(btn).find('.arrow').css('display', 'none')
 
   if (examDetailsDiv.style.display == "none")
   {
@@ -81,7 +82,7 @@ function getExamDetails(btnId, examPk, elt) {
             var secondsLeft = section_data[2]
             if (secondsLeft <= 9) {
               secondsLeft = '0' + secondsLeft
-            } 
+            }
             document.getElementById(`exam${examPk}-${section}-time-remaining`).innerHTML = `${section_data[1]}:` + secondsLeft + ` minutes remaining`
             document.getElementById(`exam${examPk}-${section}-start`).innerHTML = '<span class="material-icons material-icons-round">play_arrow</span>Resume this section'
             document.getElementById(`exam${examPk}-${section}-review`).style.display = 'none'
@@ -117,6 +118,10 @@ function filterExamType(selection) {
     query.forEach(element => {
       element.style.display = "block";
     })
+
+    // select the first SAT exam
+    getExamDetails('SAT Mock Test 1-btn')
+
   } else if (examType == 'ACT Mock Exams') {
     //hide all exam buttons
     [...examButtons].forEach(element => {
@@ -128,7 +133,12 @@ function filterExamType(selection) {
     query.forEach(element => {
       element.style.display = "block";
     })
+
+    // select the first ACT exam
+    getExamDetails('ACT Mock Test 1-btn')
   }
+
+
 
 }
 function changeSectionTime(value, examPk, elt) {
