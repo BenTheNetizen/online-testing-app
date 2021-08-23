@@ -31,9 +31,6 @@ class Exam(models.Model):
     def get_sections(self):
         return self.section_set.all()
 
-    def test():
-        return str(self.name)
-
     def __str__(self):
         return str(self.name)
 
@@ -58,6 +55,8 @@ class Section(models.Model):
     def get_questions(self):
         return self.question_set.all()[:self.num_questions]
 
+    def get_section_instance(self):
+        return self.sectioninstance_set.all()
 #model for a section instance
 class SectionInstance(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

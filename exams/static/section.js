@@ -17,9 +17,11 @@ getPassage()
 
 // sends the section data to the backend and redirects to different section or back to the hub
 function sendData(isNextSection) {
-  const elements = [...document.getElementsByClassName('ans')]
   const data = {}
   data['csrfmiddlewaretoken'] = csrf[0].value
+  /*
+  const elements = [...document.getElementsByClassName('ans')]
+
   elements.forEach(el=>{
     if (el.type == 'text') {
       data[el.name] = el.value
@@ -36,7 +38,7 @@ function sendData(isNextSection) {
 
   })
   console.log(data)
-
+  */
   $.ajax({
       type: 'POST',
       url: `${url}save`,

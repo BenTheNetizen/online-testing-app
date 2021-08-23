@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% load static %}
@@ -91,9 +92,15 @@ Exam List
             <div id="exam{{exam.pk}}-{{section.type}}-score" class="exam-list-score-data">Raw Score: N/A</div>
             <div class="exam-list-score-data">Estimated Section Score Range: N/A</div>
             <div class="section-begin">
+              {% if section.get_section_instance %}
+              <a id="exam{{exam.pk}}-{{section.type}}-start"
+                href="{% url 'exams:section-view' pk=exam.id section_name=section.type %}"
+                class="ca-btn begin"><span class="material-icons material-icons-round">play_arrow</span>Resume this section</a>
+              {% else %}
               <a id="exam{{exam.pk}}-{{section.type}}-start"
                 href="{% url 'exams:section-directions-view' pk=exam.id section_name=section.type %}"
                 class="ca-btn begin">Begin this section</a>
+              {% endif %}
               <p id="exam{{exam.pk}}-{{section.type}}-time-remaining" class="time-remaining">Timer goes here</p>
             </div>
             <a id="exam{{exam.pk}}-{{section.type}}-reset"

@@ -39,7 +39,7 @@ Section Directions
      corresponding circle on your answer sheet. For questions 31-38, solve the problem and enter your answer in
      the grid on the answer sheet. Please refer to the directions before question 31 on how to enter your answers
      in the grid. You may use any available space in your test booklet for scratch work.</p>
-     <a href="{% url 'exams:section-view' pk=exam.id section_name='math2' %}">Continue</a>
+     <a href="{% url 'exams:section-view' pk=exam.id section_name='math2' %}" class="btn green-btn">Continue</a>
   {% elif section.type == "english" and exam.type == "ACT" %}
   <p>In the five passages that follow, certain
       words and phrases are underlined and numbered. In
@@ -63,7 +63,7 @@ Section Directions
       beyond the question to determine the answer. Be sure
       that you have read far enough ahead each time you
       choose an alternative.</p>
-     <a href="{% url 'exams:section-view' pk=exam.id section_name='english' %}">Continue</a>
+     <a href="{% url 'exams:section-view' pk=exam.id section_name='english' %}" class="btn green-btn">Continue</a>
    {% elif section.type == "math" and exam.type == "ACT" %}
    <p>Solve each problem, choose the correct
       answer, and then fill in the corresponding oval on your
@@ -86,7 +86,7 @@ Section Directions
         <li>The word average indicates arithmetic mean.</li>
       </ol>
     </p>
-     <a href="{% url 'exams:section-view' pk=exam.id section_name='math' %}">Continue</a>
+     <a href="{% url 'exams:section-view' pk=exam.id section_name='math' %}" class="btn green-btn">Continue</a>
    {% elif section.type == "reading" and exam.type == "ACT" %}
    <p>There are several passages in this test.
       Each passage is accompanied by several questions.
@@ -95,7 +95,7 @@ Section Directions
       answer document. You may refer to the passages as
       often as necessary.
     </p>
-    <a href="{% url 'exams:section-view' pk=exam.id section_name='reading' %}">Continue</a>
+    <a href="{% url 'exams:section-view' pk=exam.id section_name='reading' %}" class="btn green-btn">Continue</a>
     {% elif section.type == "science" and exam.type == "ACT" %}
     <p>There are several passages in this test.
        Each passage is followed by several questions. After
@@ -105,7 +105,7 @@ Section Directions
        often as necessary.
        <br><br>
        You are NOT permitted to use a calculator on this test.</p>
-       <a href="{% url 'exams:section-view' pk=exam.id section_name='science' %}">Continue</a>
+       <a href="{% url 'exams:section-view' pk=exam.id section_name='science' %}" class="btn green-btn">Continue</a>
   {% endif %}
 </div>
 

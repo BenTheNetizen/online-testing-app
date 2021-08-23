@@ -611,11 +611,11 @@ def save_section_view(request, pk, section_name):
     print(request.POST)
     if request.is_ajax():
 
-        data = request.POST
+        #data = request.POST
         #converts the data from a QueryDict to a dict
-        data_ = dict(data.lists())
+        #data_ = dict(data.lists())
         #gets rid of the csrf token from the dict
-        data_.pop('csrfmiddlewaretoken')
+        #data_.pop('csrfmiddlewaretoken')
 
         #grabs the questions and section displayed on the site
         user = request.user
