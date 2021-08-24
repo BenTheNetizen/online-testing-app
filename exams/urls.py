@@ -3,6 +3,7 @@ from django.urls import include
 from .views import (
     index,
     exam_list_view,
+    exam_list_recent_exam_view,
     exam_list_data_view,
     exam_list_reset_view,
     exam_list_change_time_view,
@@ -26,6 +27,7 @@ app_name = 'exams'
 urlpatterns = [
     path('', index, name='index'),
     path('exam-list/', exam_list_view, name="exam-list-view"),
+    path('exam-list/recent-exam', exam_list_recent_exam_view, name="exam-list-recent-exam-view"),
     path('exam-list/exam-<pk>/data', exam_list_data_view, name="exam-list-data-view"),
     path('exam-list/exam-<pk>/reset', exam_list_reset_view, name="exam-list-reset-view"),
     path('exam-list/exam-<pk>/change-time', exam_list_change_time_view, name="exam-list-change-time-view"),

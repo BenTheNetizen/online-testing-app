@@ -205,6 +205,7 @@
   const isMathSection = ('{{ section.type|safe }}'.includes('math')) ? true : false
   const correctAnswers = {{ correct_answers | safe }}
   const maxPassages = {{ section.num_passages }}
+  const examPk = {{ exam.pk }}
   console.log(correctAnswers)
 </script>
 {% else %}
@@ -213,6 +214,7 @@
      template variables are all implemented in this script tag
   */
   const examType = '{{ exam.type }}'
+  const examPk = {{ exam.pk }}
   const isMathSection = ('{{ section.type|safe }}'.includes('math')) ? true : false
   const maxPassages = {{ section.num_passages }}
   const sectionTimer = document.getElementById('section-timer')
@@ -227,7 +229,7 @@
 
   // saves timer when the user exits the page
   window.addEventListener('unload', (ev) => {
-    saveTimer(ev);
+    saveInstance(ev);
   })
 
   //start the timer
@@ -282,7 +284,8 @@
     clearInterval(timer);
   }
 
-  function saveTimer(ev) {
+  // saves the timer and the exam instance
+  function saveInstance(ev) {
     minutesRemaining = minutes
     secondsRemaining = seconds
 

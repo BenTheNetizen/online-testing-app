@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Section, Exam, SectionInstance, ExamInstance
+from .models import Section, Exam, SectionInstance, ExamInstance, Student
 from django.views.generic import ListView
 from django.http import JsonResponse
 from questions.models import Question, Answer, Result, Student_Answer
@@ -295,11 +295,23 @@ def exam_list_view(request):
         sections_completed.append(Result.objects.filter(user=user, exam=exam).count())
 
     exam_info = zip(exams, sections_completed, num_sections)
+
+    # Get the most recent exam
+    recent_exam = None
+
+    # Checks if user is a student (not an admin or superuser)
+    if not user.is_superuser:
+        user.refresh_from_db()
+        student = Student.objects.get(user=user)
+        student.refresh_from_db()
+        if student.recent_exam is not None:
+            recent_exam = student.recent_exam.name
     context = {
         'exams':exams,
         'exam_info':exam_info,
         'sections_completed':sections_completed,
-        'num_sections':num_sections
+        'num_sections':num_sections,
+        'recent_exam': recent_exam,
     }
     return render(request, 'exams/exam_list.html', context)
 
@@ -310,7 +322,6 @@ def exam_list_data_view(request, pk):
     sections = exam.get_sections()
     user = request.user
     results = Result.objects.filter(exam=exam, user=user)
-
 
     data = []
 
@@ -340,6 +351,20 @@ def exam_list_data_view(request, pk):
         'data': data,
     })
 
+def exam_list_recent_exam_view(request):
+    user = request.user
+
+    # Get the most recent exam
+    recent_exam = None
+    recent_exam_type = None
+    # Checks if user is a student (not an admin or superuser)
+    if not user.is_superuser:
+        student = Student.objects.get(user=user)
+        if student.recent_exam is not None:
+            recent_exam = student.recent_exam.name
+            recent_exam_type = student.recent_exam.type
+
+    return JsonResponse({'recent_exam': recent_exam, 'recent_exam_type': recent_exam_type})
 @login_required
 def exam_list_reset_view(request, pk):
     exam = Exam.objects.get(pk=pk)
@@ -424,11 +449,18 @@ def save_timer_view(request, pk, section_name):
     exam = Exam.objects.get(pk=pk)
     user = request.user
 
+    # Save the timer
     if SectionInstance.objects.filter(user=user, exam=exam, section=section):
         section_instance = SectionInstance.objects.get(user=user, exam=exam, section=section)
         section_instance.minutes_left = data['minutes']
         section_instance.seconds_left = data['seconds']
         section_instance.save()
+
+    # Set this exam as the 'recent_exam'
+    student = Student.objects.get(user=user)
+    student.recent_exam = exam
+    student.save()
+    print('RECENT EXAM: ' + student.recent_exam.name)
 
     return JsonResponse({})
 

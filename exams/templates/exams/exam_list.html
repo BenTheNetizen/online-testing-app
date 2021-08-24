@@ -132,6 +132,22 @@ Exam List
 <script src="{% static 'exam_list.js' %}" defer></script>
 <script>
   var csrf = "{{ csrf_token }}"
+  const url = window.location.href
+  var recentExam
+  var recentExamType
+  $.ajax({
+    type: 'GET',
+    url: `${url}recent-exam`,
+    success: function(response) {
+      console.log(response)
+      recentExam = response.recent_exam
+      recentExamType = response.recent_exam_type
+      console.log(`Recent Exam Type: ${recentExamType}`)
+    },
+    error: function(error) {
+      console.log(error)
+    }
+  })
 </script>
 <script src="{% static 'dropdown-list.js' %}" defer></script>
 {% endblock content %}

@@ -7,16 +7,31 @@ Javascript file for the exam list page
 //function to show the correct exam's details when button is clicked on the exam list
 var prevElement = null
 var allSectionsCompleted = true
+var hasSelectedRecentExam = false
 const guideMsg = document.getElementById("guide-msg");
-const url = window.location.href
 const examDropdown = document.getElementById('select-exam');
 const examButtons = document.getElementsByClassName('choose-exam-btn');
 
-//run this function to filter by default (SAT)
-filterExamType('<li>SAT Mock Exams</li>')
+
+//run this function to filter by default and select first exam (SAT)
+if (recentExamType != null) {
+  if (recentExamType == 'SAT') {
+    filterExamType('<li>SAT Mock Exams</li>')
+  }
+  else if (recentExamType == 'ACT') {
+    filterExamType('<li>ACT Mock Exams</li>')
+  }
+  else {
+    console.log('RECENT EXAM HAS NO EXAM TYPE!??!')
+  }
+} else {
+  filterExamType('<li>SAT Mock Exams</li>')
+}
+
 
 //run this function to open the first exam by default
 
+// gets exam details (also shows recent exam if possible)
 function getExamDetails(btnId) {
   const btn = document.getElementById(btnId)
   const examName = btn.getAttribute("data-exam-name")
@@ -119,8 +134,15 @@ function filterExamType(selection) {
       element.style.display = "block";
     })
 
-    // select the first SAT exam
-    getExamDetails('SAT Mock Test 1-btn')
+    // select the most recent exam if it exists
+    if (recentExam != null && !hasSelectedRecentExam) {
+      getExamDetails(`${recentExam}-btn`)
+      hasSelectedRecentExam = true
+    } else {
+      // select the first SAT exam
+      getExamDetails('SAT Mock Test 1-btn')
+    }
+
 
   } else if (examType == 'ACT Mock Exams') {
     //hide all exam buttons
@@ -134,13 +156,17 @@ function filterExamType(selection) {
       element.style.display = "block";
     })
 
-    // select the first ACT exam
-    getExamDetails('ACT Mock Test 1-btn')
+    // select the most recent exam if it exists
+    if (recentExam != null && !hasSelectedRecentExam) {
+      getExamDetails(`${recentExam}-btn`)
+      hasSelectedRecentExam = true
+    } else {
+      // select the first ACT exam
+      getExamDetails('ACT Mock Test 1-btn')
+    }
   }
-
-
-
 }
+
 function changeSectionTime(value, examPk, elt) {
   // change button colors when clicked
   $(elt).parent().find('button').css('backgroundColor', 'white')
