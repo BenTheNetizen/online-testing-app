@@ -5,20 +5,6 @@ from django.urls import reverse
 from django.dispatch import receiver
 # Create your models here.
 
-class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    parent_name = models.CharField(max_length=50, blank=True, null=True)
-    parent_email = models.CharField(max_length=100, blank=True, null=True)
-    parent_phone_number = models.CharField(max_length=50, blank=True, null=True)
-    student_access_code = models.CharField(max_length=50, blank=True, null=True)
-
-
-    def __str__(self):
-        return f'{self.user.username} Profile'
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
 #model for the Exam
 class Exam(models.Model):
     name = models.CharField(max_length=100, default=" ")
@@ -29,10 +15,24 @@ class Exam(models.Model):
         ordering = ['id']
 
     def get_sections(self):
-        return self.section_set.all()
+        return self.section_set.all().order_by('ordering')
 
     def __str__(self):
         return str(self.name)
+
+class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    parent_name = models.CharField(max_length=50, blank=True, null=True)
+    parent_email = models.CharField(max_length=100, blank=True, null=True)
+    parent_phone_number = models.CharField(max_length=50, blank=True, null=True)
+    student_access_code = models.CharField(max_length=50, blank=True, null=True)
+    recent_exam = models.ForeignKey(Exam, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
 #model for an exam instance
 class ExamInstance(models.Model):
@@ -48,6 +48,7 @@ class Section(models.Model):
     num_questions = models.IntegerField(default=0)
     time = models.IntegerField(default=5, help_text="duration of the section in minutes")
     num_passages = models.IntegerField(default=0, blank=True, null=True)
+    ordering = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.name}-{self.exam}"

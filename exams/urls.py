@@ -16,6 +16,7 @@ from .views import (
     save_timer_view,
     save_section_view,
     save_question_view,
+    get_next_section_view,
     section_break_view,
     file_upload,
 )
@@ -41,6 +42,7 @@ urlpatterns = [
     re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/(review/)?data$', section_math_data_view, name='section-math-data-view'),
     re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/(review/)?passage-(?P<passage_num>[0-9]+)/data$', section_passage_data_view, name='section-passage-data-view'),
     re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/save-question$', save_question_view, name='save-question-view'),
+    re_path(r'^exam-(?P<pk>[0-9]+)/(?P<section_name>[a-z0-9]+)/get-next-section$', get_next_section_view, name='get-next-section-view'),
     path('exam-<pk>/break<int:break_num>/<str:next_section_name>/', section_break_view, name='section-break-view'),
     path('upload-csv/', file_upload, name="file-upload"),
 

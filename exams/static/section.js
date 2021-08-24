@@ -11,12 +11,13 @@ var passageNum = 1
 var sectionName
 const sectionForm = document.getElementById('section-form')
 const csrf = document.getElementsByName('csrfmiddlewaretoken')
-
+var nextSection
+var hasCompletedExam
 // grabs the data for the first passage
 getPassage()
 
 // sends the section data to the backend and redirects to different section or back to the hub
-function sendData(isNextSection) {
+function sendData() {
   const data = {}
   data['csrfmiddlewaretoken'] = csrf[0].value
   /*
@@ -44,11 +45,37 @@ function sendData(isNextSection) {
       url: `${url}save`,
       data: data,
       success: function(response) {
-        console.log(response)
+
+        //GO TO HUB IF EXAM IS COMPLETED
+        if (hasCompletedExam) {
+          window.location.href= window.location.origin + '/exam-list'
+        }
+        //NEW WAY OF ROUTING THE EXAMS (BREAKS ARE ONLY FOR THE SAT AND ACT EXAMS)
+        else if (examType == 'SAT') {
+          if (nextSection == 'writing') {
+            window.location.href="../break1/writing"
+          }
+          else if (nextSection == 'math1') {
+            window.location.href="../break2/math2"
+          }
+          else {
+            window.location.href=`../${nextSection}/section-directions`
+          }
+        } else if (examType == 'ACT') {
+          if (nextSection == 'math') {
+            window.location.href="../break1/reading"
+          }
+          else {
+            window.location.href=`../${nextSection}/section-directions`
+          }
+        } else {
+          window.location.href=`../${nextSection}/section-directions`
+        }
+
+        // OLD WAY OF ROUTING FOR THE SAT EXAM
+        /*
         //THIS IS A HORRIBLE WAY TO REDIRECT THE URLs
         sectionName = response.section_name
-
-        // ROUTING FOR THE SAT EXAM
         if (isNextSection && examType == 'SAT') {
           if (sectionName == "reading") {
             window.location.href="../break1/writing"
@@ -80,6 +107,7 @@ function sendData(isNextSection) {
         else {
           window.location.href= window.location.origin + '/exam-list'
         }
+        */
       },
       error: function(error) {
         console.log(error)
@@ -372,4 +400,36 @@ function getPassage(value) {
     }
   })
 
+}
+
+function getNextSection() {
+  const data = {}
+  data['csrfmiddlewaretoken'] = csrf[0].value
+
+  $.ajax({
+      type: 'POST',
+      url: `${url}get-next-section`,
+      data: data,
+      success: function(response) {
+        console.log(response)
+
+        hasCompletedExam = response.has_completed_exam
+        // Exam completed, display completed exam modal
+        if (hasCompletedExam) {
+          // display modal
+          $('#finishSectionModal').modal('hide')
+          $('#completedExamModal').modal()
+        }
+        else {
+          // display finish section confirmation modal
+          nextSection = response.next_section
+          $('#finishSectionModal').modal('hide')
+          $('#finishSectionConfirmationModal').modal()
+        }
+
+      },
+      error: function(error) {
+        console.log(error)
+      }
+  })
 }

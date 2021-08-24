@@ -40,6 +40,9 @@ def file_upload(request):
         question_object = None
         exam_type = None
 
+        # Variable to hold the ordering of the sections (assumes that the excel file contains the sections in the right order)
+        section_order = 1
+
         for row in worksheet.iter_rows(min_row=2):
             #checks if the 'section' column is empty - this is when processing should stop
             if row[2].value is None:
@@ -126,8 +129,10 @@ def file_upload(request):
                     exam = exam_object,
                     num_questions = num_questions,
                     time = time,
+                    ordering = section_order
                 )
 
+                section_order += 1
             #create questions
             question_text = row[4].value
 
@@ -700,3 +705,35 @@ def save_question_view(request, pk, section_name):
     return JsonResponse({
         'hello':'hello'
     })
+
+@login_required
+def get_next_section_view(request, pk, section_name):
+    exam = Exam.objects.get(pk=pk)
+    section = Section.objects.get(exam=exam, type=section_name)
+    user = request.user
+    num_sections = exam.get_sections().count()
+    section_index = section.ordering + 1
+    has_completed_exam = True
+    next_section = None
+
+    for i in range(1, num_sections + 1):
+        # If section_index > num_sections, start searching for available section at ordering 1
+        if section_index > num_sections:
+            section_index = 1
+
+        next_section = Section.objects.get(exam=exam, ordering=section_index)
+        if not Result.objects.filter(user=user, exam=exam, section=next_section).exists():
+            has_completed_exam = False
+
+    # Checks if we did not find an unfinished section (exam is finished)
+    if has_completed_exam:
+        next_section = None
+    else:
+        next_section = next_section.type
+
+    context = {
+        'next_section': next_section,
+        'has_completed_exam': has_completed_exam,
+    }
+
+    return JsonResponse(context)

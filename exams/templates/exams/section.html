@@ -46,7 +46,8 @@
         Once you finish, scores for this section will be uploaded to your account.
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#finishSectionConfirmationModal">Yes, finish section</button>
+        <!--<button class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#finishSectionConfirmationModal">Yes, finish section</button>-->
+        <button class="btn btn-primary" onclick="getNextSection()">Yes, finish section</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">No, continue working</button>
       </div>
     </div>
@@ -58,29 +59,37 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        {% if section.type == 'math2' %}
-        <h5 class="modal-title" id="exampleModalLongTitle">Congratulations!</h5>
-        {% else %}
         <h5 class="modal-title" id="exampleModalLongTitle">How would you like to proceed?</h5>
-        {% endif %}
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span class='material-icons' aria-hidden="true">close</span>
         </button>
       </div>
       <div class="modal-body">
-        {% if section.type == 'math2' %}
-        You have finished {{ exam.name | title }}. Please return to the home page to view your results.
-        {% else %}
-        Scores for this section are being uploaded to your account homepage.
-        {% endif %}
+        Scores for this section will be uploaded to your account homepage.
       </div>
       <div class="modal-footer">
-        {% if section.type == 'math2' %}
-        <button onclick="sendData(false)" class="btn btn-primary">Back to account homepage</button>
-        {% else %}
-        <button onclick="sendData(true)" class="btn btn-primary">Next section</button>
-        <button onclick="sendData(false)" class="btn btn-secondary">Back to account homepage</button>
-        {% endif %}
+        <button onclick="sendData()" class="btn btn-primary">Next section</button>
+        <button onclick="sendData()" class="btn btn-secondary">Back to account homepage</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Exam Completed Modal -->
+<div class="modal fade" id="completedExamModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Congratulations!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span class='material-icons' aria-hidden="true">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        You have finished {{ exam.name | title }}. Please return to the home page to view your results.
+      </div>
+      <div class="modal-footer">
+        <button onclick="sendData()" class="btn btn-primary">Back to account homepage</button>
       </div>
     </div>
   </div>
