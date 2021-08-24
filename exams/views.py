@@ -542,7 +542,7 @@ def section_math_data_view(request, pk, section_name):
 
     data = []
     #gives key, value pairs to "questions," which are the questions and the answers
-    for q in section.get_questions():
+    for q in section.get_questions().order_by('question_number'):
         answers = []
         for a in q.get_answers():
             answers.append(a.text)
@@ -596,7 +596,7 @@ def section_passage_data_view(request, pk, section_name, passage_num):
 
     data = []
     #gives key, value pairs to "questions," which are the questions and the answers
-    for q in Question.objects.filter(exam=exam, section=section, passage=passage_num):
+    for q in Question.objects.filter(exam=exam, section=section, passage=passage_num).order_by('question_number'):
         answers = []
         for a in q.get_answers():
             answers.append(a.text)
