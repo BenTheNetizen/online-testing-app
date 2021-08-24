@@ -286,7 +286,7 @@ def index(request):
 @login_required
 def exam_list_view(request):
     user = request.user
-    exams = Exam.objects.all()
+    exams = Exam.objects.all().order_by('name')
     # Calculate the number of sections completed for each exam
     num_sections = []
     sections_completed = []
