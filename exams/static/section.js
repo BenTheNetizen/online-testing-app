@@ -17,7 +17,7 @@ var hasCompletedExam
 getPassage()
 
 // sends the section data to the backend and redirects to different section or back to the hub
-function sendData() {
+function sendData(goToHub) {
   const data = {}
   data['csrfmiddlewaretoken'] = csrf[0].value
   /*
@@ -45,9 +45,9 @@ function sendData() {
       url: `${url}save`,
       data: data,
       success: function(response) {
-
-        //GO TO HUB IF EXAM IS COMPLETED
-        if (hasCompletedExam) {
+        console.log(`completedExam: ${hasCompletedExam}`)
+        //GO TO HUB IF EXAM IS COMPLETED OR USER SELECTS TO GO BACK TO HUB
+        if (hasCompletedExam || goToHub) {
           window.location.href= window.location.origin + '/exam-list'
         }
         //NEW WAY OF ROUTING THE EXAMS (BREAKS ARE ONLY FOR THE SAT AND ACT EXAMS)

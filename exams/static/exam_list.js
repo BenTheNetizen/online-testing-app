@@ -61,9 +61,10 @@ function getExamDetails(btnId) {
   }
   else
   {
-    examDetailsDiv.style.display = "none";
     if (prevElement == examDetailsDiv) {
-      guideMsg.style.display = "block";
+      //guideMsg.style.display = "block";
+    } else {
+      examDetailsDiv.style.display = "none";
     }
   }
 
@@ -72,7 +73,7 @@ function getExamDetails(btnId) {
     type: 'GET',
     url: `${url}exam-${examPk}/data`,
     success: function(response) {
-      console.log(response.data)
+      console.log(response)
       data = response.data
 
       //reset the boolean for if all sections are done (if any are not finished, set this to false)
@@ -86,18 +87,23 @@ function getExamDetails(btnId) {
           //section_data[2] are the seconds left (if it exists)
           if (section_data[0] != null) {
             // Implies that the section has been finished
-            document.getElementById(`exam${examPk}-${section}-score`).innerHTML = `Raw Score: ${section_data[0]}`
+            document.getElementById(`exam${examPk}-${section}-raw-score`).innerHTML = `Raw Score: ${section_data[0]}`
             document.getElementById(`exam${examPk}-${section}-start`).style.display = 'none'
             document.getElementById(`exam${examPk}-${section}-time-remaining`).style.display = 'none'
+
+            if (section_data[1] != null) {
+              //implies that there is a scaled_score
+              document.getElementById(`exam${examPk}-${section}-scaled-score`).innerHTML = `Estimated Section Score: ${section_data[1]}`
+            }
           }
-          else if (section_data[1] != null) {
+          else if (section_data[2] != null) {
             // Implies that the section is in progress
             allSectionsCompleted = false
-            var secondsLeft = section_data[2]
+            var secondsLeft = section_data[3]
             if (secondsLeft <= 9) {
               secondsLeft = '0' + secondsLeft
             }
-            document.getElementById(`exam${examPk}-${section}-time-remaining`).innerHTML = `${section_data[1]}:` + secondsLeft + ` minutes remaining`
+            document.getElementById(`exam${examPk}-${section}-time-remaining`).innerHTML = `${section_data[2]}:` + secondsLeft + ` minutes remaining`
             // THIS IS NOW HANDLEd IN exam_list.htl
             //document.getElementById(`exam${examPk}-${section}-start`).innerHTML = '<span class="material-icons material-icons-round">play_arrow</span>Resume this section'
             document.getElementById(`exam${examPk}-${section}-review`).style.display = 'none'
@@ -112,6 +118,16 @@ function getExamDetails(btnId) {
           }
         }
       })
+
+      // Set the regular/extended time buttons to the correct state
+      let isExtendedTime = response.is_extended_time
+      let regularTimeBtn = document.getElementById(`${examPk}-regular-time-btn`)
+      let extendedTimeBtn = document.getElementById(`${examPk}-extended-time-btn`)
+      if (isExtendedTime) {
+        changeSectionTime('extended', examPk, extendedTimeBtn)
+      } else {
+        changeSectionTime('regular', examPk, regularTimeBtn)
+      }
     },
     error: function(error) {
       console.log(error)

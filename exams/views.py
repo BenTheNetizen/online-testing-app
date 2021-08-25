@@ -301,9 +301,7 @@ def exam_list_view(request):
 
     # Checks if user is a student (not an admin or superuser)
     if not user.is_superuser:
-        user.refresh_from_db()
         student = Student.objects.get(user=user)
-        student.refresh_from_db()
         if student.recent_exam is not None:
             recent_exam = student.recent_exam.name
     context = {
@@ -336,19 +334,29 @@ def exam_list_data_view(request, pk):
         #import pdb; pdb.set_trace()
         minutes = None
         seconds = None
-        score = None
+        raw_score = None
+        scaled_score = None
         if SectionInstance.objects.filter(user=user, exam=exam, section=section).exists():
             section_instance = SectionInstance.objects.get(user=user, exam=exam, section=section)
             minutes = section_instance.minutes_left
             seconds = section_instance.seconds_left
         if Result.objects.filter(user=user, exam=exam, section=section).exists():
             result = Result.objects.get(user=user, exam=exam, section=section)
-            score = result.score
+            raw_score = result.raw_score
+            scaled_score = result.scaled_score
 
-        data.append({section.type: [score, minutes, seconds]})
+        data.append({section.type: [raw_score, scaled_score, minutes, seconds]})
+
+    # Get the is_extended_time boolean
+    if ExamInstance.objects.filter(user=user, exam=exam).exists():
+        exam_instance = ExamInstance.objects.get(user=user, exam=exam)
+        is_extended_time = exam_instance.is_extended_time
+    else:
+        is_extended_time = False
 
     return JsonResponse({
         'data': data,
+        'is_extended_time': is_extended_time,
     })
 
 def exam_list_recent_exam_view(request):
@@ -596,7 +604,7 @@ def section_passage_data_view(request, pk, section_name, passage_num):
 
     data = []
     #gives key, value pairs to "questions," which are the questions and the answers
-    import pdb; pdb.set_trace()
+
     for q in Question.objects.filter(exam=exam, section=section, passage=passage_num).order_by('question_number'):
         answers = []
         for a in q.get_answers():
@@ -685,13 +693,48 @@ def save_section_view(request, pk, section_name):
 
         #CREATE SECTION RESULT OBJECT ONLY IF IT DOES NOT EXIST
         if not Result.objects.filter(user=user, exam=exam, section=section).exists():
-            Result.objects.create(section=section, user=user, exam=exam, score=raw_score)
+            # Calculate scaled score for the section depending on the exam type
+            scaled_score = None
+            if exam.type == 'SAT':
+                if section.type == 'reading':
+                    scaled_score = 400 - 5 * (52 - raw_score)
+                    scaled_score = round(scaled_score/10) * 10
+                    scaled_score = 100 if scaled_score < 100 else scaled_score
+                elif section.type == 'writing':
+                    scaled_score = 400 - 15 * (44 - raw_score)
+                    scaled_score = round(scaled_score/10) * 10
+                    scaled_score = 100 if scaled_score < 100 else scaled_score
+                elif section.type == 'math1':
+                    scaled_score = 340 - 10 * (25 - raw_score)
+                    scaled_score = round(scaled_score/10) * 10
+                    scaled_score = 100 if scaled_score < 100 else scaled_score
+                elif section.type == 'math2':
+                    scaled_score = 460 - 10 * (38 - raw_score)
+                    scaled_score = round(scaled_score/10) * 10
+                    scaled_score = 100 if scaled_score < 100 else scaled_score
+            elif exam.type == 'ACT':
+                if section.type == 'english':
+                    scaled_score = 36 - 0.5 * (75 - raw_score)
+                    scaled_score = round(scaled_score)
+                    scaled_score = 1 if scaled_score < 1 else scaled_score
+                elif section.type == 'math':
+                    scaled_score = 36 - 0.6 * (60 - raw_score)
+                    scaled_score = round(scaled_score)
+                    scaled_score = 1 if scaled_score < 1 else scaled_score
+                elif section.type == 'reading':
+                    scaled_score = 36 - 0.7 * (40 - raw_score)
+                    scaled_score = round(scaled_score)
+                    scaled_score = 1 if scaled_score < 1 else scaled_score
+                elif section.type == 'science':
+                    scaled_score = 36 - (40 - raw_score)
+                    scaled_score = round(scaled_score)
+                    scaled_score = 1 if scaled_score < 1 else scaled_score
+
+            Result.objects.create(section=section, user=user, exam=exam, raw_score=raw_score, scaled_score=scaled_score)
 
         #Deletes SectionInstance object, since the section has been finished
         if SectionInstance.objects.filter(user=user, exam=exam, section=section).exists():
             SectionInstance.objects.get(user=user, exam=exam, section=section).delete()
-
-
 
     return JsonResponse({'section_name':section_name})
 
@@ -749,7 +792,7 @@ def get_next_section_view(request, pk, section_name):
     has_completed_exam = True
     next_section = None
 
-    for i in range(1, num_sections + 1):
+    for i in range(1, num_sections):
         # If section_index > num_sections, start searching for available section at ordering 1
         if section_index > num_sections:
             section_index = 1
@@ -758,6 +801,7 @@ def get_next_section_view(request, pk, section_name):
         if not Result.objects.filter(user=user, exam=exam, section=next_section).exists():
             has_completed_exam = False
 
+        section_index += 1
     # Checks if we did not find an unfinished section (exam is finished)
     if has_completed_exam:
         next_section = None

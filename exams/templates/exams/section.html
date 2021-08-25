@@ -68,8 +68,8 @@
         Scores for this section will be uploaded to your account homepage.
       </div>
       <div class="modal-footer">
-        <button onclick="sendData()" class="btn btn-primary">Next section</button>
-        <button onclick="sendData()" class="btn btn-secondary">Back to account homepage</button>
+        <button onclick="sendData(false)" class="btn btn-primary">Next section</button>
+        <button onclick="sendData(true)" class="btn btn-secondary">Back to account homepage</button>
       </div>
     </div>
   </div>
@@ -89,7 +89,7 @@
         You have finished {{ exam.name | title }}. Please return to the home page to view your results.
       </div>
       <div class="modal-footer">
-        <button onclick="sendData()" class="btn btn-primary">Back to account homepage</button>
+        <button onclick="sendData(true)" class="btn btn-primary">Back to account homepage</button>
       </div>
     </div>
   </div>
@@ -103,19 +103,11 @@
         <h5 class="modal-title" id="exampleModalLongTitle">Times up!</h5>
       </div>
       <div class="modal-body">
-        {% if section.type == 'math2' %}
-        Congratulations! You have finished {{exam.name | title}}. Please return to the home page to view your results.
-        {% else %}
         There is no more time remaining for this section. Would you like to move on to the next section?
-        {% endif %}
       </div>
       <div class="modal-footer">
-        {% if section.type == 'math2' %}
-        <button onclick="sendData(false)" class="btn btn-primary" data-dismiss="modal">Return to home</button>
-        {% else %}
-        <button onclick="sendData(true)" class="btn btn-primary">Next section</button>
-        <button onclick="sendData(false)" class="btn btn-secondary" data-dismiss="modal">Back to account homepage</button>
-        {% endif %}
+        <button onclick="sendData(false)" class="btn btn-primary">Next section</button>
+        <button onclick="sendData(true)" class="btn btn-secondary" data-dismiss="modal">Back to account homepage</button>
       </div>
     </div>
   </div>

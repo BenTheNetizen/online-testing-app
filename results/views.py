@@ -9,6 +9,7 @@ from django.contrib.staticfiles import finders
 from questions.models import Student_Answer, Question, Result
 from exams.models import Exam, Section
 from openpyxl import load_workbook
+from datetime import date
 #from easy_pdf.views import PDFTemplateView
 #import easy_pdf
 import os
@@ -20,6 +21,170 @@ def results(request, pk):
     print(user.email)
     return render(request, 'results/results.html', {})
 
+def render_pdf_view(request, pk):
+    user = request.user
+    exam = Exam.objects.get(pk=pk)
+    exam_type = exam.type
+    sections = exam.get_sections()
+    current_date = date.today().strftime("%m/%d/%Y")
+    # IM REUSING 'reading' FOR BOTH THE ACT AND SAT TESTS
+    raw_reading_score, raw_writing_score, raw_math1_score, raw_math2_score, raw_english_score, raw_math_score, raw_science_score = None, None, None, None, None, None, None
+    omitted_reading, omitted_writing, omitted_math1, omitted_math2, omitted_english, omitted_math, omitted_science = None, None, None, None, None, None, None
+    reading_questions, writing_questions, math1_questions, math2_questions, english_questions, math_questions, science_questions = None, None, None, None, None, None, None
+    reading_student_answers, writing_student_answers, math1_student_answers, math2_student_answers, english_student_answers, math1_student_answers, science_student_answers = None, None, None, None, None, None, None
+    reading_score, writing_score, math1_score, math2_score, english_score, math_score, science_score = None, None, None, None, None, None, None
+    for section in sections:
+        if exam_type == 'SAT':
+            if (section.type == 'reading'):
+                raw_reading_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                reading_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
+                omitted_reading = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                reading_questions = Question.objects.filter(exam=exam, section=section)
+                reading_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+            elif (section.type == 'writing'):
+                raw_writing_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                writing_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
+                omitted_writing = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                writing_questions = Question.objects.filter(exam=exam, section=section)
+                writing_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+            elif (section.type == 'math1'):
+                raw_math1_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                math1_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
+                omitted_math1 = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                math1_questions = Question.objects.filter(exam=exam, section=section)
+                math1_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+            elif (section.type == 'math2'):
+                raw_math2_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                math2_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
+                omitted_math2 = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                math2_questions = Question.objects.filter(exam=exam, section=section)
+                math2_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+        elif exam_type == 'ACT':
+            if (section.type == 'english'):
+                raw_english_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                english_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
+                omitted_english = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                english_questions = Question.objects.filter(exam=exam, section=section)
+                english_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+            elif (section.type == 'math'):
+                raw_math_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                math_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
+                omitted_math = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                math_questions = Question.objects.filter(exam=exam, section=section)
+                math_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+            elif (section.type == 'reading'):
+                raw_reading_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                reading_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
+                omitted_reading = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                reading_questions = Question.objects.filter(exam=exam, section=section)
+                reading_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+            elif (section.type == 'science'):
+                raw_science_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                science_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
+                omitted_science = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                science_questions = Question.objects.filter(exam=exam, section=section)
+                science_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+
+    if exam_type == 'SAT':
+        total_score = reading_score + writing_score + math1_score + math2_score
+        incorrect_reading = 52 - (omitted_reading + raw_reading_score)
+        incorrect_writing = 44 - (omitted_writing + raw_writing_score)
+        incorrect_math1 = 25 - (omitted_math1 + raw_math1_score)
+        incorrect_math2 = 38 - (omitted_math2 + raw_math2_score)
+
+        reading_questions_answers = zip(reading_questions, reading_student_answers)
+        writing_questions_answers = zip(writing_questions, writing_student_answers)
+        math1_questions_answers = zip(math1_questions, math1_student_answers)
+        math2_questions_answers = zip(math2_questions, math2_student_answers)
+
+        context = {
+            'exam':exam,
+            'user': user,
+            'current_date':current_date,
+            'raw_reading_score':raw_reading_score,
+            'raw_writing_score':raw_writing_score,
+            'raw_math1_score':raw_math1_score,
+            'raw_math2_score':raw_math2_score,
+            'omitted_reading':omitted_reading,
+            'omitted_writing':omitted_writing,
+            'omitted_math1':omitted_math1,
+            'omitted_math2':omitted_math2,
+            'reading_questions':reading_questions,
+            'writing_questions':writing_questions,
+            'math1_questions':math1_questions,
+            'math2_questions':math2_questions,
+            'reading_student_answers':reading_student_answers,
+            'writing_student_answers':writing_student_answers,
+            'math1_student_answers':math1_student_answers,
+            'math2_student_answers':math2_student_answers,
+            'incorrect_reading':incorrect_reading,
+            'incorrect_writing':incorrect_writing,
+            'incorrect_math1':incorrect_math1,
+            'incorrect_math2':incorrect_math2,
+            'reading_score':reading_score,
+            'writing_score':writing_score,
+            'math1_score':math1_score,
+            'math2_score':math2_score,
+            'total_score':total_score,
+            'reading_questions_answers':reading_questions_answers,
+            'writing_questions_answers':writing_questions_answers,
+            'math1_questions_answers':math1_questions_answers,
+            'math2_questions_answers':math2_questions_answers,
+        }
+
+        return render(request, 'results/sat-results.html', context)
+
+    elif exam_type == 'ACT':
+        total_score = english_score + math_score + reading_score + science_score
+        incorrect_english = 52 - (omitted_english + raw_english_score)
+        incorrect_math = 44 - (omitted_math + raw_writing_math)
+        incorrect_reading = 25 - (omitted_reading + raw_reading_score)
+        incorrect_science = 38 - (omitted_science + raw_science_score)
+
+        english_questions_answers = zip(english_questions, english_student_answers)
+        math_questions_answers = zip(math_questions, math_student_answers)
+        reading_questions_answers = zip(reading_questions, reading_student_answers)
+        science_questions_answers = zip(science_questions, science_student_answers)
+
+        context = {
+            'exam':exam,
+            'user': user,
+            'current_date':current_date,
+            'raw_english_score':raw_english_score,
+            'raw_math_score':raw_math_score,
+            'raw_reading_score':raw_reading_score,
+            'raw_science_score':raw_science_score,
+            'omitted_english':omitted_english,
+            'omitted_math':omitted_math,
+            'omitted_reading':omitted_reading,
+            'omitted_science':omitted_science,
+            'english_questions':english_questions,
+            'math_questions':math_questions,
+            'reading_questions':reading_questions,
+            'science_questions':science_questions,
+            'english_student_answers':english_student_answers,
+            'math_student_answers':math_student_answers,
+            'reading_student_answers':reading_student_answers,
+            'science_student_answers':science_student_answers,
+            'incorrect_english':incorrect_english,
+            'incorrect_math':incorrect_math,
+            'incorrect_reading':incorrect_reading,
+            'incorrect_science':incorrect_science,
+            'english_score':english_score,
+            'math_score':math_score,
+            'reading_score':reading_score,
+            'science_score':science_score,
+            'total_score':total_score,
+            'english_questions_answers':english_questions_answers,
+            'math_questions_answers':math_questions_answers,
+            'reading_questions_answers':reading_questions_answers,
+            'science_questions_answers':science_questions_answers,
+        }
+    return render(request, 'results/act-results.html', context)
+
+
+
+"""
 def render_pdf_view(request, pk):
     module_dir = os.path.dirname(__file__) #get current directory
     file_path = os.path.join(module_dir, 'scoring_sheets/test-scoring-template.xlsx')
@@ -78,7 +243,7 @@ def render_pdf_view(request, pk):
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
-
+"""
 def render_pdf_of_results(request, pk):
     user = request.user
     exam = Exam.objects.get(pk=pk)

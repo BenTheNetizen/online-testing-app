@@ -42,7 +42,7 @@ Exam List
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Exam {{exam.pk}} Breakdown</h5>
+            <h5 class="modal-title" id="exampleModalLongTitle">{{exam.name}} Breakdown</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span class='material-icons' aria-hidden="true">close</span>
             </button>
@@ -66,8 +66,8 @@ Exam List
               schedule
             </span>
             <div class='section-time-btns'>
-              <button onclick="changeSectionTime('regular', {{exam.pk}}, this)">Regular</button>
-              <button onclick="changeSectionTime('extended', {{exam.pk}}, this)">Extended</button>
+              <button id="{{exam.pk}}-regular-time-btn" onclick="changeSectionTime('regular', {{exam.pk}}, this)">Regular</button>
+              <button id="{{exam.pk}}-extended-time-btn" onclick="changeSectionTime('extended', {{exam.pk}}, this)">Extended</button>
             </div>
           </div>
         </div>
@@ -89,8 +89,8 @@ Exam List
               <a id="exam{{exam.pk}}-{{section.type}}-review" class='view-mistakes-link'
                 href="{% url 'exams:section-review-view' pk=exam.id section_name=section.type %}">View mistakes</a>
             </div>
-            <div id="exam{{exam.pk}}-{{section.type}}-score" class="exam-list-score-data">Raw Score: N/A</div>
-            <div class="exam-list-score-data">Estimated Section Score Range: N/A</div>
+            <div id="exam{{exam.pk}}-{{section.type}}-raw-score" class="exam-list-score-data">Raw Score: N/A</div>
+            <div id="exam{{exam.pk}}-{{section.type}}-scaled-score" class="exam-list-score-data">Estimated Section Score: N/A</div>
             <div class="section-begin">
               {% if section.get_section_instance %}
               <a id="exam{{exam.pk}}-{{section.type}}-start"
