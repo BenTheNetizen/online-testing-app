@@ -17,3 +17,5 @@ pillow==8.2.0
 django-easy-pdf==0.2.0.dev1
 WeasyPrint>=0.34
 django-cleanup==5.2.0
+boto3==1.18.28
+django-storages==1.11.1

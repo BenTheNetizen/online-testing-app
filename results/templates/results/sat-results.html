@@ -271,19 +271,23 @@
 
         <div class='answer-sheet math ca-flex ca-padding ca-horz-center right-col'
           style='align-content: flex-start; text-align: center; box-sizing: border-box'>
+
+
           <div class="answer-grid">
-            <div id="col-1">
-              <div id="reading"></div>
-            </div>
-            <div id="col-2">
-              <div id="writing"></div>
-            </div>
-            <div id="col-3">
-              <div id="math"></div>
-              <div id="math-2" style="margin-top:50px;"></div>
-            </div>
-          </div>
-        </div>
+            <div id="col-1"><div id="reading">{% include 'results/tables/reading.html' %}</div></div>
+                <div id="col-2">
+                  <div id="writing">{% include 'results/tables/writing.html' %}</div>
+                </div>
+                    <div id="col-3">
+                      <div id="math">{% include 'results/tables/math1.html' %}</div>
+                        <div id="math-2" style="margin-top:50px;"><div>
+                      </div>
+                      {% include 'results/tables/math2.html' %}
+
+                    </div>
+              </div>
+</div>
+</div>
 </div>
 
 <div id="page-3">
@@ -534,12 +538,14 @@
 </div>
   </div>
   <script>
+    /*
   $(document).ready(function(){
         $('#reading').load("tables/reading.html");
         $('#writing').load("tables/writing.html");
         $('#math').load("tables/math.html");
         $('#math-2').load("tables/math-2.html");
      });
+     */
   </script>
 
 </body>
