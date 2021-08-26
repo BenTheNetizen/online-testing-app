@@ -22,7 +22,7 @@ Exam List
     {% for exam, sections_completed, num_sections in exam_info %}
     <button id="{{exam.name}}-btn" data-exam-name="{{exam.name}}" data-exam-type="{{exam.type}}" data-exam-pk="{{exam.pk}}" class="btn btn-link modal-button choose-exam-btn"
       onclick="getExamDetails(this.id)">
-      <span>{{exam.name}}</span><br><span id='{{exam.pk}}-sections-completed'>{{ sections_completed }} of {{num_sections}} sections completed</span>
+      <span>{{exam.name}}</span><br><span><span id="{{exam.pk}}-sections-completed" style="all:unset;">{{ sections_completed }}</span> of {{num_sections}} sections completed</span>
       <i class="arrow right"></i>
     </button>
     <br>

@@ -252,7 +252,8 @@ function resetExam(examPk, targetBtnId) {
     },
     success: function(response) {
       getExamDetails(targetBtnId)
-
+      // sets the number of sections completed to 0
+      document.getElementById(`${examPk}-sections-completed`).innerHTML = '0'
     },
     error: function(error) {
       console.log(error)
