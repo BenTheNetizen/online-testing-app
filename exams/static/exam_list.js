@@ -30,9 +30,6 @@ if (recentExamType != null) {
   filterExamType('<li>SAT Mock Exams</li>')
 }
 
-
-//run this function to open the first exam by default
-
 // gets exam details (also shows recent exam if possible)
 function getExamDetails(btnId) {
   const btn = document.getElementById(btnId)
@@ -113,7 +110,6 @@ function getExamDetails(btnId) {
             document.getElementById(`exam${examPk}-${section}-reset`).style.display = 'none'
           }
           else {
-            ('section never started')
             // Implies that the section has not ever been started
             allSectionsCompleted = false
             startBtn = document.getElementById(`exam${examPk}-${section}-start`)
