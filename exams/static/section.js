@@ -291,6 +291,7 @@ function getPassage(value) {
           }
         })
       } else {
+
         //handling for non math sections
         //clearing the images and questions
         sectionBox.innerHTML = ''
@@ -304,7 +305,6 @@ function getPassage(value) {
             <img src="${response.img_urls[i]}">
             `
         }
-
         //handling the questions displaying
         data.forEach(el => {
           for (const [questionNum, questionData] of Object.entries(el)) {
@@ -312,6 +312,7 @@ function getPassage(value) {
             //questionData[0] is question text; questionData[1] are the answers;
             //questionData[2] is either '' or contains the answer that was previously selected
             var sectionBoxString = ''
+
             if (questionData[0].includes('no question')) {
               sectionBoxString += `
                 <!--
@@ -322,7 +323,7 @@ function getPassage(value) {
                 -->
                 <div class='question-container'>
                 <div class="mb-2 testing">
-                  <b class="ca-question-num">Question ${questionNum}</b>
+                  <b id="question-${questionNum}" class="ca-question-num">Question ${questionNum}</b>
                   <br>
                 </div>
                 <div class="answers-container">
@@ -338,7 +339,7 @@ function getPassage(value) {
                 -->
                 <div class='question-container'>
                 <div class="mb-2 testing">
-                  <b class="ca-question-num">Question ${questionNum}</b>
+                  <b id="question-${questionNum}" class="ca-question-num">Question ${questionNum}</b>
                   <br>
                   <b class="ca-question-data">${questionData[0]}</b>
                 </div>
@@ -390,10 +391,15 @@ function getPassage(value) {
             sectionBox.innerHTML += sectionBoxString
           }
         })
+
+        // return to top of the page after passage change
+        document.getElementById('section-form').scrollTop = 0
       }
 
       // needed statement for MathJax functionality
       MathJax.typesetPromise();
+
+
     },
     error: function(error) {
       console.log(error)

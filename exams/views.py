@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import csv, io, re, datetime, math
 from openpyxl import load_workbook
+from django.urls import reverse
 #from results.models import Result
 # Create your views here.
 from django.utils.decorators import method_decorator
@@ -295,7 +296,7 @@ def exam_list_view(request):
         sections_completed.append(Result.objects.filter(user=user, exam=exam).count())
 
     exam_info = zip(exams, sections_completed, num_sections)
-
+    section_info = zip()
     # Get the most recent exam
     recent_exam = None
 
@@ -336,16 +337,20 @@ def exam_list_data_view(request, pk):
         seconds = None
         raw_score = None
         scaled_score = None
+        direct_section_url = None
+        section_directions_url = reverse('exams:section-directions-view', kwargs={'pk':pk, 'section_name':section.type})
         if SectionInstance.objects.filter(user=user, exam=exam, section=section).exists():
             section_instance = SectionInstance.objects.get(user=user, exam=exam, section=section)
             minutes = section_instance.minutes_left
             seconds = section_instance.seconds_left
+            has_section_instance = True
+            direct_section_url = reverse('exams:section-view', kwargs={'pk':pk, 'section_name':section.type})
         if Result.objects.filter(user=user, exam=exam, section=section).exists():
             result = Result.objects.get(user=user, exam=exam, section=section)
             raw_score = result.raw_score
             scaled_score = result.scaled_score
 
-        data.append({section.type: [raw_score, scaled_score, minutes, seconds]})
+        data.append({section.type: [raw_score, scaled_score, minutes, seconds, section_directions_url, direct_section_url]})
 
     # Get the is_extended_time boolean
     if ExamInstance.objects.filter(user=user, exam=exam).exists():
@@ -380,6 +385,20 @@ def exam_list_reset_view(request, pk):
 
     section_instances = SectionInstance.objects.filter(user=user, exam=exam)
     student_answers = Student_Answer.objects.filter(user=user, exam=exam)
+    results = Result.objects.filter(user=user, exam=exam)
+    exam_instance = ExamInstance.objects.filter(user=user, exam=exam)
+
+    if section_instances.count() > 0:
+        section_instances.delete()
+
+    if student_answers.count() > 0:
+        student_answers.delete()
+
+    if results.count() > 0:
+        results.delete()
+
+    if exam_instance.count() > 0:
+        exam_instance.delete()
 
     return JsonResponse({})
 
@@ -793,6 +812,7 @@ def get_next_section_view(request, pk, section_name):
     next_section = None
 
     for i in range(1, num_sections):
+        print('SECTION INDEX: ' + str(section_index))
         # If section_index > num_sections, start searching for available section at ordering 1
         if section_index > num_sections:
             section_index = 1
@@ -800,6 +820,7 @@ def get_next_section_view(request, pk, section_name):
         next_section = Section.objects.get(exam=exam, ordering=section_index)
         if not Result.objects.filter(user=user, exam=exam, section=next_section).exists():
             has_completed_exam = False
+            break
 
         section_index += 1
     # Checks if we did not find an unfinished section (exam is finished)

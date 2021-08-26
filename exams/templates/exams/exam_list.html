@@ -57,6 +57,28 @@ Exam List
       </div>
     </div>
 
+    <!-- Exam Reset Confirmation Modal -->
+    <div class="modal fade" id="exam{{exam.pk}}ResetConfirmationModal" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">{{exam.name}} Reset Confirmation</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span class='material-icons' aria-hidden="true">close</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to reset this exam? You cannot undo this action.
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" onclick="resetExam({{exam.id}}, '{{exam.name}}-btn')" data-dismiss="modal">Yes, reset exam</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">No, go back</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="{{exam.name}}-details" style="display: none">
       <div class="exam-details-header">
         <div id="exam-details-header-inner">
@@ -92,6 +114,7 @@ Exam List
             <div id="exam{{exam.pk}}-{{section.type}}-raw-score" class="exam-list-score-data">Raw Score: N/A</div>
             <div id="exam{{exam.pk}}-{{section.type}}-scaled-score" class="exam-list-score-data">Estimated Section Score: N/A</div>
             <div class="section-begin">
+              <!--
               {% if section.get_section_instance %}
               <a id="exam{{exam.pk}}-{{section.type}}-start"
                 href="{% url 'exams:section-view' pk=exam.id section_name=section.type %}"
@@ -101,6 +124,10 @@ Exam List
                 href="{% url 'exams:section-directions-view' pk=exam.id section_name=section.type %}"
                 class="ca-btn begin">Begin this section</a>
               {% endif %}
+              -->
+              <a id="exam{{exam.pk}}-{{section.type}}-start"
+                href="{% url 'exams:section-directions-view' pk=exam.id section_name=section.type %}"
+                class="ca-btn begin">Begin this section</a>
               <p id="exam{{exam.pk}}-{{section.type}}-time-remaining" class="time-remaining">Timer goes here</p>
             </div>
             <a id="exam{{exam.pk}}-{{section.type}}-reset"
@@ -113,8 +140,9 @@ Exam List
         <div class="section-details">
           <!--
           <a href="{% url 'exams:start-exam-view' pk=exam.id %}" class="btn btn-primary">Begin this Exam</a>
-          <a onclick="resetExam({{exam.id}})" class="btn btn-danger">Reset this Exam</a>
           -->
+          <button type="button" data-toggle="modal" data-target="#exam{{exam.pk}}ResetConfirmationModal" class="btn btn-danger">Reset this Exam</button>
+
           <!-- trigger modal -->
           <a data-url="{% url 'results:render-pdf-view' pk=exam.id %}"
             data-modal-id="#openExam{{exam.pk}}BreakdownModal" class="btn green-btn" onclick="openBreakdown(this)">
@@ -131,6 +159,7 @@ Exam List
 
 <script src="{% static 'exam_list.js' %}" defer></script>
 <script>
+  console.log('{{user}}')
   var csrf = "{{ csrf_token }}"
   const url = window.location.href
   var recentExam

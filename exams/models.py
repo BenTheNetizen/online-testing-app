@@ -95,6 +95,7 @@ class Section(models.Model):
 
     def get_section_instance(self):
         return self.sectioninstance_set.all()
+
 #model for a section instance
 class SectionInstance(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

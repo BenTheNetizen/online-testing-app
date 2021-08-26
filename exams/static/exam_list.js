@@ -73,7 +73,6 @@ function getExamDetails(btnId) {
     type: 'GET',
     url: `${url}exam-${examPk}/data`,
     success: function(response) {
-      console.log(response)
       data = response.data
 
       //reset the boolean for if all sections are done (if any are not finished, set this to false)
@@ -98,6 +97,7 @@ function getExamDetails(btnId) {
           }
           else if (section_data[2] != null) {
             // Implies that the section is in progress
+
             allSectionsCompleted = false
             var secondsLeft = section_data[3]
             if (secondsLeft <= 9) {
@@ -105,13 +105,22 @@ function getExamDetails(btnId) {
             }
             document.getElementById(`exam${examPk}-${section}-time-remaining`).innerHTML = `${section_data[2]}:` + secondsLeft + ` minutes remaining`
             // THIS IS NOW HANDLEd IN exam_list.htl
-            //document.getElementById(`exam${examPk}-${section}-start`).innerHTML = '<span class="material-icons material-icons-round">play_arrow</span>Resume this section'
+            document.getElementById(`exam${examPk}-${section}-start`).innerHTML = '<span class="material-icons material-icons-round">play_arrow</span>Resume this section'
+            document.getElementById(`exam${examPk}-${section}-start`).href = section_data[5]
             document.getElementById(`exam${examPk}-${section}-review`).style.display = 'none'
             document.getElementById(`exam${examPk}-${section}-reset`).style.display = 'none'
           }
           else {
+            ('section never started')
             // Implies that the section has not ever been started
             allSectionsCompleted = false
+            startBtn = document.getElementById(`exam${examPk}-${section}-start`)
+            startBtn.innerHTML = 'Begin this section'
+            startBtn.href = section_data[4]
+            startBtn.style.display = 'block'
+
+            document.getElementById(`exam${examPk}-${section}-raw-score`).innerHTML = 'Raw Score: N/A'
+            document.getElementById(`exam${examPk}-${section}-scaled-score`).innerHTML = 'Estimated Section Score: N/A'
             document.getElementById(`exam${examPk}-${section}-reset`).style.display = 'none'
             document.getElementById(`exam${examPk}-${section}-review`).style.display = 'none'
             document.getElementById(`exam${examPk}-${section}-time-remaining`).style.display = 'none'
@@ -190,7 +199,6 @@ function changeSectionTime(value, examPk, elt) {
   $(elt).css('backgroundColor', '#66A1A5')
   $(elt).css('color', 'white')
 
-  console.log('change time')
   let isExtendedTime
   if (value === 'regular') {
     isExtendedTime = false
@@ -207,7 +215,7 @@ function changeSectionTime(value, examPk, elt) {
       is_extended_time: isExtendedTime,
     },
     success: function(response) {
-      console.log(response)
+
     },
     error: function(error) {
       console.log(error)
@@ -228,8 +236,7 @@ function openBreakdown(elt) {
   }
 }
 
-function resetExam(examPk) {
-  console.log(examPk)
+function resetExam(examPk, targetBtnId) {
 
   $.ajax({
     type: 'POST',
@@ -238,7 +245,8 @@ function resetExam(examPk) {
       csrfmiddlewaretoken: csrf
     },
     success: function(response) {
-      console.log('reset ajax received response')
+      getExamDetails(targetBtnId)
+
     },
     error: function(error) {
       console.log(error)
