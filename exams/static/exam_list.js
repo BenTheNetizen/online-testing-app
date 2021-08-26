@@ -16,9 +16,11 @@ const examButtons = document.getElementsByClassName('choose-exam-btn');
 //run this function to filter by default and select first exam (SAT)
 if (recentExamType != null) {
   if (recentExamType == 'SAT') {
+    console.log('RECENT EXAM IS SAT')
     filterExamType('<li>SAT Mock Exams</li>')
   }
   else if (recentExamType == 'ACT') {
+    console.log('RECENT EXAM IS ACT')
     filterExamType('<li>ACT Mock Exams</li>')
   }
   else {
@@ -146,13 +148,15 @@ function getExamDetails(btnId) {
 
 function filterExamType(selection) {
   let examType = $(selection).text()
+  let selectedExam = document.getElementById('selected-exam')
 
   if (examType == 'SAT Mock Exams') {
+
     //hide all exam buttons
     [...examButtons].forEach(element => {
       element.style.display = "none";
     })
-
+    selectedExam.innerHTML = 'SAT Mock Exams'
     //show the queried exam buttons
     let query = document.querySelectorAll("[data-exam-type='SAT']")
     query.forEach(element => {
@@ -161,6 +165,7 @@ function filterExamType(selection) {
 
     // select the most recent exam if it exists
     if (recentExam != null && !hasSelectedRecentExam) {
+      console.log('RECENT EXAM EXISTS')
       getExamDetails(`${recentExam}-btn`)
       hasSelectedRecentExam = true
     } else {
@@ -170,11 +175,12 @@ function filterExamType(selection) {
 
 
   } else if (examType == 'ACT Mock Exams') {
+
     //hide all exam buttons
     [...examButtons].forEach(element => {
       element.style.display = "none";
     })
-
+    selectedExam.innerHTML = 'ACT Mock Exams'
     //show the queried exam buttons
     let query = document.querySelectorAll("[data-exam-type='ACT']")
     query.forEach(element => {

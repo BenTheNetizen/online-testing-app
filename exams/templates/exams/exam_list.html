@@ -13,9 +13,9 @@ Exam List
   <div class="exam-list">
   <div class="exam-list-inner-container">
     <select id="select-exam" name="exam-titles" onchange="filterExamType()" style='display: none'>
-      <option value="SAT Mock Exams" selected>SAT Mock Exams</option>
-      <option value="ACT Mock Exams">ACT Mock Exams</option>
-      <option value="SAT/ACT Diagnostic Test">SAT/ACT Diagnostic Test</option>
+      <option id="sat-option" value="SAT Mock Exams" selected>SAT Mock Exams</option>
+      <option id="act-option" value="ACT Mock Exams">ACT Mock Exams</option>
+      <option id="diagnostic-option" value="SAT/ACT Diagnostic Test">SAT/ACT Diagnostic Test</option>
     </select>
 
     <p>Select the test or section you would like to work on and click START to begin.</p>
@@ -157,7 +157,6 @@ Exam List
   </div>
 </div>
 
-<script src="{% static 'exam_list.js' %}" defer></script>
 <script>
   console.log('{{user}}')
   var csrf = "{{ csrf_token }}"
@@ -179,4 +178,5 @@ Exam List
   })
 </script>
 <script src="{% static 'dropdown-list.js' %}" defer></script>
+<script src="{% static 'exam_list.js' %}" defer></script>
 {% endblock content %}

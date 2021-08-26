@@ -14,7 +14,7 @@ $('select').each( function() {
     $this.wrap('<div class="select" />');
 
     // Insert a styled div to sit over the top of the hidden select element
-    $this.after('<div class="styledSelect"></div>');
+    $this.after('<div id="selected-exam" class="styledSelect"></div>');
 
     // Cache the styled div
     var $styledSelect = $this.next('div.styledSelect');
