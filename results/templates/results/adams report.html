@@ -1,5 +1,4 @@
 <!doctype html>
-{% load static %}
 <html lang="en">
 
 <head>
@@ -11,26 +10,29 @@
   <link href="{% static 'assets/img/alexander-academy-logo.png' %}" rel="icon">
 
   <!-- Font(s) -->
-  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+
+  <link rel="stylesheet" href="css/app.css">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+
 </head>
 
 <body>
   <div class='ca-container'>
     <div class='ca-content'>
       <div class="general-info">
-        <div><span class="general-info-label ca-bold">Name: </span> {{user}}</div>
-        <div><span class="general-info-label ca-bold">Test Date: </span> {{current_date}} </div>
-        <div><span class="general-info-label ca-bold">Test Number: </span> {{exam.name}}</div>
-        {% include 'results/includes/test.html' %}
+        <div><span class="general-info-label ca-bold">Name: </span> VAR</div>
+        <div><span class="general-info-label ca-bold">Test Date: </span> VAR </div>
+        <div><span class="general-info-label ca-bold">Test Number: </span> VAR</div>
       </div>
 
       <div class="total-score-info ca-flex ca-vert-center">
         <div class="total-score-details ca-flex ca-flex-half">
           <h2 class="total-score-heading ca-flex-full">Your Total Score</h2>
           <div class="total-score-and-range ca-flex ca-flex-full ca-vert-center">
-            <div class="total-score ca-bold ca-inline-b">{{total_score}}</div>
+            <div class="total-score ca-bold ca-inline-b">VAR</div>
             <div class="total-score-range ca-italic ca-inline-b">400 to<br />1600</div>
           </div>
 
@@ -48,7 +50,7 @@
         </div>
 
         <div class="total-score-graph ca-flex ca-flex-half ca-horz-center ca-vert-center">
-          <img src="{% static 'graph-asset.png' %}">
+          <img src="graph-asset.png">
         </div>
       </div>
 
@@ -57,7 +59,7 @@
       <h2>Section Scores</h2>
       <div class='ca-flex'>
         <div class='ca-flex-two-fifths ca-flex ca-vert-center'>
-          <span class="ca-font-big ca-bold">{{reading_score|add:writing_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>200 to
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>200 to
               800</span></span>
           <div class="ca-flex-full">Your Evidence-Based<br>Reading and Writing<br>Score</div>
         </div>
@@ -73,7 +75,7 @@
         <div class="ca-flex-full"><br></div>
 
         <div class='ca-flex-two-fifths ca-flex ca-vert-center'>
-          <span class="ca-font-big ca-bold">{{math1_score|add:math2_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>200 to
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>200 to
               800</span></span>
           <div class="ca-flex-full">Your Math Score</div>
         </div>
@@ -93,17 +95,17 @@
       <h2>Test Scores</h2>
       <div class='ca-flex'>
         <div class='ca-flex-one-third ca-flex ca-vert-center'>
-          <span class="ca-font-big ca-bold">{{reading_test_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
               40</span></span>
           <div class="ca-flex-full">Reading</div>
         </div>
         <div class='ca-flex-one-third ca-flex ca-vert-center'>
-          <span class="ca-font-big ca-bold">{{writing_test_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
               40</span></span>
           <div class="ca-flex-full">Writing and Language</div>
         </div>
         <div class='ca-flex-one-third ca-flex ca-vert-center'>
-          <span class="ca-font-big ca-bold">{{math_test_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
               40</span></span>
           <div class="ca-flex-full">Math</div>
         </div>
@@ -164,6 +166,8 @@
         </div>
       </div>
 
+
+
 <div id="page-2">
       <div class='questions-overview ca-flex'>
         <div class='questions-overview-summary ca-flex'>
@@ -173,78 +177,78 @@
           <hr class="ca-flex-full" />
           <h3 class='ca-bold ca-flex-full'>Reading</h3>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>52</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Total Questions</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>{{raw_reading_score}}</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Correct Answers</div>
           </div>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>{{incorrect_reading}}</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Incorrect Answers</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>{{omitted_reading}}</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Omitted Answers</div>
           </div>
           <hr class="ca-flex-full" />
 
           <h3 class='ca-bold ca-flex-full'>Writing and Language</h3>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>44</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Total Questions</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>{{raw_writing_score}}</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Correct Answers</div>
           </div>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>{{incorrect_writing}}</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Incorrect Answers</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>{{omitted_writing}}</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Omitted Answers</div>
           </div>
           <hr class="ca-flex-full" />
 
           <h3 class='ca-bold ca-flex-full'>Math - No Calculator</h3>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>25</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Total Questions</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>{{raw_math1_score}}</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Correct Answers</div>
           </div>
           <div class="ca-flex-full"></div>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>{{incorrect_math1}}</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Incorrect Answers</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>{{omitted_math1}}</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Omitted Answers</div>
           </div>
           <hr class="ca-flex-full" />
 
           <h3 class='ca-bold ca-flex-full'>Math - Calculator</h3>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>38</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Total Questions</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>{{raw_math2_score}}</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Correct Answers</div>
           </div>
           <div class="ca-flex-full"></div>
           <div class='ca-flex-half '>
-            <div class='ca-font-big ca-bold'>{{incorrect_math2}}</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Incorrect Answers</div>
           </div>
           <div class='ca-flex-half'>
-            <div class='ca-font-big ca-bold'>{{omitted_math2}}</div>
+            <div class='ca-font-big ca-bold'>VAR</div>
             <div class='ca-font-small'>Omitted Answers</div>
           </div>
           <hr class="ca-flex-full" />
@@ -273,134 +277,23 @@
           style='align-content: flex-start; text-align: center; box-sizing: border-box'>
 
 
+
+
+
+
           <div class="answer-grid">
-            <div id="col-1">
-              <div id="reading">
-                <div class="table-wrapper">
-                  <h3 class='ca-bold ca-flex-full'>Reading</h3>
-
-                   <div class="col-name-wrapper">
-                       <div class='col-name'>Question #</div>
-                       <div class='col-name'>Correct</div>
-                       <div class='col-name' style='line-height:1'>Your Answer</div>
-                       <div class='col-name'>Difficulty</div>
-                  </div>
+            <div id="col-1"><div id="reading"></div></div>
+                <div id="col-2">
+                  <div id="writing"></div>
                 </div>
+                    <div id="col-3">
+                      <div id="math"></div>
+                        <div id="math-2" style="margin-top:50px;"><div>
+                      </div>
 
-                <div id="table-reading">
-                  {% for question, student_answer in reading_questions_answers %}
-                  <div class='ca-cells ca-flex ca-flex-full'>
-                    <div class='ca-cell ca-flex-one-fourth'>{{question.question_number}}</div>
-                    <div class='ca-cell ca-flex-one-fourth'>{{question.correct_answer}}</div>
-                    {% if student_answer == question.correct_answer %}
-                    <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-                    {% elif student_answer == 'N' %}
-                    <div class='ca-cell ca-flex-one-fourth'>&cross;</div>
-                    {% else %}
-                    <div class='ca-cell ca-flex-one-fourth'>{{student_answer}}</div>
-                    {% endif %}
-                    <div class='ca-cell ca-flex-one-fourth'><span
-                        class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-                  </div>
-                  {% endfor %}
-                </div>
+
+                    </div>
               </div>
-            </div>
-            <div id="col-2">
-              <div id="writing">
-                <div class="table-wrapper">
-                  <h3 class='ca-bold ca-flex-full'>Writing</h3>
-
-                   <div class="col-name-wrapper">
-                       <div class='col-name'>Question #</div>
-                       <div class='col-name'>Correct</div>
-                       <div class='col-name' style='line-height:1'>Your Answer</div>
-                       <div class='col-name'>Difficulty</div>
-                  </div>
-                </div>
-
-                <div id="table-writing">
-                  {% for question, student_answer in writing_questions_answers %}
-                  <div class='ca-cells ca-flex ca-flex-full'>
-                    <div class='ca-cell ca-flex-one-fourth'>{{question.question_number}}</div>
-                    <div class='ca-cell ca-flex-one-fourth'>{{question.correct_answer}}</div>
-                    {% if student_answer == question.correct_answer %}
-                    <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-                    {% elif student_answer == 'N' %}
-                    <div class='ca-cell ca-flex-one-fourth'>&cross;</div>
-                    {% else %}
-                    <div class='ca-cell ca-flex-one-fourth'>{{student_answer}}</div>
-                    {% endif %}
-                    <div class='ca-cell ca-flex-one-fourth'><span
-                        class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-                  </div>
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
-            <div id="col-3">
-              <div id="math">
-                <div class="table-wrapper">
-
-                  <h3 class='ca-bold ca-flex-full'>Math - No Calculator</h3>
-
-                   <div class="col-name-wrapper">
-                       <div class='col-name'>Question #</div>
-                       <div class='col-name'>Correct</div>
-                       <div class='col-name' style='line-height:1'>Your Answer</div>
-                       <div class='col-name'>Difficulty</div>
-                  </div>
-                </div>
-
-                <div id="table-math1">
-                  {% for question, student_answer in math1_questions_answers %}
-                  <div class='ca-cells ca-flex ca-flex-full'>
-                    <div class='ca-cell ca-flex-one-fourth'>{{question.question_number}}</div>
-                    <div class='ca-cell ca-flex-one-fourth'>{{question.correct_answer}}</div>
-                    {% if student_answer == question.correct_answer %}
-                    <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-                    {% elif student_answer == 'N' %}
-                    <div class='ca-cell ca-flex-one-fourth'>&cross;</div>
-                    {% else %}
-                    <div class='ca-cell ca-flex-one-fourth'>{{student_answer}}</div>
-                    {% endif %}
-                    <div class='ca-cell ca-flex-one-fourth'><span
-                        class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-                  </div>
-                  {% endfor %}
-                </div>
-              </div>
-              <div id="math-2" style="margin-top:50px;">
-                <div class="table-wrapper">
-                  <h3 class='ca-bold ca-flex-full'>Math - Calculator</h3>
-
-                   <div class="col-name-wrapper">
-                       <div class='col-name'>Question #</div>
-                       <div class='col-name'>Correct</div>
-                       <div class='col-name' style='line-height:1'>Your Answer</div>
-                       <div class='col-name'>Difficulty</div>
-                  </div>
-                </div>
-
-                <div id="table-math1">
-                  {% for question, student_answer in math2_questions_answers %}
-                  <div class='ca-cells ca-flex ca-flex-full'>
-                    <div class='ca-cell ca-flex-one-fourth'>{{question.question_number}}</div>
-                    <div class='ca-cell ca-flex-one-fourth'>{{question.correct_answer}}</div>
-                    {% if student_answer == question.correct_answer %}
-                    <div class='ca-cell ca-flex-one-fourth'>&check;</div>
-                    {% elif student_answer == 'N' %}
-                    <div class='ca-cell ca-flex-one-fourth'>&cross;</div>
-                    {% else %}
-                    <div class='ca-cell ca-flex-one-fourth'>{{student_answer}}</div>
-                    {% endif %}
-                    <div class='ca-cell ca-flex-one-fourth'><span
-                        class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-                  </div>
-                  {% endfor %}
-                </div>
-              </div>
-          </div>
 </div>
 </div>
 </div>
@@ -651,16 +544,17 @@
     tutoring@alexanderacademy.net, or phone (678) 757-4385.
   </div>
 </div>
+
+
+
   </div>
   <script>
-    /*
   $(document).ready(function(){
         $('#reading').load("tables/reading.html");
         $('#writing').load("tables/writing.html");
         $('#math').load("tables/math.html");
         $('#math-2').load("tables/math-2.html");
      });
-     */
   </script>
 
 </body>

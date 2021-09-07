@@ -10,6 +10,7 @@ from questions.models import Student_Answer, Question, Result
 from exams.models import Exam, Section
 from openpyxl import load_workbook
 from datetime import date
+import numpy as np
 #from easy_pdf.views import PDFTemplateView
 #import easy_pdf
 import os
@@ -97,6 +98,10 @@ def render_pdf_view(request, pk):
         math1_questions_answers = zip(math1_questions, math1_student_answers)
         math2_questions_answers = zip(math2_questions, math2_student_answers)
 
+        reading_test_score = int(np.floor(reading_score / 10))
+        writing_test_score = int(np.floor(writing_score / 10))
+        math_test_score = int(np.floor((math1_score + math2_score) / 20))
+
         context = {
             'exam':exam,
             'user': user,
@@ -130,9 +135,14 @@ def render_pdf_view(request, pk):
             'writing_questions_answers':writing_questions_answers,
             'math1_questions_answers':math1_questions_answers,
             'math2_questions_answers':math2_questions_answers,
+            'test_questions_answers':reading_questions_answers,
+            'reading_test_score': reading_test_score,
+            'writing_test_score': writing_test_score,
+            'math_test_score': math_test_score,
         }
 
         return render(request, 'results/sat-results.html', context)
+        #return render(request, 'results/og-score-report.html', context)
 
     elif exam_type == 'ACT':
         total_score = english_score + math_score + reading_score + science_score
