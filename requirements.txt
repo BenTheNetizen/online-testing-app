@@ -19,3 +19,5 @@ WeasyPrint>=0.34
 django-cleanup==5.2.0
 boto3==1.18.28
 django-storages==1.11.1
+numpy==1.21.0
+pandas==1.2.5

@@ -56,7 +56,7 @@ function sendData(goToHub) {
             window.location.href="../break1/writing"
           }
           else if (nextSection == 'math1') {
-            window.location.href="../break2/math2"
+            window.location.href="../break2/math1"
           }
           else {
             window.location.href=`../${nextSection}/section-directions`

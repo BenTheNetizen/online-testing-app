@@ -70,7 +70,6 @@ class Result(models.Model):
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     raw_score = models.IntegerField(default=0)
     scaled_score = models.IntegerField(default=None, null=True)
-
     time_finished = models.TimeField(null=True, blank=True)
 
     def __str__(self):
@@ -79,9 +78,11 @@ class Result(models.Model):
 class Student_Answer(models.Model):
     answer = models.CharField(max_length=100, default="")
     question_number = models.IntegerField(default=0)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True)
     section = models.CharField(max_length=30, default="")
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_correct = models.BooleanField(default=False)
 
     def __str__(self):
         return f"User: {self.user}, Exam: {self.exam}, Section: {self.section}, Question: {self.question_number}, Answer: {self.answer}"

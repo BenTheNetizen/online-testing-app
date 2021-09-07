@@ -696,19 +696,26 @@ def save_section_view(request, pk, section_name):
 
         for question in questions:
             if Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number).exists():
-                #'answer' is the student's answer
-                selected_answer = Student_Answer.objects.get(user=user, exam=exam, section=section_name, question_number=question.question_number).answer
+                #'selected_answer' is the student's answer
+                selected_answer_object = Student_Answer.objects.get(user=user, exam=exam, section=section_name, question_number=question.question_number)
+                selected_answer = selected_answer_object.answer
                 correct_answer = question.correct_answer
+                # handling the multiple choice correct answers
                 if correct_answer.isalpha():
                     if selected_answer == correct_answer:
                         raw_score += 1
+                        selected_answer_object.is_correct = True
+                        selected_answer_object.save()
+                # handling the free response correct answers
                 else:
                     correct_answers = correct_answer.split(',')
                     for correct_answer in correct_answers:
                         if selected_answer == correct_answer:
                             raw_score += 1
+                            selected_answer_object.is_correct = True
+                            selected_answer_object.save()
             else:
-                Student_Answer.objects.create(user=user, exam=exam, section=section_name, question_number=question.question_number, answer='N')
+                Student_Answer.objects.create(user=user, exam=exam, section=section_name, question=question, question_number=question.question_number, answer='N')
 
         #CREATE SECTION RESULT OBJECT ONLY IF IT DOES NOT EXIST
         if not Result.objects.filter(user=user, exam=exam, section=section).exists():
@@ -792,6 +799,7 @@ def save_question_view(request, pk, section_name):
             Student_Answer.objects.create(
                 answer = selected_answer,
                 question_number = question.question_number,
+                question = question,
                 section = section_name,
                 exam = exam,
                 user = user,
