@@ -146,7 +146,7 @@ def file_upload(request):
             question_text = question_text.replace("\n", "\\n")
 
             # handling of non float values in the column
-            question_passage = int(row[3].value) if isinstance(row[3].value, int) else None
+            question_passage = int(row[3].value) if (isinstance(row[3].value, int) or isinstance(row[3].value, float)) else None
             correct_answer = row[10].value
             question_categories = row[11].value
 
