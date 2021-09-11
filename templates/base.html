@@ -87,8 +87,16 @@
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top">
     <a href="{% url 'exams:exam-list-view' %}" class="logo">
-      <img src="{% static 'assets/img/logo-scaled-72-percent.png' %}" alt="" class="img-fluid">
+      <img src="/static/assets/img/logo-scaled-final.png" style="width: 140px; height: 36px;">
     </a>
+
+    <script>
+      var isChrome = !!window.chrome;
+      if (isChrome) {
+          $('.logo img').css('image-rendering', '-webkit-optimize-contrast');
+      }
+    </script>
+
     {% if user.is_authenticated %}
     <!--
     <p class="username">{{ user }}</p>

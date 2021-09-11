@@ -1,0 +1,169 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Tab Icon -->
+  <link href="{% static 'assets/img/alexander-academy-logo.png' %}" rel="icon">
+
+  <!-- Font(s) -->
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <div class='ca-container'>
+    <div class='ca-content'>
+
+      <div class="general-info">
+        <div><span class="general-info-label ca-bold">Name: </span> VAR</div>
+        <div><span class="general-info-label ca-bold">Test Date: </span> VAR </div>
+        <div><span class="general-info-label ca-bold">Test Number: </span> VAR</div>
+      </div>
+
+      <div class="ca-flex ca-vert-center">
+        <div class="total-score-graph ca-flex ca-flex-full ca-vert-center">
+          <img src="{% static 'graph-asset.png' %}">
+          <style>
+            .bubble {
+              position: relative;
+              margin-bottom: 40px;
+              margin-left: 30px;
+            }
+
+            .bubble-triangle {
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+            }
+
+            .bubble-rect {
+              width: 180px;
+              height: 112px;
+              background-color: rgb(246,246,246);
+              display: inline-block;
+              margin-left: 16px;
+              padding: 15px;
+              box-sizing: border-box;
+            }
+          </style>
+          <div class='bubble'>
+            <svg class='bubble-triangle' height="19" width="17">
+              <polygon points="0,10 17,0 17,19" style="fill:rgb(246,246,246);" />
+            </svg>
+            <div class='bubble-rect ca-italic'>
+              The average SAT and ACT scores for the class of 2020 was <b>1051</b> and <b>20.6</b> respectively.
+            </div>
+          </div>
+        </div>
+      </div>
+      <br /><br />
+      <h2>Overall Performance</h2>
+      <br />
+      <div class='ca-flex'>
+          <style>
+            .overall-perf-score {
+              width: 100%;
+              margin-right: 30px;
+              border: 2px #66a1a5 solid;
+              box-sizing: border-box;
+            }
+
+            .overall-perf-score-header {
+              padding: 10px 30px;
+              color: white;
+              background-color: #66a1a5;
+              font-weight: 900;
+              font-size: 24px;
+            }
+
+            .overall-perf-score-num {
+              padding: 10px 30px 10px;
+              font-size: 50px;
+              display: inline-block;
+            }
+
+            .overall-perf-message {
+              background-color: rgb(246,246,246);
+              padding: 20px;
+              margin-top: 35px;
+            }
+          </style>
+        <div class='ca-flex-two-fifths ca-flex ca-vert-center'>
+          <div class='overall-perf-score'>
+            <div class='overall-perf-score-header'>SAT out of 1600</div>
+            <div class='overall-perf-score-num'>VAR</div>
+            <div style='display: inline-block'>SAT equivalent VAR<br /> <span class='ca-italic'>Percentile: VAR</span></div>
+          </div>
+        </div>
+        <div class='ca-flex-two-fifths ca-flex ca-vert-center'>
+          <div class='overall-perf-score'>
+            <div class='overall-perf-score-header'>ACT out of 36</div>
+            <div class='overall-perf-score-num'>VAR</div>
+            <div style='display: inline-block'>SAT equivalent VAR<br /> <span class='ca-italic'>Percentile: VAR</span></div>
+          </div>
+        </div>
+        <div class='ca-flex' style='flex-basis: calc(80% - 30px);'>
+          <div class='overall-perf-message' style='flex-basis: 100%'>
+            On the whole, VAR performed significantly better on the VAR and we would
+            recommend that VAR focus on that exam first.
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <h2>Comparison Summary</h2>
+      <br />
+      <h3 style='color: #66a1a5'>SAT</h3>
+      <div class='ca-flex' style='justify-content: space-between;'>
+        <div class='ca-flex ca-vert-center'>
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+              40</span></span>
+          <div class="ca-flex-full">Reading</div>
+        </div>
+        <div class='ca-flex ca-vert-center'>
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+              40</span></span>
+          <div class="ca-flex-full">Writing and Language</div>
+        </div>
+        <div class='ca-flex ca-vert-center'>
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+              40</span></span>
+          <div class="ca-flex-full">Math</div>
+        </div>
+      </div>
+      <br />
+      <h3 style='color: #66a1a5'>ACT</h3>
+      <div class='ca-flex' style='justify-content: space-between;'>
+        <div class='ca-flex ca-vert-center'>
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+              40</span></span>
+          <div class="ca-flex-full">Reading</div>
+        </div>
+        <div class='ca-flex ca-vert-center'>
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+              40</span></span>
+          <div class="ca-flex-full">Writing and Language</div>
+        </div>
+        <div class='ca-flex ca-vert-center'>
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+              40</span></span>
+          <div class="ca-flex-full">Math</div>
+        </div>
+      </div>
+
+
+    </div>
+    <!--end of ca-content -->
+  </div>
+  <!--end of ca-container -->
+
+</body>
+
+</html>

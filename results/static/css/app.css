@@ -214,7 +214,7 @@ body{
   }
 
   .ca-cells .ca-cell:nth-of-type(1) {
-    border-left-width: 0px;
+    border-left-width: 1px;
   }
 
   .ca-cells .ca-cell:nth-of-type(4) {
@@ -227,9 +227,14 @@ body{
     align-content: space-between;
     justify-content: space-evenly;
     transform: rotate(-90deg);
-    padding-left: 15px;
+    padding-left: 20px;
     margin-bottom: -10px;
     margin-top: -90px;
+    left: -2px; 
+    position: relative;
+  }
+  #math .col-name-wrapper{
+    left: -1px; 
   }
   .col-name-container{
     display: block;
@@ -239,19 +244,21 @@ body{
 
   .col-name {
     text-align: left;
-        height: 48px;
-        display: flex;
-        align-items: center;
-        width: 110px;
-    }
-    .col-name-small {
-      text-align: left;
-          height: 33px;
-          display: flex;
-          align-items: center;
-          width: 80px;
-      }
+    height: 61px;
+    display: flex;
+    align-items: center;
+    width: 110px;
+    border-bottom: 1px transparent solid;
   }
+  .col-name-small {
+      text-align: left;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      width: 80px;
+      border-bottom: 1px transparent solid;
+  }
+
 
   .questions-overview div.answer-sheet:first-of-type {
     padding-left: 0px !important;
@@ -382,7 +389,7 @@ body{
     width: 120px;
     position: absolute;
     top: -10px;
-    left: 100px;
+    left: 100px !important;
     justify-content: flex-start;
     padding-left: unset;
 }
