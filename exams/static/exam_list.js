@@ -103,7 +103,10 @@ function getExamDetails(btnId) {
               secondsLeft = '0' + secondsLeft
             }
             document.getElementById(`exam${examPk}-${section}-time-remaining`).innerHTML = `${section_data[2]}:` + secondsLeft + ` minutes remaining`
-            document.getElementById(`exam${examPk}-${section}-start`).innerHTML = '&#9654; Resume this section'
+            //document.getElementById(`exam${examPk}-${section}-start`).innerHTML = '&#9654; Resume this section'
+            document.getElementById(`exam${examPk}-${section}-start`).innerHTML = '<span class="material-icons material-icons-round" style="opacity: 1">play_arrow</span>Resume this section'
+            $(`#exam${examPk}-${section}-start`).removeClass('begin')
+            $(`#exam${examPk}-${section}-start`).addClass('resume')
             document.getElementById(`exam${examPk}-${section}-start`).href = section_data[5]
             document.getElementById(`exam${examPk}-${section}-review`).style.display = 'none'
             document.getElementById(`exam${examPk}-${section}-reset`).style.display = 'none'

@@ -714,7 +714,7 @@ select {
 }
 
 .ca-btn.resume {
-  padding: 0 12px 0px 12px;
+  padding: 0 14px 0px 10px;
   display: flex;
   align-items: center;
 }
