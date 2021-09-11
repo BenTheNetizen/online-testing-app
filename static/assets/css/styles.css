@@ -714,7 +714,7 @@ select {
 }
 
 .ca-btn.resume {
-  padding: 0 12px 0px 12px;
+  padding: 0 14px 0px 10px;
   display: flex;
   align-items: center;
 }
@@ -1061,9 +1061,34 @@ select {
   margin-bottom: 0px;
   margin-right: 0px;
 }
+/*
 .answer-container:not(:last-of-type) {
   border-bottom-width: 0px;
 }
+*/
+.answer-container:not(:nth-of-type(4n)) {
+  border-bottom-width: 0px;
+}
+.answer-container:first-of-type {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.answer-container:nth-of-type(5n) {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.answer-container:nth-of-type(4n) {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  margin-bottom: 60px;
+}
+
+.ca-textbox {
+  margin-bottom: 60px;
+}
+
 .answers-container .answer-container:first-of-type {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -1266,6 +1291,20 @@ select {
     margin-left: 0;
   }
 }
+
+.logo img {
+  image-rendering: -o-crisp-edges;            /* Opera               */    
+}
+/*
+.logo img {
+image-rendering: -moz-crisp-edges;           Firefox             
+image-rendering: -o-crisp-edges;             Opera               
+image-rendering: -webkit-optimize-contrast;  Chrome (and Safari) 
+image-rendering: pixelated;                  Chrome as of 2019 
+image-rendering: optimize-contrast;          CSS3 Proposed       
+-ms-interpolation-mode: nearest-neighbor;
+}
+*/
 
 @media (max-width: 1250px) {
   #header {

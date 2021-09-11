@@ -587,3 +587,6 @@ def render_pdf_of_results2(request, pk):
 
     context = {'test': 'testvalue2', 'test2': 'testvalue2'}
     return easy_pdf.rendering.render_to_pdf_response(request, 'results/pdf-of-results.html', context, using=None, download_filename=None, content_type='application/pdf', response_class=HttpResponse)
+
+def render_diagnostic_score_report(request):
+    return render(request, 'results/diagnostic-score-report.html', {})

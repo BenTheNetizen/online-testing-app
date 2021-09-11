@@ -14,6 +14,17 @@
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <style>
+    @font-face{
+        font-family:"mainFont";
+        src:url("{% static 'css/fonts/28a6da92-8a64-42a5-9565-914caf257538r.woff2' %}") format("woff2"),url("{% static 'css/fonts/6e6d9ee8-cbc5-4670-b243-c90a93b3a8d2r.woff' %}") format("woff");
+    }
+
+    @font-face{
+        font-family:"mainFontBold";
+        src:url("{% static 'css/fonts/67fc974b-bcc7-48aa-bff0-15c824085f7dr.woff2' %}") format("woff2"),url("{% static 'css/fonts/30bc8000-1637-4079-9dd6-d93c7c1d8245r.woff' %}") format("woff");
+    }
+  </style>
 </head>
 
 <body>
@@ -274,7 +285,7 @@
           style='align-content: flex-start; text-align: center; box-sizing: border-box'>
 
 
-          <div class="answer-grid">
+          <div class="answer-grid"> 
             <div id="col-1">
               <div id="reading">
                 <div class="table-wrapper">
@@ -290,7 +301,7 @@
                   </div>
                 </div>
 
-                <div id="table-reading">
+                <div id="table">
                   {% for question, student_answer in reading_questions_answers %}
                   <div class='ca-cells ca-flex ca-flex-full'>
                     <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
@@ -326,7 +337,7 @@
                   </div>
                 </div>
 
-                <div id="table-writing">
+                <div id="table">
                   {% for question, student_answer in writing_questions_answers %}
                   <div class='ca-cells ca-flex ca-flex-full'>
                     <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
@@ -350,74 +361,241 @@
             <div id="col-3">
               <div id="math">
                 <div class="table-wrapper">
-
                   <h3 class='ca-bold ca-flex-full'>Math - No Calculator</h3>
+                
+                  <div class="interior-grid">
+                
+                    <div id="math-col-1" >
+                    
+                      <div class="col-name-wrapper" style="margin-top:-39px;padding-left:20px;">
+                          <div class='col-name-small'>Question #</div>
+                          <div class='col-name-small'>Correct</div>
+                          <div class='col-name-small'>Your Answer</div>
+                          <!-- <div class='col-name-small'>Difficulty</div> -->
+                      </div>
+                    
+                      <div id="table">
+                        {% for question, student_answer in math1_questions_answers %}
+                        {% if forloop.counter < 9 %}
+                        <div class='ca-cells ca-flex ca-flex-full'>
+                          <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
+                          <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
+                          {% if student_answer == question.correct_answer %}
+                          <div class='ca-cell ca-flex-one-third'>&check;</div>
+                          {% elif student_answer == 'N' %}
+                          <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
+                          {% else %}
+                          <div class='ca-cell ca-flex-one-third'>{{student_answer}}</div>
+                          {% endif %}
+                          <!--
+                          <div class='ca-cell ca-flex-one-fourth'><span
+                              class="difficulty-level easy"><span></span><span></span><span></span></span></div>
+                          -->
+                        </div> 
+                        {% endif %}
 
-                   <div class="col-name-wrapper">
-                       <div class='col-name'>Question #</div>
-                       <div class='col-name'>Correct</div>
-                       <div class='col-name' style='line-height:1'>Your Answer</div>
-                       <!--
-                       <div class='col-name'>Difficulty</div>
-                     -->
-                  </div>
-                </div>
+                        {% if forloop.counter == 9 %}
+                      </div>
+                    
+                    </div>
+                        
+                    <div id="math-col-2">
+                    
+                      <div class="col-name-wrapper" style="margin-top:-39px;padding-left:20px;">
+                          <div class='col-name-small'>Question #</div>
+                          <div class='col-name-small'>Correct</div>
+                          <div class='col-name-small'>Your Answer</div>
+                          <!-- <div class='col-name-small'>Difficulty</div> -->
+                      </div>
+                    
+                      <div id="table">
+                        {% endif %}
+                
+                        {% if forloop.counter >= 9 and forloop.counter < 16 %}
+                        <div class='ca-cells ca-flex ca-flex-full'>
+                          <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
+                          <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
+                          {% if student_answer == question.correct_answer %}
+                          <div class='ca-cell ca-flex-one-third'>&check;</div>
+                          {% elif student_answer == 'N' %}
+                          <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
+                          {% else %}
+                          <div class='ca-cell ca-flex-one-third'>{{student_answer}}</div>
+                          {% endif %}
+                          <!--
+                          <div class='ca-cell ca-flex-one-fourth'><span
+                              class="difficulty-level easy"><span></span><span></span><span></span></span></div>
+                          -->
+                        </div> 
+                        {% endif %}
 
-                <div id="table-math1">
-                  {% for question, student_answer in math1_questions_answers %}
-                  <div class='ca-cells ca-flex ca-flex-full'>
-                    <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
-                    <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
-                    {% if student_answer == question.correct_answer %}
-                    <div class='ca-cell ca-flex-one-third'>&check;</div>
-                    {% elif student_answer == 'N' %}
-                    <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
-                    {% else %}
-                    <div class='ca-cell ca-flex-one-third'>{{student_answer}}</div>
-                    {% endif %}
-                    <!--
-                    <div class='ca-cell ca-flex-one-fourth'><span
-                        class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-                    -->
-                  </div>
-                  {% endfor %}
-                </div>
-              </div>
-              <div id="math-2" style="margin-top:50px;">
-                <div class="table-wrapper">
-                  <h3 class='ca-bold ca-flex-full'>Math - Calculator</h3>
+                        {% if forloop.counter == 16 %}
+                      </div>
+                    
+                    </div>
+                  </div> <!-- end of interior grid -->
+                
+                
+                  <div id="math-col-3">
+                  
+                  
+                    <div class="col-name-wrapper  math-wrapper">
+                      <div class='col-name' style="margin-top:-22px;">Question #</div>
+                      <div class='col-name' style="height: 90px;align-items: flex-start;
+                    margin-top: 29px;">Correct</div>
+                      <div class='col-name' style="margin-top: 29px;">Your Answer</div>
+                        <!-- <div class='col-name' style="height: 80px;">Difficulty</div> -->
+                    </div>
+                  
+                    <div id="table">
+                        {% endif %}
 
-                   <div class="col-name-wrapper">
-                       <div class='col-name'>Question #</div>
-                       <div class='col-name'>Correct</div>
-                       <div class='col-name' style='line-height:1'>Your Answer</div>
-                       <!--
-                       <div class='col-name'>Difficulty</div>
-                     -->
-                  </div>
-                </div>
+                        {% if forloop.counter >= 16 and forloop.counter <= 20 %}
+                        <div class='ca-cells ca-flex ca-flex-full'>
+                          <div class='ca-cell ca-flex-one-fourth'>{{question.question_number}}</div>
+                          <div class='ca-cell ca-flex-half align-left'>{{question.correct_answer}}</div>
+                          {% if student_answer == question.correct_answer %}
+                          <div class='ca-cell ca-flex-one-fourth'>&check;</div>
+                          {% elif student_answer == 'N' %}
+                          <div class='ca-cell ca-flex-one-fourth' style='color: darkred'>&cross;</div>
+                          {% else %}
+                          <div class='ca-cell ca-flex-one-fourth'>{{student_answer}}</div>
+                          {% endif %}
+                          <!--
+                          <div class='ca-cell ca-flex-one-fourth'><span
+                              class="difficulty-level easy"><span></span><span></span><span></span></span></div>
+                          -->
+                        </div> 
+                        {% endif %}
 
-                <div id="table-math1">
-                  {% for question, student_answer in math2_questions_answers %}
-                  <div class='ca-cells ca-flex ca-flex-full'>
-                    <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
-                    <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
-                    {% if student_answer == question.correct_answer %}
-                    <div class='ca-cell ca-flex-one-third'>&check;</div>
-                    {% elif student_answer == 'N' %}
-                    <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
-                    {% else %}
-                    <div class='ca-cell ca-flex-one-third'>{{student_answer}}</div>
-                    {% endif %}
-                    <!--
-                    <div class='ca-cell ca-flex-one-fourth'><span
-                        class="difficulty-level easy"><span></span><span></span><span></span></span></div>
-                      -->
+                        {% if forloop.counter == 20 %}                          
+                    </div>                  
                   </div>
-                  {% endfor %}
-                </div>
-              </div>
+                </div> <!-- end of math 1 questions -->
+                        {% endif %}
+                        {% endfor %}
+                <div id="math-2" style="margin-top:58px;">
+                  <div class="table-wrapper">
+                    <h3 class='ca-bold ca-flex-full'>Math - Calculator</h3>
+                  
+                    <div class="interior-grid">
+                  
+                      <div id="math-col-1" >
+                      
+                        <div class="col-name-wrapper" style="margin-top:-39px;padding-left:20px;">
+                            <div class='col-name-small'>Question #</div>
+                            <div class='col-name-small'>Correct</div>
+                            <div class='col-name-small'>Your Answer</div>
+                            <!-- <div class='col-name-small'>Difficulty</div> -->
+                        </div>
+                      
+                        <div id="table">
+                          {% for question, student_answer in math2_questions_answers %}
+                          {% if forloop.counter < 9 %}
+                          <div class='ca-cells ca-flex ca-flex-full'>
+                            <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
+                            <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
+                            {% if student_answer == question.correct_answer %}
+                            <div class='ca-cell ca-flex-one-third'>&check;</div>
+                            {% elif student_answer == 'N' %}
+                            <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
+                            {% else %}
+                            <div class='ca-cell ca-flex-one-third'>{{student_answer}}</div>
+                            {% endif %}
+                            <!--
+                            <div class='ca-cell ca-flex-one-fourth'><span
+                                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
+                            -->
+                          </div> 
+                          {% endif %}
+  
+                          {% if forloop.counter == 9 %}
+                        </div>
+                      
+                      </div>
+                          
+                      <div id="math-col-2">
+                      
+                        <div class="col-name-wrapper" style="margin-top:-39px;padding-left:20px;">
+                            <div class='col-name-small'>Question #</div>
+                            <div class='col-name-small'>Correct</div>
+                            <div class='col-name-small'>Your Answer</div>
+                            <!-- <div class='col-name-small'>Difficulty</div> -->
+                        </div>
+                      
+                        <div id="table">
+                          {% endif %}
+                  
+                          {% if forloop.counter >= 9 and forloop.counter < 16 %}
+                          <div class='ca-cells ca-flex ca-flex-full'>
+                            <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
+                            <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
+                            {% if student_answer == question.correct_answer %}
+                            <div class='ca-cell ca-flex-one-third'>&check;</div>
+                            {% elif student_answer == 'N' %}
+                            <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
+                            {% else %}
+                            <div class='ca-cell ca-flex-one-third'>{{student_answer}}</div>
+                            {% endif %}
+                            <!--
+                            <div class='ca-cell ca-flex-one-fourth'><span
+                                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
+                            -->
+                          </div> 
+                          {% endif %}
+  
+                          {% if forloop.counter == 16 %}
+                        </div>
+                      
+                      </div>
+                    </div> <!-- end of interior grid -->
+                  
+                  
+                    <div id="math-col-3">
+                    
+                    
+                      <div class="col-name-wrapper  math-wrapper">
+                          <div class='col-name' style="margin-top:-22px;">Question #</div>
+                          <div class='col-name' style="height: 90px;align-items: flex-start;
+                        margin-top: 29px;">Correct</div>
+                          <div class='col-name' style="margin-top: 29px;">Your Answer</div>
+                          <!-- <div class='col-name' style="height: 80px;">Difficulty</div> -->
+                      </div>
+                    
+                      <div id="table">
+                          {% endif %}
+  
+                          {% if forloop.counter >= 16 and forloop.counter <= 20 %}
+                          <div class='ca-cells ca-flex ca-flex-full'>
+                            <div class='ca-cell ca-flex-one-fourth'>{{question.question_number}}</div>
+                            <div class='ca-cell ca-flex-half align-left'>{{question.correct_answer}}</div>
+                            {% if student_answer == question.correct_answer %}
+                            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
+                            {% elif student_answer == 'N' %}
+                            <div class='ca-cell ca-flex-one-fourth' style='color: darkred'>&cross;</div>
+                            {% else %}
+                            <div class='ca-cell ca-flex-one-fourth'>{{student_answer}}</div>
+                            {% endif %}
+                            <!--
+                            <div class='ca-cell ca-flex-one-fourth'><span
+                                class="difficulty-level easy"><span></span><span></span><span></span></span></div>
+                            -->
+                          </div> 
+                          {% endif %}
+  
+                          {% if forloop.counter == 20 %}                          
+                      </div>                  
+                    </div>
+                  </div>
+                          {% endif %}
+                          {% endfor %}
+                </div> <!-- end of math 2 questions -->      
+              </div> <!-- end of math questions -->
+                        
+              
+            </div>
           </div>
+        
 </div>
 </div>
 </div>
@@ -467,7 +645,7 @@
         </div>
       </div>
       <div class='ca-flex ca-flex-full' style='position: relative;'>
-        <div class='ca-inline-b' >Inferece</div>
+        <div class='ca-inline-b' >Inference</div>
         <div class='ca-bar ca-inline-b'>
           <div class='ca-progress ca-font-small' style='width: {{reading_category_data.I.2}}%; text-align:right;'>{{reading_category_data.I.2}}%&nbsp;</div>
         </div>

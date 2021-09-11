@@ -1,0 +1,130 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Tab Icon -->
+  <link href="{% static 'assets/img/alexander-academy-logo.png' %}" rel="icon">
+
+  <!-- Font(s) -->
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <style>
+    @font-face{
+        font-family:"mainFont";
+        src:url("{% static 'css/fonts/28a6da92-8a64-42a5-9565-914caf257538r.woff2' %}") format("woff2"),url("{% static 'css/fonts/6e6d9ee8-cbc5-4670-b243-c90a93b3a8d2r.woff' %}") format("woff");
+    }
+
+    @font-face{
+        font-family:"mainFontBold";
+        src:url("{% static 'css/fonts/67fc974b-bcc7-48aa-bff0-15c824085f7dr.woff2' %}") format("woff2"),url("{% static 'css/fonts/30bc8000-1637-4079-9dd6-d93c7c1d8245r.woff' %}") format("woff");
+    }
+  </style>
+</head>
+
+<body>
+  <div class='ca-container'>
+    <div class='ca-content'>
+
+      <div class="general-info">
+        <div><span class="general-info-label ca-bold">Name: </span> VAR</div>
+        <div><span class="general-info-label ca-bold">Test Date: </span> VAR </div>
+        <div><span class="general-info-label ca-bold">Test Number: </span> VAR</div>
+      </div>
+
+      <div class="ca-flex ca-vert-center">
+        <div class="total-score-graph ca-flex ca-flex-full ca-vert-center">
+          <img src="{% static 'graph-asset.png' %}">
+          <div class='bubble'>
+            <svg class='bubble-triangle' height="19" width="17">
+              <polygon points="0,10 17,0 17,19" style="fill:rgb(246,246,246);" />
+            </svg>
+            <div class='bubble-rect ca-italic'>
+              The average SAT and ACT scores for the class of 2020 was <b>1051</b> and <b>20.6</b> respectively.
+            </div>
+          </div>
+        </div>
+      </div>
+      <br /><br />
+      <h2>Overall Performance</h2>
+      <br />
+      <div class='ca-flex'>
+        <div class='ca-flex-two-fifths ca-flex ca-vert-center'>
+          <div class='overall-perf-score'>
+            <div class='overall-perf-score-header'>SAT out of 1600</div>
+            <div class='overall-perf-score-num ca-bold'>VAR</div>
+            <div style='display: inline-block'>SAT equivalent VAR<br /> <span class='ca-italic'>Percentile: VAR</span></div>
+          </div>
+        </div>
+        <div class='ca-flex-two-fifths ca-flex ca-vert-center'>
+          <div class='overall-perf-score'>
+            <div class='overall-perf-score-header'>ACT out of 36</div>
+            <div class='overall-perf-score-num ca-bold'>VAR</div>
+            <div style='display: inline-block'>SAT equivalent VAR<br /> <span class='ca-italic'>Percentile: VAR</span></div>
+          </div>
+        </div>
+        <div class='ca-flex' style='flex-basis: calc(80% - 30px);'>
+          <div class='overall-perf-message' style='flex-basis: 100%'>
+            On the whole, VAR performed significantly better on the VAR and we would
+            recommend that VAR focus on that exam first.
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <h2>Comparison Summary</h2>
+      <br />
+      <h3 style='color: #66a1a5'>SAT</h3>
+      <div class='ca-flex' style='justify-content: space-between;'>
+        <div class='ca-flex ca-vert-center'>
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+              40</span></span>
+          <div class="ca-flex-full">Reading</div>
+        </div>
+        <div class='ca-flex ca-vert-center'>
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+              40</span></span>
+          <div class="ca-flex-full">Grammar</div>
+        </div>
+        <div class='ca-flex ca-vert-center'>
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+              40</span></span>
+          <div class="ca-flex-full">Math</div>
+        </div>
+      </div>
+      <br />
+      <h3 style='color: #66a1a5'>ACT</h3>
+      <div class='ca-flex' style='justify-content: space-between;'>
+        <div class='ca-flex ca-vert-center'>
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+              40</span></span>
+          <div class="ca-flex-full">Reading/Science</div>
+        </div>
+        <div class='ca-flex ca-vert-center' style='margin-left: -52px;'>
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+              40</span></span>
+          <div class="ca-flex-full">Grammar</div>
+        </div>
+        <div class='ca-flex ca-vert-center'>
+          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
+              40</span></span>
+          <div class="ca-flex-full">Math</div>
+        </div>
+      </div>
+
+
+    </div>
+    <!--end of ca-content -->
+  </div>
+  <!--end of ca-container -->
+
+</body>
+
+</html>

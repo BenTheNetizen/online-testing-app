@@ -50,16 +50,26 @@
       font-display: swap;
     }
     */
+    @font-face{
+        font-family:"mainFont";
+        src:url("{% static 'assets/fonts/28a6da92-8a64-42a5-9565-914caf257538.woff2' %}") format("woff2"),url("{% static 'assets/fonts/6e6d9ee8-cbc5-4670-b243-c90a93b3a8d2.woff' %}") format("woff");
+    }
 
+    @font-face{
+        font-family:"mainFontBold";
+        src:url("{% static 'assets/fonts/67fc974b-bcc7-48aa-bff0-15c824085f7d.woff2' %}") format("woff2"),url("{% static 'assets/fonts/30bc8000-1637-4079-9dd6-d93c7c1d8245.woff' %}") format("woff");
+    }
+    /* otf format but causes bugs for apple devices
     @font-face {
-      font-family: mainFont;
+      font-family: mainFont2;
       src: url("{% static 'assets/fonts/TradeGothicLTStd-Cn18.otf' %}");
     }
 
     @font-face {
-      font-family: mainFontBold;
+      font-family: mainFontBold2;
       src: url("{% static 'assets/fonts/TradeGothicLTStd-BdCn20.otf' %}");
     }
+    */
     /*
     @font-face{
       font-family:"Trade Gothic LT W05 Light";
@@ -87,8 +97,16 @@
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top">
     <a href="{% url 'exams:exam-list-view' %}" class="logo">
-      <img src="{% static 'assets/img/logo-scaled-72-percent.png' %}" alt="" class="img-fluid">
+      <img src="/static/assets/img/logo-scaled-final.png" style="width: 140px; height: 36px;">
     </a>
+
+    <script>
+      var isChrome = !!window.chrome;
+      if (isChrome) {
+          $('.logo img').css('image-rendering', '-webkit-optimize-contrast');
+      }
+    </script>
+
     {% if user.is_authenticated %}
     <!--
     <p class="username">{{ user }}</p>
