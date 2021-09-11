@@ -14,6 +14,18 @@
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <style>
+    @font-face{
+        font-family:"mainFont";
+        src:url("{% static 'css/fonts/28a6da92-8a64-42a5-9565-914caf257538r.woff2' %}") format("woff2"),url("{% static 'css/fonts/6e6d9ee8-cbc5-4670-b243-c90a93b3a8d2r.woff' %}") format("woff");
+    }
+
+    @font-face{
+        font-family:"mainFontBold";
+        src:url("{% static 'css/fonts/67fc974b-bcc7-48aa-bff0-15c824085f7dr.woff2' %}") format("woff2"),url("{% static 'css/fonts/30bc8000-1637-4079-9dd6-d93c7c1d8245r.woff' %}") format("woff");
+    }
+  </style>
 </head>
 
 <body>
@@ -29,29 +41,6 @@
       <div class="ca-flex ca-vert-center">
         <div class="total-score-graph ca-flex ca-flex-full ca-vert-center">
           <img src="{% static 'graph-asset.png' %}">
-          <style>
-            .bubble {
-              position: relative;
-              margin-bottom: 40px;
-              margin-left: 30px;
-            }
-
-            .bubble-triangle {
-              position: absolute;
-              top: 50%;
-              transform: translateY(-50%);
-            }
-
-            .bubble-rect {
-              width: 180px;
-              height: 112px;
-              background-color: rgb(246,246,246);
-              display: inline-block;
-              margin-left: 16px;
-              padding: 15px;
-              box-sizing: border-box;
-            }
-          </style>
           <div class='bubble'>
             <svg class='bubble-triangle' height="19" width="17">
               <polygon points="0,10 17,0 17,19" style="fill:rgb(246,246,246);" />
@@ -66,45 +55,17 @@
       <h2>Overall Performance</h2>
       <br />
       <div class='ca-flex'>
-          <style>
-            .overall-perf-score {
-              width: 100%;
-              margin-right: 30px;
-              border: 2px #66a1a5 solid;
-              box-sizing: border-box;
-            }
-
-            .overall-perf-score-header {
-              padding: 10px 30px;
-              color: white;
-              background-color: #66a1a5;
-              font-weight: 900;
-              font-size: 24px;
-            }
-
-            .overall-perf-score-num {
-              padding: 10px 30px 10px;
-              font-size: 50px;
-              display: inline-block;
-            }
-
-            .overall-perf-message {
-              background-color: rgb(246,246,246);
-              padding: 20px;
-              margin-top: 35px;
-            }
-          </style>
         <div class='ca-flex-two-fifths ca-flex ca-vert-center'>
           <div class='overall-perf-score'>
             <div class='overall-perf-score-header'>SAT out of 1600</div>
-            <div class='overall-perf-score-num'>VAR</div>
+            <div class='overall-perf-score-num ca-bold'>VAR</div>
             <div style='display: inline-block'>SAT equivalent VAR<br /> <span class='ca-italic'>Percentile: VAR</span></div>
           </div>
         </div>
         <div class='ca-flex-two-fifths ca-flex ca-vert-center'>
           <div class='overall-perf-score'>
             <div class='overall-perf-score-header'>ACT out of 36</div>
-            <div class='overall-perf-score-num'>VAR</div>
+            <div class='overall-perf-score-num ca-bold'>VAR</div>
             <div style='display: inline-block'>SAT equivalent VAR<br /> <span class='ca-italic'>Percentile: VAR</span></div>
           </div>
         </div>
@@ -130,7 +91,7 @@
         <div class='ca-flex ca-vert-center'>
           <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
               40</span></span>
-          <div class="ca-flex-full">Writing and Language</div>
+          <div class="ca-flex-full">Grammar</div>
         </div>
         <div class='ca-flex ca-vert-center'>
           <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
@@ -144,12 +105,12 @@
         <div class='ca-flex ca-vert-center'>
           <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
               40</span></span>
-          <div class="ca-flex-full">Reading</div>
+          <div class="ca-flex-full">Reading/Science</div>
         </div>
-        <div class='ca-flex ca-vert-center'>
+        <div class='ca-flex ca-vert-center' style='margin-left: -52px;'>
           <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
               40</span></span>
-          <div class="ca-flex-full">Writing and Language</div>
+          <div class="ca-flex-full">Grammar</div>
         </div>
         <div class='ca-flex ca-vert-center'>
           <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to

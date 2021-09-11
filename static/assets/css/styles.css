@@ -1061,9 +1061,34 @@ select {
   margin-bottom: 0px;
   margin-right: 0px;
 }
+/*
 .answer-container:not(:last-of-type) {
   border-bottom-width: 0px;
 }
+*/
+.answer-container:not(:nth-of-type(4n)) {
+  border-bottom-width: 0px;
+}
+.answer-container:first-of-type {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.answer-container:nth-of-type(5n) {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.answer-container:nth-of-type(4n) {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  margin-bottom: 60px;
+}
+
+.ca-textbox {
+  margin-bottom: 60px;
+}
+
 .answers-container .answer-container:first-of-type {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
