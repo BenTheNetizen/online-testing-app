@@ -105,9 +105,9 @@ def file_upload(request):
                         num_questions = 38
                         time = 55
                         section_name = 'Math (Calculator)'
-                else:
+                elif exam_type == 'ACT':
                     # SECTION NAMES OF THE ACT
-                    if current_section == 'english':
+                    if current_section == 'english' or current_section == 'writing':
                         num_questions = 75
                         time = 45
                         section_name = 'English'
@@ -126,7 +126,7 @@ def file_upload(request):
 
                 section_object, created = Section.objects.get_or_create(
                     name = section_name,
-                    type = current_section,
+                    type = 'english' if current_section == 'writing' else current_section,
                     exam = exam_object,
                     num_questions = num_questions,
                     time = time,
@@ -147,7 +147,8 @@ def file_upload(request):
 
             # handling of non float values in the column
             question_passage = int(row[3].value) if (isinstance(row[3].value, int) or isinstance(row[3].value, float)) else None
-            correct_answer = row[10].value
+            correct_answer = row[10].value.upper()
+
             question_categories = row[11].value
 
             if question_passage is not None:
@@ -167,25 +168,25 @@ def file_upload(request):
             #create answers to question
             answer_object_A, created = Answer.objects.get_or_create(
                 text = row[5].value,
-                letter = 'A',
+                letter = 'F' if (question_number % 2 == 1 and exam_type == 'ACT') else 'A' ,
                 question = question_object
             )
 
             answer_object_B, created = Answer.objects.get_or_create(
                 text = row[6].value,
-                letter = 'B',
+                letter = 'G' if (question_number % 2 == 1 and exam_type == 'ACT') else 'B' ,
                 question = question_object
             )
 
             answer_object_C, created = Answer.objects.get_or_create(
                 text = row[7].value,
-                letter = 'C',
+                letter = 'H' if (question_number % 2 == 1 and exam_type == 'ACT') else 'C' ,
                 question = question_object
             )
 
             answer_object_D, created = Answer.objects.get_or_create(
                 text = row[8].value,
-                letter = 'D',
+                letter = 'J' if (question_number % 2 == 1 and exam_type == 'ACT') else 'D' ,
                 question = question_object
             )
 
@@ -194,7 +195,7 @@ def file_upload(request):
                 if row[9].value is not None:
                     answer_object_E, created = Answer.objects.get_or_create(
                         text = row[9].value,
-                        letter = 'E',
+                        letter = 'K' if (question_number % 2 == 1) else 'E' ,
                         question = question_object
                     )
 

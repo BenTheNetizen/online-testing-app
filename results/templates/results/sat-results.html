@@ -45,13 +45,15 @@
           </div>
 
           <div class='nrs-and-sat-percentiles ca-flex ca-flex-full'>
+          <!--
             <div class="nat-rep-sample-perc ca-flex-half">
               <div class='ca-bold'>{{percentile}}</div>
               <div class='ca-font-small'>Nationally Representative<br />
                 Sample Percentile</div>
             </div>
+          -->
             <div class="sat-user-perc ca-flex-half">
-              <div class='ca-bold'>VAR</div>
+              <div class='ca-bold'>{{percentile}}</div>
               <div class='ca-font-small'>SAT User Percentile</div>
             </div>
           </div>
@@ -73,10 +75,12 @@
         </div>
 
         <div class='ca-flex-two-fifths'>
+          <!--
           <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold ca-inline-b">VAR</span><span
               class="section-scores-perc ca-font-small ca-inline-b">Nationally Representative<br>Sample
               Percentile</span></div>
-          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold">VAR</span><span
+            -->
+          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold">{{reading_writing_percentile}}</span><span
               class="section-scores-perc ca-font-small">SAT User Percentile</span></div>
         </div>
 
@@ -89,10 +93,12 @@
         </div>
 
         <div class='ca-flex-two-fifths'>
+          <!--
           <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold ca-inline-b">VAR</span><span
               class="section-scores-perc ca-font-small ca-inline-b">Nationally Representative<br>Sample
               Percentile</span></div>
-          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold">VAR</span><span
+            -->
+          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold">{{math_percentile}}</span><span
               class="section-scores-perc ca-font-small">SAT User Percentile</span></div>
         </div>
 
@@ -285,7 +291,7 @@
           style='align-content: flex-start; text-align: center; box-sizing: border-box'>
 
 
-          <div class="answer-grid"> 
+          <div class="answer-grid">
             <div id="col-1">
               <div id="reading">
                 <div class="table-wrapper">
@@ -362,18 +368,18 @@
               <div id="math">
                 <div class="table-wrapper">
                   <h3 class='ca-bold ca-flex-full'>Math - No Calculator</h3>
-                
+
                   <div class="interior-grid">
-                
+
                     <div id="math-col-1" >
-                    
+
                       <div class="col-name-wrapper" style="margin-top:-39px;padding-left:20px;">
                           <div class='col-name-small'>Question #</div>
                           <div class='col-name-small'>Correct</div>
                           <div class='col-name-small'>Your Answer</div>
                           <!-- <div class='col-name-small'>Difficulty</div> -->
                       </div>
-                    
+
                       <div id="table">
                         {% for question, student_answer in math1_questions_answers %}
                         {% if forloop.counter < 9 %}
@@ -391,26 +397,26 @@
                           <div class='ca-cell ca-flex-one-fourth'><span
                               class="difficulty-level easy"><span></span><span></span><span></span></span></div>
                           -->
-                        </div> 
+                        </div>
                         {% endif %}
 
                         {% if forloop.counter == 9 %}
                       </div>
-                    
+
                     </div>
-                        
+
                     <div id="math-col-2">
-                    
+
                       <div class="col-name-wrapper" style="margin-top:-39px;padding-left:20px;">
                           <div class='col-name-small'>Question #</div>
                           <div class='col-name-small'>Correct</div>
                           <div class='col-name-small'>Your Answer</div>
                           <!-- <div class='col-name-small'>Difficulty</div> -->
                       </div>
-                    
+
                       <div id="table">
                         {% endif %}
-                
+
                         {% if forloop.counter >= 9 and forloop.counter < 16 %}
                         <div class='ca-cells ca-flex ca-flex-full'>
                           <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
@@ -426,19 +432,19 @@
                           <div class='ca-cell ca-flex-one-fourth'><span
                               class="difficulty-level easy"><span></span><span></span><span></span></span></div>
                           -->
-                        </div> 
+                        </div>
                         {% endif %}
 
                         {% if forloop.counter == 16 %}
                       </div>
-                    
+
                     </div>
                   </div> <!-- end of interior grid -->
-                
-                
+
+
                   <div id="math-col-3">
-                  
-                  
+
+
                     <div class="col-name-wrapper  math-wrapper">
                       <div class='col-name' style="margin-top:-22px;">Question #</div>
                       <div class='col-name' style="height: 90px;align-items: flex-start;
@@ -446,7 +452,7 @@
                       <div class='col-name' style="margin-top: 29px;">Your Answer</div>
                         <!-- <div class='col-name' style="height: 80px;">Difficulty</div> -->
                     </div>
-                  
+
                     <div id="table">
                         {% endif %}
 
@@ -465,11 +471,11 @@
                           <div class='ca-cell ca-flex-one-fourth'><span
                               class="difficulty-level easy"><span></span><span></span><span></span></span></div>
                           -->
-                        </div> 
+                        </div>
                         {% endif %}
 
-                        {% if forloop.counter == 20 %}                          
-                    </div>                  
+                        {% if forloop.counter == 20 %}
+                    </div>
                   </div>
                 </div> <!-- end of math 1 questions -->
                         {% endif %}
@@ -477,21 +483,21 @@
                 <div id="math-2" style="margin-top:58px;">
                   <div class="table-wrapper">
                     <h3 class='ca-bold ca-flex-full'>Math - Calculator</h3>
-                  
+
                     <div class="interior-grid">
-                  
+
                       <div id="math-col-1" >
-                      
+
                         <div class="col-name-wrapper" style="margin-top:-39px;padding-left:20px;">
                             <div class='col-name-small'>Question #</div>
                             <div class='col-name-small'>Correct</div>
                             <div class='col-name-small'>Your Answer</div>
                             <!-- <div class='col-name-small'>Difficulty</div> -->
                         </div>
-                      
+
                         <div id="table">
                           {% for question, student_answer in math2_questions_answers %}
-                          {% if forloop.counter < 9 %}
+                          {% if forloop.counter < 15 %}
                           <div class='ca-cells ca-flex ca-flex-full'>
                             <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
                             <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
@@ -506,27 +512,27 @@
                             <div class='ca-cell ca-flex-one-fourth'><span
                                 class="difficulty-level easy"><span></span><span></span><span></span></span></div>
                             -->
-                          </div> 
+                          </div>
                           {% endif %}
-  
-                          {% if forloop.counter == 9 %}
+
+                          {% if forloop.counter == 15 %}
                         </div>
-                      
+
                       </div>
-                          
+
                       <div id="math-col-2">
-                      
+
                         <div class="col-name-wrapper" style="margin-top:-39px;padding-left:20px;">
                             <div class='col-name-small'>Question #</div>
                             <div class='col-name-small'>Correct</div>
                             <div class='col-name-small'>Your Answer</div>
                             <!-- <div class='col-name-small'>Difficulty</div> -->
                         </div>
-                      
+
                         <div id="table">
                           {% endif %}
-                  
-                          {% if forloop.counter >= 9 and forloop.counter < 16 %}
+
+                          {% if forloop.counter >= 15 and forloop.counter < 31 %}
                           <div class='ca-cells ca-flex ca-flex-full'>
                             <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
                             <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
@@ -541,19 +547,19 @@
                             <div class='ca-cell ca-flex-one-fourth'><span
                                 class="difficulty-level easy"><span></span><span></span><span></span></span></div>
                             -->
-                          </div> 
+                          </div>
                           {% endif %}
-  
-                          {% if forloop.counter == 16 %}
+
+                          {% if forloop.counter == 31 %}
                         </div>
-                      
+
                       </div>
                     </div> <!-- end of interior grid -->
-                  
-                  
+
+
                     <div id="math-col-3">
-                    
-                    
+
+
                       <div class="col-name-wrapper  math-wrapper">
                           <div class='col-name' style="margin-top:-22px;">Question #</div>
                           <div class='col-name' style="height: 90px;align-items: flex-start;
@@ -561,11 +567,11 @@
                           <div class='col-name' style="margin-top: 29px;">Your Answer</div>
                           <!-- <div class='col-name' style="height: 80px;">Difficulty</div> -->
                       </div>
-                    
+
                       <div id="table">
                           {% endif %}
-  
-                          {% if forloop.counter >= 16 and forloop.counter <= 20 %}
+
+                          {% if forloop.counter >= 31 and forloop.counter <= 38 %}
                           <div class='ca-cells ca-flex ca-flex-full'>
                             <div class='ca-cell ca-flex-one-fourth'>{{question.question_number}}</div>
                             <div class='ca-cell ca-flex-half align-left'>{{question.correct_answer}}</div>
@@ -580,22 +586,22 @@
                             <div class='ca-cell ca-flex-one-fourth'><span
                                 class="difficulty-level easy"><span></span><span></span><span></span></span></div>
                             -->
-                          </div> 
+                          </div>
                           {% endif %}
-  
-                          {% if forloop.counter == 20 %}                          
-                      </div>                  
+
+                          {% if forloop.counter == 38 %}
+                      </div>
                     </div>
                   </div>
                           {% endif %}
                           {% endfor %}
-                </div> <!-- end of math 2 questions -->      
+                </div> <!-- end of math 2 questions -->
               </div> <!-- end of math questions -->
-                        
-              
+
+
             </div>
           </div>
-        
+
 </div>
 </div>
 </div>

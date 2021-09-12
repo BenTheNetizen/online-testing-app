@@ -90,6 +90,9 @@ def render_pdf_view(request, pk):
 
     if exam_type == 'SAT':
         total_score = reading_score + writing_score + math1_score + math2_score
+        math_section_score = math1_score + math2_score
+        reading_writing_score = reading_score + writing_score
+
         incorrect_reading = 52 - (omitted_reading + raw_reading_score)
         incorrect_writing = 44 - (omitted_writing + raw_writing_score)
         incorrect_math1 = 25 - (omitted_math1 + raw_math1_score)
@@ -109,8 +112,16 @@ def render_pdf_view(request, pk):
         percentiles_file_path = os.path.join(module_dir, 'data_files/Percentiles.csv')
         percentiles_df = pd.read_csv(percentiles_file_path)
         percentile_index = percentiles_df.loc[percentiles_df['SAT'] == total_score].index[0]
-        percentile = percentiles_df['SAT_Percentiles'][percentile_index]
+        percentile = percentiles_df['SAT Percentiles'][percentile_index]
         percentile = ordinal(percentile)
+
+        index = percentiles_df.loc[percentiles_df['SAT Math Score'] == math_section_score].index[0]
+        math_percentile = percentiles_df['SAT Math Percentiles'][index]
+        math_percentile = ordinal(math_percentile)
+
+        index = percentiles_df.loc[percentiles_df['SAT RW Score'] == reading_writing_score].index[0]
+        reading_writing_percentile = percentiles_df['SAT RW Percentiles'][index]
+        reading_writing_percentile = ordinal(reading_writing_percentile)
 
         # GET CATEGORY DATA
         questions = Question.objects.filter(exam=exam)
@@ -376,6 +387,8 @@ def render_pdf_view(request, pk):
             'english_category_data':english_category_data,
             'math_category_data':math_category_data,
             'percentile':percentile,
+            'math_percentile':math_percentile,
+            'reading_writing_percentile':reading_writing_percentile,
         }
 
         return render(request, 'results/sat-results.html', context)
@@ -383,15 +396,40 @@ def render_pdf_view(request, pk):
 
     elif exam_type == 'ACT':
         total_score = english_score + math_score + reading_score + science_score
-        incorrect_english = 52 - (omitted_english + raw_english_score)
-        incorrect_math = 44 - (omitted_math + raw_writing_math)
-        incorrect_reading = 25 - (omitted_reading + raw_reading_score)
-        incorrect_science = 38 - (omitted_science + raw_science_score)
+
+        incorrect_english = 75 - (omitted_english + raw_english_score)
+        incorrect_math = 60 - (omitted_math + raw_math_score)
+        incorrect_reading = 40 - (omitted_reading + raw_reading_score)
+        incorrect_science = 40 - (omitted_science + raw_science_score)
 
         english_questions_answers = zip(english_questions, english_student_answers)
         math_questions_answers = zip(math_questions, math_student_answers)
         reading_questions_answers = zip(reading_questions, reading_student_answers)
         science_questions_answers = zip(science_questions, science_student_answers)
+
+        # Get Percentiles
+        module_dir = os.path.dirname(__file__) #get current directory
+        percentiles_file_path = os.path.join(module_dir, 'data_files/Percentiles.csv')
+        percentiles_df = pd.read_csv(percentiles_file_path)
+        percentile_index = percentiles_df.loc[percentiles_df['ACT'] == total_score].index[0]
+        percentile = percentiles_df['ACT Percentiles'][percentile_index]
+        percentile = ordinal(percentile)
+
+        index = percentiles_df.loc[percentiles_df['ACT English'] == english_score].index[0]
+        english_percentile = percentiles_df['ACT English Percentiles'][index]
+        english_percentile = ordinal(english_percentile)
+
+        index = percentiles_df.loc[percentiles_df['ACT Math'] == math_score].index[0]
+        math_percentile = percentiles_df['ACT Math Percentiles'][index]
+        math_percentile = ordinal(math_percentile)
+
+        index = percentiles_df.loc[percentiles_df['ACT Reading'] == reading_score].index[0]
+        reading_percentile = percentiles_df['ACT Reading Percentiles'][index]
+        reading_percentile = ordinal(reading_percentile)
+
+        index = percentiles_df.loc[percentiles_df['ACT Science'] == reading_score].index[0]
+        science_percentile = percentiles_df['ACT Science Percentiles'][index]
+        science_percentile = ordinal(science_percentile)
 
         context = {
             'exam':exam,
@@ -426,6 +464,11 @@ def render_pdf_view(request, pk):
             'math_questions_answers':math_questions_answers,
             'reading_questions_answers':reading_questions_answers,
             'science_questions_answers':science_questions_answers,
+            'percentile':percentile,
+            'english_percentile':english_percentile,
+            'math_percentile':math_percentile,
+            'reading_percentile':reading_percentile,
+            'science_percentile':science_percentile,
         }
     return render(request, 'results/act-results.html', context)
 

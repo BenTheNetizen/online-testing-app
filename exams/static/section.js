@@ -348,6 +348,7 @@ function getPassage(value) {
             }
             // Handle the answer displaying
             questionData[1].forEach(answer=>{
+              console.log(answer)
               answer = answer.replaceAll('\"', '&quot;')
 
               // CONDITION FOR QUESTION BEING PREVIOUSLY ANSWERED
