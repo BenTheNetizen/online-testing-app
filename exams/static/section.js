@@ -71,43 +71,6 @@ function sendData(goToHub) {
         } else {
           window.location.href=`../${nextSection}/section-directions`
         }
-
-        // OLD WAY OF ROUTING FOR THE SAT EXAM
-        /*
-        //THIS IS A HORRIBLE WAY TO REDIRECT THE URLs
-        sectionName = response.section_name
-        if (isNextSection && examType == 'SAT') {
-          if (sectionName == "reading") {
-            window.location.href="../break1/writing"
-          }
-          else if (sectionName == "writing") {
-            window.location.href="../math1/section-directions"
-          }
-          else if (sectionName == "math1") {
-            window.location.href="../break2/math2"
-          }
-          else if (sectionName =="math2") {
-            window.location.href="../results"
-          }
-        // ROUTING FOR THE ACT EXAM
-        } else if (isNextSection && examType =='ACT') {
-          if (sectionName == "english") {
-            window.location.href="../math/section-directions"
-          }
-          else if (sectionName == "math") {
-            window.location.href="../break1/reading"
-          }
-          else if (sectionName == "reading") {
-            window.location.href="../science/section-directions"
-          }
-          else if (sectionName =="science") {
-            window.location.href="../results"
-          }
-        }
-        else {
-          window.location.href= window.location.origin + '/exam-list'
-        }
-        */
       },
       error: function(error) {
         console.log(error)
@@ -117,12 +80,6 @@ function sendData(goToHub) {
 
 // makes ajax request to save the progress of the student each time they select an answer
 function radioChecked(elt, questionNum) {
-  /*
-  console.log('radio checked!')
-  console.log(`Name: ${elt.name}, Value: ${elt.value}`)
-  let question = elt.name
-  let answer = elt.value
-  */
 
   //handles the question tracker column on the right
   $(`#question${questionNum}`).parent().find('.material-icons').addClass('answered')
@@ -218,7 +175,7 @@ function getPassage(value) {
                   <br>
                   <b class="ca-question-data">${questionData[0]}</b>
                 </div>
-                <div class="answers-container">
+                <div class="answers-container" id="${questionNum}-answers"></div>
               `
             } else {
                 sectionBox.innerHTML += `
@@ -228,12 +185,13 @@ function getPassage(value) {
                   <br>
                   <b class="ca-question-data">${questionData[0]}</b>
                 </div>
-                <div class="answers-container">
+                <div class="answers-container" id="${questionNum}-answers"></div>
               `
             }
+            let answerBox = document.getElementById(`${questionNum}-answers`)
             //checks if one of the answers are null, implies math fill in the answer box
             if (questionData[1][0] == null) {
-              sectionBox.innerHTML += `
+              answerBox.innerHTML += `
                 <div>
                   <input type="text" class="ans ca-textbox" id="${questionNum}-textbox" name="${questionData[0]}" onfocusout="radioChecked(this, ${questionNum})">
                 </div>
@@ -250,14 +208,7 @@ function getPassage(value) {
                 if (answer == questionData[2] && questionData[2] != null) {
                   // SETS QUESTION TRACKER ON THE RIGHT TO GREEN
                   $(`#question${questionNum}`).parent().find('.material-icons').addClass('answered')
-                  sectionBox.innerHTML += `
-                    <!--
-                    <div>
-                      <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this, ${questionNum})" checked>
-                      <label for="${questionData[0]}">${answer}</label>
-                    </div>
-                    -->
-
+                  answerBox.innerHTML += `
                     <label for="${questionData[0]}" class="answer-container" style="background-color: #f5f5f5" onclick="radioChecked(this, ${questionNum})">
                       <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" checked>
                       <span class="checkmark-con"><span class="material-icons checkmark">done</span></span>
@@ -266,13 +217,7 @@ function getPassage(value) {
                   `
                 } else {
 
-                  sectionBox.innerHTML += `
-                    <!--
-                    <div>
-                      <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}" onclick="radioChecked(this, ${questionNum})">
-                      <label for="${questionData[0]}">${answer}</label>
-                    </div>
-                    -->
+                  answerBox.innerHTML += `
                     <label for="${questionData[0]}" class="answer-container" onclick="radioChecked(this, ${questionNum})">
                       <input type="radio" class="ans" id="${questionData[0]}-${answer}" name="${questionData[0]}" value="${answer}">
                       <span class="checkmark-con"><span class="material-icons checkmark">done</span></span>
