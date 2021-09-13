@@ -127,7 +127,7 @@ def file_upload(request):
 
                 section_object, created = Section.objects.get_or_create(
                     name = section_name,
-                    type = 'english' if current_section == 'writing' else current_section,
+                    type = 'english' if (current_section == 'writing' and exam_type == 'ACT') else current_section,
                     exam = exam_object,
                     num_questions = num_questions,
                     time = time,
