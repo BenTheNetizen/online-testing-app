@@ -11,9 +11,10 @@ from django.urls import reverse
 #from results.models import Result
 # Create your views here.
 from django.utils.decorators import method_decorator
+from django.contrib.admin.views.decorators import staff_member_required
 
 
-@login_required
+@staff_member_required
 def file_upload(request):
     if request.method == 'POST':
 
@@ -147,7 +148,7 @@ def file_upload(request):
 
             # handling of non float values in the column
             question_passage = int(row[3].value) if (isinstance(row[3].value, int) or isinstance(row[3].value, float)) else None
-            correct_answer = row[10].value.upper()
+            correct_answer = row[10].value.upper() if not isinstance(row[10].value, float) else row[10].value
 
             question_categories = row[11].value
 
