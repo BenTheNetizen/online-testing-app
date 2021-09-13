@@ -16,7 +16,20 @@
 
 <script>
   //count-down timer where '5' is the number of minutes
-  var distance = 5 * 60000
+  var nextSection = '{{next_section.type}}'
+
+  var minutes = 5
+
+  if (nextSection == 'writing') {
+    minutes = 10
+  } else if (nextSection == 'math1') {
+    minutes = 5
+  } else if (nextSection == 'reading') {
+    minutes = 10
+  }
+
+
+  var distance = minutes * 60000
 
   var timer = setInterval(function() {
     var now = new Date().getTime();
@@ -27,7 +40,7 @@
     document.getElementById("timer").innerHTML = minutes + "&nbsp;&nbsp;<span style='font-size: 34px; font-weight: 900;'>:</span>&nbsp;&nbsp;" + seconds;
 
     if (distance < 0) {
-      clearInterval(x);
+      clearInterval(timer);
       let url = document.getElementById('go-to-next-section').getAttribute('href')
       window.location.href = url
       document.getElementById("timer").innerHTML = "EXPIRED";

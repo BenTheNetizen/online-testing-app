@@ -431,6 +431,223 @@ def render_pdf_view(request, pk):
         science_percentile = percentiles_df['ACT Science Percentiles'][index]
         science_percentile = ordinal(science_percentile)
 
+        # GET CATEGORY DATA
+        questions = Question.objects.filter(exam=exam)
+
+        subscores_category_data = {
+            'CM':[0,0,0,None],
+            'PSDA':[0,0,0,None],
+            'HA':[0,0,0,None],
+            'WC':[0,0,0,None],
+            'EI':[0,0,0,None],
+            'PAM':[0,0,0,None],
+            'SEC':[0,0,0,None],
+        }
+        reading_science_category_data = {
+            'D':[0,0,None],
+            'I':[0,0,None],
+            'S':[0,0,None],
+            'GF':[0,0,None],
+            'VC':[0,0,None],
+            'F':[0,0,None],
+            'NS':[0,0,None],
+            'SS':[0,0,None],
+            'H':[0,0,None],
+            'DP':[0,0,None],
+        }
+        english_category_data = {
+            'A':[0,0,None],
+            'P':[0,0,None],
+            'ST':[0,0,None],
+            'VC':[0,0,None],
+            'CW':[0,0,None],
+            'ID':[0,0,None],
+            'COMP':[0,0,None],
+            'PS':[0,0,None],
+            'R':[0,0,None],
+            'TW':[0,0,None],
+            'SP':[0,0,None],
+            'RG':[0,0,None],
+            'UP':[0,0,None],
+            'TS':[0,0,None],
+            'SX':[0,0,None],
+        }
+        math_category_data = {
+            'FA':[0,0,None],
+            'WP':[0,0,None],
+            'SE':[0,0,None],
+            'Q':[0,0,None],
+            'FOIL':[0,0,None],
+            'AI':[0,0,None],
+            'EXP':[0,0,None],
+            'GEO':[0,0,None],
+            'CR':[0,0,None],
+            'TR':[0,0,None],
+            '3D':[0,0,None],
+            'PL':[0,0,None],
+            'RAT':[0,0,None],
+            'CN':[0,0,None],
+            'TRIG':[0,0,None],
+            'RG':[0,0,None],
+            'PROB':[0,0,None],
+            'STAT':[0,0,None],
+            'LOG':[0,0,None],
+            'RE':[0,0,None],
+            'MISC':[0,0,None],
+            'MMM':[0,0,None],
+        }
+
+        category_data = {
+            'CM':[0,0, None],
+            'PSDA':[0,0,None],
+            'HA':[0,0,None],
+            'WC':[0,0,None],
+            'EI':[0,0,None],
+            'PAM':[0,0,None],
+            'SEC':[0,0,None],
+            'D':[0,0,None],
+            'I':[0,0,None],
+            'S':[0,0,None],
+            'GF':[0,0,None],
+            'VC':[0,0,None],
+            'F':[0,0,None],
+            'NS':[0,0,None],
+            'SS':[0,0,None],
+            'H':[0,0,None],
+            'DP':[0,0,None],
+            'A':[0,0,None],
+            'P':[0,0,None],
+            'ST':[0,0,None],
+            'VC':[0,0,None],
+            'CW':[0,0,None],
+            'ID':[0,0,None],
+            'COMP':[0,0,None],
+            'PS':[0,0,None],
+            'R':[0,0,None],
+            'TW':[0,0,None],
+            'SP':[0,0,None],
+            'RG':[0,0,None],
+            'UP':[0,0,None],
+            'TS':[0,0,None],
+            'SX':[0,0,None],
+            'FA':[0,0,None],
+            'WP':[0,0,None],
+            'SE':[0,0,None],
+            'Q':[0,0,None],
+            'FOIL':[0,0,None],
+            'AI':[0,0,None],
+            'EXP':[0,0,None],
+            'GEO':[0,0,None],
+            'CR':[0,0,None],
+            'TR':[0,0,None],
+            '3D':[0,0,None],
+            'PL':[0,0,None],
+            'RAT':[0,0,None],
+            'CN':[0,0,None],
+            'TRIG':[0,0,None],
+            'RG':[0,0,None],
+            'PROB':[0,0,None],
+            'STAT':[0,0,None],
+            'LOG':[0,0,None],
+            'RE':[0,0,None],
+            'MISC':[0,0,None],
+            'MMM':[0,0,None],
+            'MC':[0,0,None],
+            'FR':[0,0,None],
+            'OI':[0,0,None],
+        }
+
+        for question in questions:
+            category_string = question.categories
+            categories = None
+            try:
+                categories = category_string.split(',')
+            except:
+                # this case occurs if there is only one category
+                categories = [category_string]
+
+            for category in categories:
+                category = category.replace(' ', '')
+
+                # handle the subscores category
+                if category in subscores_category_data.keys():
+                    # Increase the count of the category
+                    subscores_category_data[category][0] += 1
+                    # If answered correctly, increase the correct count of that category
+                    selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                    if selected_answer.is_correct:
+                        subscores_category_data[category][1] += 1
+
+                if question.section.type == 'reading' or question.section.type == 'science':
+                    if category in reading_science_category_data.keys():
+                        # Increase the count of the category
+                        reading_science_category_data[category][0] += 1
+                        # If answered correctly, increase the correct count of that category
+                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        if selected_answer.is_correct:
+                            reading_science_category_data[category][1] += 1
+                elif question.section.type == 'english':
+                    if category in english_category_data.keys():
+                        # Increase the count of the category
+                        english_category_data[category][0] += 1
+                        # If answered correctly, increase the correct count of that category
+                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        if selected_answer.is_correct:
+                            english_category_data[category][1] += 1
+                elif question.section.type == 'math':
+                    if category in math_category_data.keys():
+                        # Increase the count of the category
+                        math_category_data[category][0] += 1
+                        # If answered correctly, increase the correct count of that category
+                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        if selected_answer.is_correct:
+                            math_category_data[category][1] += 1
+
+                if category not in category_data.keys():
+                    print(category + ' is not in the category_data dictionary!!!')
+
+        # Loop through the dictionary and perform the percentages computation
+        for key in subscores_category_data:
+            # NOTE: subscores are out of 15, so we have an additional value in the list
+            # Assign 'NA' to categories with 0 appearances
+            if subscores_category_data[key][0] == 0:
+                subscores_category_data[key][3] = 'NA'
+            else:
+                # Assign the fraction in proportion to 15
+                subscores_category_data[key][3] = int((subscores_category_data[key][1] * 15) / subscores_category_data[key][0])
+                # Get percentage from the proportion to 15
+                subscores_category_data[key][2] = int((subscores_category_data[key][3] / 15) * 100)
+
+        for key in reading_science_category_data:
+            # Assign 'NA' to categories with 0 appearances
+            if reading_science_category_data[key][0] == 0:
+                reading_science_category_data[key][2] = 'NA'
+                # WE ARE SETTING THIS EQAUL TO 0 FOR NOW
+                reading_science_category_data[key][2] = 0
+            else:
+                # Assign the percentage to the third element in the value list
+                reading_science_category_data[key][2] = int((reading_science_category_data[key][1] / reading_science_category_data[key][0]) * 100)
+
+        for key in english_category_data:
+            # Assign 'NA' to categories with 0 appearances
+            if english_category_data[key][0] == 0:
+                english_category_data[key][2] = 'NA'
+                # WE ARE SETTING THIS EQAUL TO 0 FOR NOW
+                english_category_data[key][2] = 0
+            else:
+                # Assign the percentage to the third element in the value list
+                english_category_data[key][2] = int((english_category_data[key][1] / english_category_data[key][0]) * 100)
+
+        for key in math_category_data:
+            # Assign 'NA' to categories with 0 appearances
+            if math_category_data[key][0] == 0:
+                math_category_data[key][2] = 'NA'
+                # WE ARE SETTING THIS EQAUL TO 0 FOR NOW
+                math_category_data[key][2] = 0
+            else:
+                # Assign the percentage to the third element in the value list
+                math_category_data[key][2] = int((math_category_data[key][1] / math_category_data[key][0]) * 100)
+
         context = {
             'exam':exam,
             'user': user,
@@ -469,6 +686,9 @@ def render_pdf_view(request, pk):
             'math_percentile':math_percentile,
             'reading_percentile':reading_percentile,
             'science_percentile':science_percentile,
+            'reading_science_category_data':reading_science_category_data,
+            'english_category_data':english_category_data,
+            'math_category_data':math_category_data,
         }
     return render(request, 'results/act-results.html', context)
 
