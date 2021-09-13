@@ -354,7 +354,7 @@ function getPassage(value) {
 
 }
 
-function getNextSection() {
+function getNextSection(isTimeExpired) {
   const data = {}
   data['csrfmiddlewaretoken'] = csrf[0].value
 
@@ -369,14 +369,26 @@ function getNextSection() {
         // Exam completed, display completed exam modal
         if (hasCompletedExam) {
           // display modal
-          $('#finishSectionModal').modal('hide')
-          $('#completedExamModal').modal()
+          if (isTimeExpired) {
+            $('#timesUpModal').modal('hide')
+            $('#finishSectionModal').modal('hide')
+            $('#completedExamModal').modal()
+          } else {
+            $('#finishSectionModal').modal('hide')
+            $('#completedExamModal').modal()
+          }
         }
         else {
           // display finish section confirmation modal
           nextSection = response.next_section
-          $('#finishSectionModal').modal('hide')
-          $('#finishSectionConfirmationModal').modal()
+
+          if (isTimeExpired) {
+            sendData(false);
+          } else {
+            $('#finishSectionModal').modal('hide')
+            $('#finishSectionConfirmationModal').modal()
+          }
+
         }
 
       },

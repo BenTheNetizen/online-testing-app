@@ -12,7 +12,6 @@ const guideMsg = document.getElementById("guide-msg");
 const examDropdown = document.getElementById('select-exam');
 const examButtons = document.getElementsByClassName('choose-exam-btn');
 
-
 //run this function to filter by default and select first exam (SAT)
 if (recentExamType != null) {
   if (recentExamType == 'SAT') {

@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="transition-page-wrapper">
-  <h1 style='font-size: 22px' class='font-weight-bold'>5 Minute Break</h1>
+  <h1 style='font-size: 22px' class='font-weight-bold'><span id="break-minutes">5</span> Minute Break</h1>
   <br />
   <h2 id="timer">TIMER</h2>
   <p><br />Congratulations on finishing the section. Before you continue with the exam,
@@ -17,19 +17,26 @@
 <script>
   //count-down timer where '5' is the number of minutes
   var nextSection = '{{next_section.type}}'
-
+  var examType = '{{exam.type}}'
+  console.log(examType);
   var minutes = 5
 
-  if (nextSection == 'writing') {
-    minutes = 10
-  } else if (nextSection == 'math1') {
-    minutes = 5
-  } else if (nextSection == 'reading') {
-    minutes = 10
+  if (examType == 'SAT') {
+    if (nextSection == 'writing') {
+      minutes = 10
+    } else if (nextSection == 'math1') {
+      minutes = 5
+    }
+  } else if (examType == 'ACT') {
+    if (nextSection == 'reading') {
+      minutes = 10
+    }
   }
 
 
   var distance = minutes * 60000
+  document.getElementById("timer").innerHTML = minutes + "&nbsp;&nbsp;<span style='font-size: 34px; font-weight: 900;'>:</span>&nbsp;&nbsp;00";
+  document.getElementById("break-minutes").innerHTML = minutes
 
   var timer = setInterval(function() {
     var now = new Date().getTime();

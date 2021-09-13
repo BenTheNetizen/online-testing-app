@@ -47,7 +47,7 @@
       </div>
       <div class="modal-footer">
         <!--<button class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#finishSectionConfirmationModal">Yes, finish section</button>-->
-        <button class="btn btn-primary" onclick="getNextSection()">Yes, finish section</button>
+        <button class="btn btn-primary" onclick="getNextSection(false)">Yes, finish section</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">No, continue working</button>
       </div>
     </div>
@@ -106,7 +106,7 @@
         There is no more time remaining for this section. Would you like to move on to the next section?
       </div>
       <div class="modal-footer">
-        <button onclick="sendData(false)" class="btn btn-primary">Next section</button>
+        <button onclick="getNextSection(true)" class="btn btn-primary">Next section</button>
         <button onclick="sendData(true)" class="btn btn-secondary" data-dismiss="modal">Back to account homepage</button>
       </div>
     </div>
@@ -218,6 +218,9 @@
   var hours
   var minutes
   var seconds
+
+  // set initial timer value
+  timerText.innerHTML = {{minutes_remaining}} + " Minutes, " + {{seconds_remaining}} + " Seconds ";
 
   // saves timer when the user exits the page
   window.addEventListener('unload', (ev) => {

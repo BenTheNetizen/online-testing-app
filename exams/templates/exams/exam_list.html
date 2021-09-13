@@ -156,7 +156,7 @@ Exam List
   </div>
   </div>
 </div>
-
+<script src="{% static 'dropdown-list.js' %}"></script>
 <script>
   console.log('{{user}}')
   var csrf = "{{ csrf_token }}"
@@ -165,6 +165,7 @@ Exam List
   var recentExamType
   $.ajax({
     type: 'GET',
+    async: false,
     url: `${url}recent-exam`,
     success: function(response) {
       console.log(response)
@@ -177,6 +178,5 @@ Exam List
     }
   })
 </script>
-<script src="{% static 'dropdown-list.js' %}" defer></script>
-<script src="{% static 'exam_list.js' %}" defer></script>
+<script src="{% static 'exam_list.js' %}"></script>
 {% endblock content %}
