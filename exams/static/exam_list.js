@@ -70,6 +70,7 @@ function getExamDetails(btnId) {
   $.ajax({
     type: 'GET',
     url: `${url}exam-${examPk}/data`,
+    async: false,
     success: function(response) {
       data = response.data
 
