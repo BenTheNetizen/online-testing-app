@@ -121,8 +121,8 @@ a:hover {
   top: 0px;
   left: 50%;
   width: 50%;
-  background-image: url("../img/register-bg.png");
-  background-position: center bottom;
+  background-image: url("../img/new_bg.jpg");
+  background-position: left center;
   height: 100%;
   background-size: cover;
 }
@@ -212,7 +212,9 @@ a:hover {
 
 .form-control {
   border-radius: 30px;
-  font-family: Arial, Helvetica, sans-serif;
+  /*font-family: Arial, Helvetica, sans-serif;*/
+  font-family: mainFont;
+  font-size: 23px;
   border-color: rgb(237,237,237);
   height: 48px;
   padding-left: 25px;
@@ -222,8 +224,10 @@ a:hover {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: rgb(215, 215, 215);
   opacity: 1; /* Firefox */
-  font-family: "Trade Gothic LT W05 Roman";
-  font-size: 17px;
+  /*font-family: "Trade Gothic LT W05 Roman";*/
+  /*font-size: 17px;*/
+  font-family: mainFont;
+  font-size: 23px;
 }
 
 :-ms-input-placeholder {
@@ -369,11 +373,11 @@ a:hover {
   align-content: flex-start;
   justify-content: flex-end;
   flex-basis: calc(((100vw - 1250px) / 2) + 460px);
-  margin-top: 65px;
+  margin-top: 60px;
   padding-top: 40px;
   padding-right: 0px;
   background: #f5f5f5;
-  height: calc(100% - 65px);
+  height: calc(100% - 60px);
   overflow-y: auto;
 }
 /*
@@ -587,9 +591,9 @@ select {
   padding-left: 40px;
   padding-top: 40px;
   padding-bottom: 40px;
-  margin-top: 65px;
+  margin-top: 60px;
   background-color: #d1dbdc;
-  height: calc(100% - 65px);
+  height: calc(100% - 60px);
   overflow-y: auto;
 }
 
@@ -852,7 +856,7 @@ select {
   max-width: 1250px;
   padding-left: 20px;
   padding-right: 20px;
-  margin: 65px auto 0px auto;
+  margin: 60px auto 0px auto;
 }
 
 .section-wrapper hr {
@@ -1272,7 +1276,7 @@ select {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 65px;
+  height: 60px;
 }
 
 #header.header-scrolled {
@@ -1359,13 +1363,15 @@ image-rendering: optimize-contrast;          CSS3 Proposed
   background-color: #66a1a5;
   border-width: 0px;
   border-radius: 0px;
-  font-size: 32px;
+  font-size: 28px;
   font-weight: normal;
   padding-right: 0px;
 }
 
 #dropdownMenuButton::after {
   border-radius: 3px;
+  position: relative;
+  top: 3px;
 }
 
 .dropdown {
@@ -1524,7 +1530,7 @@ header .dropdown-item {
 --------------------------------------------------------------*/
 #hero {
   margin-top: 0px;
-  background-image: url("../img/new_bg.png");
+  background-image: url("../img/new_bg.jpg");
   height: 100%;
   width: 100%;
   background-size: cover;
@@ -1536,7 +1542,7 @@ header .dropdown-item {
   transform: translateY(-50%);
 }
 #hero-text-wrapper {
-  margin-top: 65px;
+  margin-top: 60px;
 }
 
 #hero h1 {
@@ -1612,11 +1618,11 @@ header .dropdown-item {
 
 .get-started-txt {
   position: absolute;
+  left: 50%;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
   color: white;
   font-size: 24px;
-  margin-left: 40px;
   font-family: mainFontBold;
 }
 
