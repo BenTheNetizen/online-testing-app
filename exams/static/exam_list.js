@@ -22,6 +22,10 @@ if (recentExamType != null) {
     console.log('RECENT EXAM IS ACT')
     filterExamType('<li>ACT Mock Exams</li>')
   }
+  else if (recentExamType == 'DIAGNOSTIC') {
+    console.log('RECENT EXAM IS DIAGNOSTIC')
+    filterExamType('<li>SAT/ACT Diagnostic Test</li>')
+  }
   else {
     console.log('RECENT EXAM HAS NO EXAM TYPE!??!')
   }
@@ -145,6 +149,7 @@ function getExamDetails(btnId) {
 }
 
 function filterExamType(selection) {
+  console.log(`Selection: ${selection}`);
   let examType = $(selection).text()
   let selectedExam = document.getElementById('selected-exam')
 
@@ -192,6 +197,26 @@ function filterExamType(selection) {
     } else {
       // select the first ACT exam
       getExamDetails('ACT Mock Test 1-btn')
+    }
+  } else if (examType == 'SAT/ACT Diagnostic Test') {
+    //hide all exam buttons
+    [...examButtons].forEach(element => {
+      element.style.display = "none";
+    })
+    selectedExam.innerHTML = 'SAT/ACT Diagnostic Test'
+    //show the queried exam buttons
+    let query = document.querySelectorAll("[data-exam-type='DIAGNOSTIC']")
+    query.forEach(element => {
+      element.style.display = "block";
+    })
+
+    // select the most recent exam if it exists
+    if (recentExam != null && !hasSelectedRecentExam) {
+      getExamDetails(`${recentExam}-btn`)
+      hasSelectedRecentExam = true
+    } else {
+      // select the first ACT exam
+      getExamDetails('Diagnostic Test 1-btn')
     }
   }
 }

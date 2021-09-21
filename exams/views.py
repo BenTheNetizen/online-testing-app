@@ -62,7 +62,8 @@ def file_upload(request):
 
                 #EXAM TYPE IS SAT OR ACT
                 exam_type = row[1].value
-                if exam_type is None or not (exam_type == 'ACT' or exam_type == 'SAT'):
+                if exam_type is None or not (exam_type == 'ACT' or exam_type == 'SAT' or exam_type == 'DIAGNOSTIC'):
+                    Exam.objects.get(name=exam_name).delete()
                     return render(request, 'exams/file_upload.html', {'error': 'The exam has been uploaded without an accepted exam type. Please specify the type in the Excel file (SAT or ACT)'})
                 exam_object, created = Exam.objects.get_or_create(
                     name = exam_name,
@@ -124,6 +125,31 @@ def file_upload(request):
                         num_questions = 40
                         time = 35
                         section_name = 'Science'
+                elif exam_type == 'DIAGNOSTIC':
+                    if current_section == 'writing':
+                        num_questions = 1
+                        time = 20
+                        section_name = 'Writing and Language - SAT'
+                    elif current_section == 'math1':
+                        num_questions = 1
+                        time = 20
+                        section_name = 'Math (No calculator) - SAT'
+                    elif current_section == 'math2':
+                        num_questions = 1
+                        time = 20
+                        section_name = 'Math (Calculator) - SAT'
+                    elif current_section == 'math':
+                        num_questions = 1
+                        time = 20
+                        section_name = 'Math - ACT'
+                    elif current_section == 'reading':
+                        num_questions = 1
+                        time = 20
+                        section_name = 'Reading - SAT'
+                    elif current_section == 'english':
+                        num_questions = 1
+                        time = 20
+                        section_name = 'English - ACT'
 
                 section_object, created = Section.objects.get_or_create(
                     name = section_name,
@@ -148,7 +174,8 @@ def file_upload(request):
 
             # handling of non float values in the column
             question_passage = int(row[3].value) if (isinstance(row[3].value, int) or isinstance(row[3].value, float)) else None
-            correct_answer = row[10].value.upper() if not isinstance(row[10].value, float) else row[10].value
+            is_open_ended_math_question = True if isinstance(row[10].value, float) or isinstance(row[10].value, int) else False
+            correct_answer = row[10].value if isinstance(row[10].value, float) or isinstance(row[10].value, int) else row[10].value.upper()
 
             question_categories = row[11].value
 
@@ -166,30 +193,61 @@ def file_upload(request):
             )
             question_number += 1
 
+            #check if multiple choice question has any empty values
+            if not is_open_ended_math_question:
+                if (row[5].value == None or row[6].value == None or row[7].value == None or row[8].value == None):
+                    Exam.objects.get(name=exam_name).delete()
+                    return render(request, 'exams/file_upload.html', {'error': f'Question {question_number} in section {section_object.name} has a missing answer'})
+
             #create answers to question
-            answer_object_A, created = Answer.objects.get_or_create(
-                text = row[5].value,
-                letter = 'F' if (question_number % 2 == 1 and exam_type == 'ACT') else 'A' ,
-                question = question_object
-            )
+            if exam_type != 'DIAGNOSTIC':
+                answer_object_A, created = Answer.objects.get_or_create(
+                    text = row[5].value,
+                    letter = 'F' if (question_number % 2 == 1 and exam_type == 'ACT') else 'A' ,
+                    question = question_object
+                )
 
-            answer_object_B, created = Answer.objects.get_or_create(
-                text = row[6].value,
-                letter = 'G' if (question_number % 2 == 1 and exam_type == 'ACT') else 'B' ,
-                question = question_object
-            )
+                answer_object_B, created = Answer.objects.get_or_create(
+                    text = row[6].value,
+                    letter = 'G' if (question_number % 2 == 1 and exam_type == 'ACT') else 'B' ,
+                    question = question_object
+                )
 
-            answer_object_C, created = Answer.objects.get_or_create(
-                text = row[7].value,
-                letter = 'H' if (question_number % 2 == 1 and exam_type == 'ACT') else 'C' ,
-                question = question_object
-            )
+                answer_object_C, created = Answer.objects.get_or_create(
+                    text = row[7].value,
+                    letter = 'H' if (question_number % 2 == 1 and exam_type == 'ACT') else 'C' ,
+                    question = question_object
+                )
 
-            answer_object_D, created = Answer.objects.get_or_create(
-                text = row[8].value,
-                letter = 'J' if (question_number % 2 == 1 and exam_type == 'ACT') else 'D' ,
-                question = question_object
-            )
+                answer_object_D, created = Answer.objects.get_or_create(
+                    text = row[8].value,
+                    letter = 'J' if (question_number % 2 == 1 and exam_type == 'ACT') else 'D' ,
+                    question = question_object
+                )
+            elif exam_type == 'DIAGNOSTIC':
+                answer_object_A, created = Answer.objects.get_or_create(
+                    text = row[5].value,
+                    letter = 'F' if (question_number % 2 == 1 and section_object.type == 'english') else 'A' ,
+                    question = question_object
+                )
+
+                answer_object_B, created = Answer.objects.get_or_create(
+                    text = row[6].value,
+                    letter = 'G' if (question_number % 2 == 1 and section_object.type == 'english') else 'B' ,
+                    question = question_object
+                )
+
+                answer_object_C, created = Answer.objects.get_or_create(
+                    text = row[7].value,
+                    letter = 'H' if (question_number % 2 == 1 and section_object.type == 'english') else 'C' ,
+                    question = question_object
+                )
+
+                answer_object_D, created = Answer.objects.get_or_create(
+                    text = row[8].value,
+                    letter = 'J' if (question_number % 2 == 1 and section_object.type == 'english') else 'D' ,
+                    question = question_object
+                )
 
             #Creates the fifth answer choice for the ACT exam
             if exam_type == 'ACT':
@@ -197,6 +255,13 @@ def file_upload(request):
                     answer_object_E, created = Answer.objects.get_or_create(
                         text = row[9].value,
                         letter = 'K' if (question_number % 2 == 1) else 'E' ,
+                        question = question_object
+                    )
+            elif exam_type == 'DIAGNOSTIC':
+                if row[9].value is not None:
+                    answer_object_E, created = Answer.objects.get_or_create(
+                        text = row[9].value,
+                        letter = 'E',
                         question = question_object
                     )
 
@@ -548,7 +613,6 @@ def section_review_view(request, pk, section_name):
                 break
             elif a.letter == q.correct_answer:
                 correct_answers.append(a.text)
-
     context = {
         'section':section,
         'exam':exam,
