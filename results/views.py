@@ -16,6 +16,7 @@ import pandas as pd
 #from easy_pdf.views import PDFTemplateView
 #import easy_pdf
 import os
+import math
 
 
 def results(request, pk):
@@ -84,6 +85,42 @@ def render_pdf_view(request, pk):
             elif (section.type == 'science'):
                 raw_science_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 science_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
+                omitted_science = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                science_questions = Question.objects.filter(exam=exam, section=section)
+                science_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+        elif exam_type == 'DIAGNOSTIC':
+            if (section.type == 'reading'):
+                raw_reading_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                omitted_reading = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                reading_questions = Question.objects.filter(exam=exam, section=section)
+                reading_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+            elif (section.type == 'writing'):
+                raw_writing_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                omitted_writing = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                writing_questions = Question.objects.filter(exam=exam, section=section)
+                writing_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+            elif (section.type == 'math1'):
+                raw_math1_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                omitted_math1 = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                math1_questions = Question.objects.filter(exam=exam, section=section)
+                math1_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+            elif (section.type == 'math2'):
+                raw_math2_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                omitted_math2 = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                math2_questions = Question.objects.filter(exam=exam, section=section)
+                math2_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+            elif (section.type == 'english'):
+                raw_english_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                omitted_english = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                english_questions = Question.objects.filter(exam=exam, section=section)
+                english_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+            elif (section.type == 'math'):
+                raw_math_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
+                omitted_math = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
+                math_questions = Question.objects.filter(exam=exam, section=section)
+                math_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+            elif (section.type == 'science'):
+                raw_science_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 omitted_science = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
                 science_questions = Question.objects.filter(exam=exam, section=section)
                 science_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
@@ -690,4 +727,70 @@ def render_pdf_view(request, pk):
             'english_category_data':english_category_data,
             'math_category_data':math_category_data,
         }
-    return render(request, 'results/act-results.html', context)
+
+        return render(request, 'results/act-results.html', context)
+    elif exam_type == 'DIAGNOSTIC':
+        sat_raw_math_score = raw_math1_score + raw_math2_score
+
+        #incorrect_reading = 52 - (omitted_reading + raw_reading_score)
+        #incorrect_writing = 44 - (omitted_writing + raw_writing_score)
+        #incorrect_math1 = 25 - (omitted_math1 + raw_math1_score)
+        #incorrect_math2 = 38 - (omitted_math2 + raw_math2_score)
+
+        #reading_questions_answers = zip(reading_questions, reading_student_answers)
+        #writing_questions_answers = zip(writing_questions, writing_student_answers)
+        #math1_questions_answers = zip(math1_questions, math1_student_answers)
+        #math2_questions_answers = zip(math2_questions, math2_student_answers)
+
+        # Get Percentiles
+        module_dir = os.path.dirname(__file__) #get current directory
+        percentiles_file_path = os.path.join(module_dir, 'data_files/Percentiles.csv')
+        percentiles_df = pd.read_csv(percentiles_file_path)
+
+        questions_correct_index = percentiles_df.loc[percentiles_df['Number of Questions Correct'] == sat_raw_math_score].index[0]
+        sat_math_score = percentiles_df['Diagnostic SAT Math'][questions_correct_index]
+        questions_correct_index = percentiles_df.loc[percentiles_df['Number of Questions Correct'] == raw_reading_score].index[0]
+        sat_reading_score = percentiles_df['Diagnostic SAT Reading'][questions_correct_index] * 10
+        questions_correct_index = percentiles_df.loc[percentiles_df['Number of Questions Correct'] == raw_writing_score].index[0]
+        sat_writing_score = percentiles_df['Diagnostic SAT Writing'][questions_correct_index] * 10
+
+        sat_reading_writing_score = sat_reading_score + sat_writing_score
+        sat_total_score = sat_reading_writing_score + sat_math_score
+
+        percentile_index = percentiles_df.loc[percentiles_df['SAT'] == sat_total_score].index[0]
+        percentile = percentiles_df['SAT Percentiles'][percentile_index]
+        raw_sat_percentile = percentile
+        sat_percentile = ordinal(percentile)
+
+        questions_correct_index = percentiles_df.loc[percentiles_df['Number of Questions Correct'] == raw_math_score].index[0]
+        act_math_score = percentiles_df['Diagnostic ACT Math'][questions_correct_index]
+        questions_correct_index = percentiles_df.loc[percentiles_df['Number of Questions Correct'] == raw_english_score].index[0]
+        act_english_score = percentiles_df['Diagnostic ACT English'][questions_correct_index]
+        questions_correct_index = percentiles_df.loc[percentiles_df['Number of Questions Correct'] == raw_science_score].index[0]
+        act_science_score = percentiles_df['Diagnostic ACT Science'][questions_correct_index]
+
+        act_total_score = act_math_score + act_english_score + act_science_score
+
+        percentile_index = percentiles_df.loc[percentiles_df['ACT'] == act_total_score].index[0]
+        percentile = percentiles_df['ACT Percentiles'][percentile_index]
+        raw_act_percentile = percentile
+        act_percentile = ordinal(percentile)
+
+        context = {
+            'exam':exam,
+            'user': user,
+            'current_date':current_date,
+            'sat_reading_score':math.trunc(sat_reading_score),
+            'sat_writing_score':math.trunc(sat_writing_score),
+            'sat_math_score':math.trunc(sat_math_score),
+            'act_english_score':math.trunc(act_english_score),
+            'act_science_score':math.trunc(act_science_score),
+            'act_math_score':math.trunc(act_math_score),
+            'sat_total_score':math.trunc(sat_total_score),
+            'act_total_score':math.trunc(act_total_score),
+            'sat_percentile':sat_percentile,
+            'act_percentile':act_percentile,
+            'raw_act_percentile':raw_act_percentile,
+            'raw_sat_percentile':raw_sat_percentile,
+        }
+        return render(request, 'results/diagnostic-score-report.html', context)

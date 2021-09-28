@@ -33,9 +33,9 @@
     <div class='ca-content'>
 
       <div class="general-info">
-        <div><span class="general-info-label ca-bold">Name: </span> VAR</div>
-        <div><span class="general-info-label ca-bold">Test Date: </span> VAR </div>
-        <div><span class="general-info-label ca-bold">Test Number: </span> VAR</div>
+        <div><span class="general-info-label ca-bold">Name: </span> {{user}}</div>
+        <div><span class="general-info-label ca-bold">Test Date: </span> {{current_date}} </div>
+        <div><span class="general-info-label ca-bold">Test Number: </span> {{exam.name}}</div>
       </div>
 
       <div class="ca-flex ca-vert-center">
@@ -58,21 +58,26 @@
         <div class='ca-flex-two-fifths ca-flex ca-vert-center'>
           <div class='overall-perf-score'>
             <div class='overall-perf-score-header'>SAT out of 1600</div>
-            <div class='overall-perf-score-num ca-bold'>VAR</div>
-            <div style='display: inline-block'>SAT equivalent VAR<br /> <span class='ca-italic'>Percentile: VAR</span></div>
+            <div class='overall-perf-score-num ca-bold'>{{sat_total_score}}</div>
+            <div style='display: inline-block'>SAT equivalent {{sat_total_score}}<br /> <span class='ca-italic'>Percentile: {{sat_percentile}}</span></div>
           </div>
         </div>
         <div class='ca-flex-two-fifths ca-flex ca-vert-center'>
           <div class='overall-perf-score'>
             <div class='overall-perf-score-header'>ACT out of 36</div>
-            <div class='overall-perf-score-num ca-bold'>VAR</div>
-            <div style='display: inline-block'>SAT equivalent VAR<br /> <span class='ca-italic'>Percentile: VAR</span></div>
+            <div class='overall-perf-score-num ca-bold'>{{act_total_score}}</div>
+            <div style='display: inline-block'>ACT equivalent {{act_total_score}}<br /> <span class='ca-italic'>Percentile: {{act_percentile}}</span></div>
           </div>
         </div>
         <div class='ca-flex' style='flex-basis: calc(80% - 30px);'>
           <div class='overall-perf-message' style='flex-basis: 100%'>
-            On the whole, VAR performed significantly better on the VAR and we would
-            recommend that VAR focus on that exam first.
+            {% if raw_sat_percentile > raw_act_percentile %}
+            On the whole, {{user}} performed significantly better on the SAT and we would
+            recommend that {{user}} focus on that exam first.
+            {% else %}
+            On the whole, {{user}} performed significantly better on the ACT and we would
+            recommend that {{user}} focus on that exam first.
+            {% endif %}
           </div>
         </div>
       </div>
@@ -84,18 +89,18 @@
       <h3 style='color: #66a1a5'>SAT</h3>
       <div class='ca-flex' style='justify-content: space-between;'>
         <div class='ca-flex ca-vert-center'>
-          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
-              40</span></span>
+          <span class="ca-font-big ca-bold">{{sat_reading_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>100 to
+              400</span></span>
           <div class="ca-flex-full">Reading</div>
         </div>
         <div class='ca-flex ca-vert-center'>
-          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
-              40</span></span>
+          <span class="ca-font-big ca-bold">{{sat_writing_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>100 to
+              400</span></span>
           <div class="ca-flex-full">Grammar</div>
         </div>
         <div class='ca-flex ca-vert-center'>
-          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
-              40</span></span>
+          <span class="ca-font-big ca-bold">{{sat_math_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>200 to
+              800</span></span>
           <div class="ca-flex-full">Math</div>
         </div>
       </div>
@@ -103,18 +108,18 @@
       <h3 style='color: #66a1a5'>ACT</h3>
       <div class='ca-flex' style='justify-content: space-between;'>
         <div class='ca-flex ca-vert-center'>
-          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
-              40</span></span>
+          <span class="ca-font-big ca-bold">{{act_science_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>1 to
+              36</span></span>
           <div class="ca-flex-full">Reading/Science</div>
         </div>
         <div class='ca-flex ca-vert-center' style='margin-left: -52px;'>
-          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
-              40</span></span>
+          <span class="ca-font-big ca-bold">{{act_english_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>1 to
+              36</span></span>
           <div class="ca-flex-full">Grammar</div>
         </div>
         <div class='ca-flex ca-vert-center'>
-          <span class="ca-font-big ca-bold">VAR</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
-              40</span></span>
+          <span class="ca-font-big ca-bold">{{act_math_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>1 to
+              36</span></span>
           <div class="ca-flex-full">Math</div>
         </div>
       </div>

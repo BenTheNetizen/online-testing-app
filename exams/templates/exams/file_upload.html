@@ -6,6 +6,7 @@
   <div style="display:flex;">
     <button id="upload-act-button" class="btn-get-started scrollto" onclick="uploadExam('ACT')">Upload ACT</button>
     <button id="upload-sat-button" class="btn-get-started scrollto" onclick="uploadExam('SAT')">Upload SAT</button>
+    <button id="upload-diagnostic-button" class="btn-get-started scrollto" onclick="uploadExam('DIAGNOSTIC')">Upload Diagnostic</button>
   </div>
   <form id="upload-files" method="post" enctype="multipart/form-data">
       {% csrf_token %}
@@ -41,6 +42,29 @@
         <input id="id_docfile" type="file" multiple name="act_science_passages"/>
         <hr>
       </div>
+      <div id="upload-diagnostic" style="display:none">
+        <label>Upload images for the SAT writing passage materials</label>
+        <input id="id_docfile" type="file" multiple name="sat_writing_passages"/>
+        <hr>
+        <label>Upload images for the SAT Math No-Calculator section</label>
+        <input id="id_docfile" type="file" multiple name="sat_nocalc_materials"/>
+        <hr>
+        <label>Upload images for the SAT Math Calculator section</label>
+        <input id="id_docfile" type="file" multiple name="sat_calc_materials"/>
+        <hr>
+        <label>Upload images for the ACT Math section</label>
+        <input id="id_docfile" type="file" multiple name="act_math_materials"/>
+        <hr>
+        <label>Upload images for the SAT Reading passage materials</label>
+        <input id="id_docfile" type="file" multiple name="sat_reading_passages"/>
+        <hr>
+        <label>Upload images for the ACT English passage materials</label>
+        <input id="id_docfile" type="file" multiple name="act_english_passages"/>
+        <hr>
+        <label>Upload images for the Science passage materials</label>
+        <input id="id_docfile" type="file" multiple name="act_science_passages"/>
+        <hr>
+      </div>
       <button type="submit">Upload</button>
   </form>
   <br>
@@ -56,8 +80,15 @@
     if (examType == 'SAT') {
       document.getElementById('upload-sat').style.display = 'block';
       document.getElementById('upload-act').style.display = 'none';
-    } else {
+      document.getElementById('upload-diagnostic').style.display = 'none';
+    } else if (examType == 'ACT') {
       document.getElementById('upload-act').style.display = 'block';
+      document.getElementById('upload-sat').style.display = 'none';
+      document.getElementById('upload-diagnostic').style.display = 'none';
+    }
+    else if (examType == 'DIAGNOSTIC') {
+      document.getElementById('upload-diagnostic').style.display = 'block';
+      document.getElementById('upload-act').style.display = 'none';
       document.getElementById('upload-sat').style.display = 'none';
     }
   }
