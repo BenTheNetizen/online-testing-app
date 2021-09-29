@@ -1618,9 +1618,9 @@ header .dropdown-item {
 
 .get-started-txt {
   position: absolute;
-  left: 50%;
+  left: 38px;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateY(-50%);
   color: white;
   font-size: 24px;
   font-family: mainFontBold;
