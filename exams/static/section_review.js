@@ -365,6 +365,9 @@ function getPassage(value) {
             //document.getElementById(`${question_text}-${correctAnswers[questionNum-1]}-label`).style.color = "green";
           }
         })
+
+        // return to top of the page after passage change
+        document.getElementById('section-form').scrollTop = 0
       }
 
       // needed statement for MathJax functionality
