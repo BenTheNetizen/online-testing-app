@@ -63,7 +63,7 @@ function getPassage(value) {
                 </div>
                 <div class="answers-container">
                 -->
-                <div class='question-container question-container-math'>
+                <div class='question-container question-container-math' id="${questionNum}-text">
                 <img class="math-material" src="${questionData[3]}">
                 <div class="mb-2 testing">
                   <b class="ca-question-num">Question ${questionNum}</b>
@@ -81,7 +81,7 @@ function getPassage(value) {
                 </div>
                 <div class="answers-container">
               -->
-              <div class='question-container question-container-math'>
+              <div class='question-container question-container-math' id="${questionNum}-text">
                 <div class="mb-2 testing">
                   <b class="ca-question-num">Question ${questionNum}</b>
                   <br>
@@ -248,7 +248,7 @@ function getPassage(value) {
                   <br>
                 </div>
                 -->
-                <div class='question-container'>
+                <div class='question-container' id="${questionNum}-text">
                 <div class="mb-2 testing">
                   <b class="ca-question-num">Question ${questionNum}</b>
                   <br>
@@ -264,7 +264,7 @@ function getPassage(value) {
                   <b>${questionData[0]}</b>
                 </div>
                 -->
-                <div class='question-container'>
+                <div class='question-container' id="${questionNum}-text">
                 <div class="mb-2 testing">
                   <b class="ca-question-num">Question ${questionNum}</b>
                   <br>
@@ -385,3 +385,8 @@ sectionForm.addEventListener('submit', e=>{
   sendData()
 
 })
+
+function scrollToQuestion(questionNum) {
+  var element = document.getElementById(`${questionNum}-text`)
+  element.scrollIntoView()
+}

@@ -37,6 +37,7 @@ if (recentExamType != null) {
 function getExamDetails(btnId) {
   const btn = document.getElementById(btnId)
   const examName = btn.getAttribute("data-exam-name")
+  console.log(`examName: ${examName}`)
   const examPk = btn.getAttribute("data-exam-pk")
   const examDetailsDiv = document.getElementById(examName + "-details")
 
@@ -173,7 +174,7 @@ function filterExamType(selection) {
       hasSelectedRecentExam = true
     } else {
       // select the first SAT exam
-      getExamDetails('SAT Mock Test 1-btn')
+      getExamDetails('SAT Mock Test 2-btn')
     }
 
 
@@ -196,7 +197,7 @@ function filterExamType(selection) {
       hasSelectedRecentExam = true
     } else {
       // select the first ACT exam
-      getExamDetails('ACT Mock Test 1-btn')
+      getExamDetails('ACT Mock Test 2-btn')
     }
   } else if (examType == 'SAT/ACT Diagnostic Test') {
     //hide all exam buttons
@@ -215,8 +216,8 @@ function filterExamType(selection) {
       getExamDetails(`${recentExam}-btn`)
       hasSelectedRecentExam = true
     } else {
-      // select the first ACT exam
-      getExamDetails('Diagnostic Test 1-btn')
+      // select the first diagnostic exam
+      getExamDetails('Diagnostic Test-btn')
     }
   }
 }

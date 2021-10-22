@@ -7,6 +7,7 @@ class AnswerInline(admin.TabularInline):
 
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerInline]
+    list_filter = ("exam", "section__type")
 
 class QuestionInline(admin.TabularInline):
     model = Question
@@ -19,13 +20,3 @@ admin.site.register(Answer)
 admin.site.register(Result)
 admin.site.register(Section, SectionAdmin)
 admin.site.register(Student_Answer)
-
-"""
-<form method="post" encrypt="multipart/form-data">
-    {% csrf_token %}
-    <label>Upload a file</label>
-    <input type="file" name="file">
-    <p>Only accepts CSV files</p>
-    <button type="submit">Upload</button>
-</form>
-"""

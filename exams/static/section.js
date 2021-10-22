@@ -62,7 +62,7 @@ function sendData(goToHub) {
             window.location.href=`../${nextSection}/section-directions`
           }
         } else if (examType == 'ACT') {
-          if (nextSection == 'math') {
+          if (nextSection == 'reading') {
             window.location.href="../break1/reading"
           }
           else {
@@ -168,7 +168,7 @@ function getPassage(value) {
             if (questionData[3] != null) {
               //implies that there is an image to add to the question
                 sectionBox.innerHTML += `
-                <div class='question-container question-container-math'>
+                <div class='question-container question-container-math' id="${questionNum}-text">
                 <img class="math-material" src="${questionData[3]}">
                 <div class="mb-2 testing">
                   <b class="ca-question-num">Question ${questionNum}</b>
@@ -179,7 +179,7 @@ function getPassage(value) {
               `
             } else {
                 sectionBox.innerHTML += `
-                <div class='question-container question-container-math'>
+                <div class='question-container question-container-math' id="${questionNum}-text">
                 <div class="mb-2 testing">
                   <b class="ca-question-num">Question ${questionNum}</b>
                   <br>
@@ -188,6 +188,9 @@ function getPassage(value) {
                 <div class="answers-container" id="${questionNum}-answers"></div>
               `
             }
+            // sets question-tracker to href to a question
+            //document.getElementById(`question${questionNum}-link`).setAttribute('data-target', `#${questionNum}-text`)
+
             let answerBox = document.getElementById(`${questionNum}-answers`)
             //checks if one of the answers are null, implies math fill in the answer box
             if (questionData[1][0] == null) {
@@ -266,7 +269,7 @@ function getPassage(value) {
                   <br>
                 </div>
                 -->
-                <div class='question-container'>
+                <div class='question-container' id="${questionNum}-text">
                 <div class="mb-2 testing">
                   <b id="question-${questionNum}" class="ca-question-num">Question ${questionNum}</b>
                   <br>
@@ -282,7 +285,7 @@ function getPassage(value) {
                   <b>${questionData[0]}</b>
                 </div>
                 -->
-                <div class='question-container'>
+                <div class='question-container' id="${questionNum}-text">
                 <div class="mb-2 testing">
                   <b id="question-${questionNum}" class="ca-question-num">Question ${questionNum}</b>
                   <br>
@@ -395,4 +398,9 @@ function getNextSection(isTimeExpired) {
         console.log(error)
       }
   })
+}
+
+function scrollToQuestion(questionNum) {
+  var element = document.getElementById(`${questionNum}-text`)
+  element.scrollIntoView()
 }
