@@ -93,7 +93,9 @@ function getPassage(value) {
 
             //checks if one of the answers are null, implies math fill in the answer box
             if (questionData[1][0] == null) {
-              if (questionData[2] == `${correctAnswers[questionNum-1]}` ) {
+              // if fill in the answer is correct
+              //if (questionData[2] == `${correctAnswers[questionNum-1]}` ) {
+              if (questionData[4]) {
                 $('#question'+questionNum).parent().find('.material-icons').addClass('answered')
                 $('#question'+questionNum).parent().show()
 

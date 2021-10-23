@@ -719,20 +719,24 @@ def section_math_data_view(request, pk, section_name):
         # Get's the previously answered question if possible
         student_answer = Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=q.question_number).first()
         student_answer_text = None
-
+        is_open_ended_correct = False
         # Case where student answer is a multiple choice
         if student_answer is not None and student_answer.answer != 'N' and student_answer.answer.isalpha():
             student_answer_text = Answer.objects.get(question=q, letter=student_answer.answer).text
         # Case where student answer is free response
         elif student_answer is not None and student_answer.answer != 'N':
             student_answer_text = student_answer.answer
+            if student_answer.is_correct:
+                is_open_ended_correct = True
+
 
         #GETS THE IMAGE URLS
         image_url = None
 
         if q.material.name:
             image_url = q.material.url
-        data.append({q.question_number: [str(q), answers, student_answer_text, image_url]})
+
+        data.append({q.question_number: [str(q), answers, student_answer_text, image_url, is_open_ended_correct]})
 
     return JsonResponse({
         'data': data,
@@ -846,12 +850,21 @@ def save_section_view(request, pk, section_name):
                         selected_answer_object.save()
                 # handling the free response correct answers
                 else:
+                    #import pdb; pdb.set_trace()
                     correct_answers = correct_answer.split(',')
                     for correct_answer in correct_answers:
+                        # avoid issue where users can submit 0.5 or .5, for example
+                        if selected_answer[0] == '.':
+                            selected_answer = '0' + selected_answer
+
+                        if correct_answer[0] == '.':
+                            correct_answer = '0' + correct_answer
+                            
                         if selected_answer == correct_answer:
                             raw_score += 1
                             selected_answer_object.is_correct = True
                             selected_answer_object.save()
+                            break
             else:
                 Student_Answer.objects.create(user=user, exam=exam, section=section_name, question=question, question_number=question.question_number, answer='N')
 
