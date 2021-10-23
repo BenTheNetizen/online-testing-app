@@ -177,8 +177,10 @@ def file_upload(request):
             question_text = question_text.replace("\n", "\\n")
 
             # handling of non float values in the column
+            #import pdb; pdb.set_trace()
             question_passage = int(row[3].value) if (isinstance(row[3].value, int) or isinstance(row[3].value, float)) else None
-            is_open_ended_math_question = True if isinstance(row[10].value, float) or isinstance(row[10].value, int) else False
+            #is_open_ended_math_question = True if isinstance(row[10].value, float) or isinstance(row[10].value, int) or (len(row[10].value) > 1) else False
+            is_open_ended_math_question = True if not str(row[10].value).isalpha() else False
             correct_answer = row[10].value if isinstance(row[10].value, float) or isinstance(row[10].value, int) else row[10].value.upper()
 
             question_categories = row[11].value
@@ -201,6 +203,7 @@ def file_upload(request):
             if not is_open_ended_math_question:
                 if (row[5].value == None or row[6].value == None or row[7].value == None or row[8].value == None):
                     Exam.objects.get(name=exam_name).delete()
+
                     return render(request, 'exams/file_upload.html', {'error': f'Question {question_number} in section {section_object.name} has a missing answer'})
 
             #create answers to question
