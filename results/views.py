@@ -8,7 +8,7 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
 from questions.models import Student_Answer, Question, Result
-from exams.models import Exam, Section
+from exams.models import Exam, Section, User
 from openpyxl import load_workbook
 from datetime import date
 import numpy as np
@@ -25,8 +25,8 @@ def results(request, pk):
     print(user.email)
     return render(request, 'results/results.html', {})
 
-def render_pdf_view(request, pk):
-    user = request.user
+def render_pdf_view(request, pk, username):
+    user = User.objects.get(username=username)
     exam = Exam.objects.get(pk=pk)
     exam_type = exam.type
     sections = exam.get_sections()
