@@ -31,6 +31,16 @@ def render_pdf_view(request, pk, username):
     exam_type = exam.type
     sections = exam.get_sections()
     current_date = date.today().strftime("%m/%d/%Y")
+
+    # Get student name if there is an underscore in username
+    user_name = None
+    if '_' in username:
+        user_name = username.split('_')
+        user_name = user_name[0] + ' ' + user_name[1]
+        user_name = user_name.title()
+    else:
+        user_name = username
+
     # IM REUSING 'reading' FOR BOTH THE ACT AND SAT TESTS
     raw_reading_score, raw_writing_score, raw_math1_score, raw_math2_score, raw_english_score, raw_math_score, raw_science_score = None, None, None, None, None, None, None
     omitted_reading, omitted_writing, omitted_math1, omitted_math2, omitted_english, omitted_math, omitted_science = None, None, None, None, None, None, None
@@ -385,6 +395,7 @@ def render_pdf_view(request, pk, username):
         context = {
             'exam':exam,
             'user': user,
+            'user_name': user_name,
             'current_date':current_date,
             'raw_reading_score':raw_reading_score,
             'raw_writing_score':raw_writing_score,
@@ -688,6 +699,7 @@ def render_pdf_view(request, pk, username):
         context = {
             'exam':exam,
             'user': user,
+            'user_name': user_name,
             'current_date':current_date,
             'raw_english_score':raw_english_score,
             'raw_math_score':raw_math_score,
@@ -779,6 +791,7 @@ def render_pdf_view(request, pk, username):
         context = {
             'exam':exam,
             'user': user,
+            'user_name':user_name,
             'current_date':current_date,
             'sat_reading_score':math.trunc(sat_reading_score),
             'sat_writing_score':math.trunc(sat_writing_score),

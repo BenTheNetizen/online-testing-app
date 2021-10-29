@@ -102,7 +102,7 @@ def file_upload(request):
                     elif current_section == 'math1':
                         num_questions = 20
                         time = 25
-                        section_name = 'Math (No calculator)'
+                        section_name = 'Math (No Calculator)'
                     elif current_section =='math2':
                         num_questions = 38
                         time = 55
@@ -133,7 +133,7 @@ def file_upload(request):
                     elif current_section == 'math1':
                         num_questions = 10
                         time = 10
-                        section_name = 'Math (No calculator) - SAT'
+                        section_name = 'Math (No Calculator) - SAT'
                     elif current_section == 'math2':
                         num_questions = 15
                         time = 21
@@ -859,7 +859,7 @@ def save_section_view(request, pk, section_name):
 
                         if correct_answer[0] == '.':
                             correct_answer = '0' + correct_answer
-                            
+
                         if selected_answer == correct_answer:
                             raw_score += 1
                             selected_answer_object.is_correct = True

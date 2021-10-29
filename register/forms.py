@@ -12,6 +12,8 @@ class UserRegisterForm(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2']
 
 class StudentRegisterForm(forms.ModelForm):
+    parent_name = forms.CharField(required=True)
+    parent_email = forms.CharField(required=True)
     class Meta:
         model = Student
         fields = ['parent_name', 'parent_email', 'parent_phone_number', 'student_access_code']
@@ -19,4 +21,7 @@ class StudentRegisterForm(forms.ModelForm):
     #parent_email = forms.CharField(max_length=30, required=True, help_text="")
     #parent_phone_number = forms.CharField(max_length=30, required=False, help_text="")
     #student_access_code = forms.CharField(max_length=30, required=False, help_text="")
-    #email = forms.EmailField(max_length=254, help_text='') 
+    #email = forms.EmailField(max_length=254, help_text='')
+
+class PasswordResetForm(forms.Form):
+    email = forms.CharField(required=True)

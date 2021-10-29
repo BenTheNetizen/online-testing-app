@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from .forms import UserRegisterForm, StudentRegisterForm
+from .forms import UserRegisterForm, StudentRegisterForm, PasswordResetForm
 from exams.models import Student
 
 # Create your views here.
@@ -30,3 +30,17 @@ def register(request):
     return render(request, 'register/register.html', {
         'user_form':user_form,
         'student_form':student_form,})
+
+def password_reset(request):
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            email = password_reset_form.cleaned_data['email']
+            print('Email: ' + str(email))
+            return redirect('exams:exam-list-view')
+    else:
+        password_reset_form = PasswordResetForm()
+
+    return render(request, 'registration/password_reset.html', {
+        'form':password_reset_form,
+        })

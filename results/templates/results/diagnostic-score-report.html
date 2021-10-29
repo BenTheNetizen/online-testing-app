@@ -33,7 +33,7 @@
     <div class='ca-content'>
 
       <div class="general-info">
-        <div><span class="general-info-label ca-bold">Name: </span> {{user}}</div>
+        <div><span class="general-info-label ca-bold">Name: </span> {{user_name}}</div>
         <div><span class="general-info-label ca-bold">Test Date: </span> {{current_date}} </div>
         <div><span class="general-info-label ca-bold">Test Number: </span> {{exam.name}}</div>
       </div>
@@ -71,12 +71,25 @@
         </div>
         <div class='ca-flex' style='flex-basis: calc(80% - 30px);'>
           <div class='overall-perf-message' style='flex-basis: 100%'>
-            {% if raw_sat_percentile > raw_act_percentile %}
-            On the whole, {{user}} performed significantly better on the SAT and we would
-            recommend that {{user}} focus on that exam first.
+            {% if raw_sat_percentile > raw_act_percentile|add:"3" %}
+            On the whole, {{user_name}} performed significantly better on the SAT and we would
+            recommend that {{user_name}} focus on that exam first.
+            {% elif raw_act_percentile > raw_sat_percentile|add:"3" %}
+            On the whole, {{user_name}} performed significantly better on the ACT and we would
+            recommend that {{user_name}} focus on that exam first.
+            {% elif raw_sat_percentile > raw_act_percentile %}
+            On the whole {{user_name}} performed slightly better on the SAT. Although it is likely
+            that {{user_name}}'s performance on both tests would be close, {{user_name}} may want to
+            lean towards the SAT based on these results.
+            {% elif raw_sat_percentile < raw_act_percentile %}
+            On the whole {{user_name}} performed slightly better on the ACT. Although it is likely
+            that {{user_name}}'s performance on both tests would be close, {{user_name}} may want to
+            lean towards the ACT based on these results.
             {% else %}
-            On the whole, {{user}} performed significantly better on the ACT and we would
-            recommend that {{user}} focus on that exam first.
+            On the whole, {{user_name}} did not show a clear preference and performed about the same
+            on both exams. Since the SAT and ACT are equally difficult and equally impactful for college
+            admissions, we would recommend choosing a test based on other factors like personal preference
+            or ease of scheduling.
             {% endif %}
           </div>
         </div>

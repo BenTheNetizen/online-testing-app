@@ -32,10 +32,11 @@ urlpatterns = [
     path('', include('exams.urls', namespace='exams')),
     path('', include('results.urls', namespace='results')),
     path('register/', v.register, name='register'),
+    path('login/password_reset/', v.password_reset, name='password_reset'),
 
     path('', include('django.contrib.auth.urls')),
 
-    #path('accounts/', include('django.contrib.auth.urls')), 
+    #path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
