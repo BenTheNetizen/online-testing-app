@@ -234,25 +234,25 @@ def file_upload(request):
             elif exam_type == 'DIAGNOSTIC':
                 answer_object_A, created = Answer.objects.get_or_create(
                     text = row[5].value,
-                    letter = 'F' if (question_number % 2 == 1 and section_object.type == 'english') else 'A' ,
+                    letter = 'F' if (question_number % 2 == 1 and (section_object.type == 'english' or section_object.type == 'math' or section_object.type == 'science')) else 'A' ,
                     question = question_object
                 )
 
                 answer_object_B, created = Answer.objects.get_or_create(
                     text = row[6].value,
-                    letter = 'G' if (question_number % 2 == 1 and section_object.type == 'english') else 'B' ,
+                    letter = 'G' if (question_number % 2 == 1 and (section_object.type == 'english' or section_object.type == 'math' or section_object.type == 'science')) else 'B' ,
                     question = question_object
                 )
 
                 answer_object_C, created = Answer.objects.get_or_create(
                     text = row[7].value,
-                    letter = 'H' if (question_number % 2 == 1 and section_object.type == 'english') else 'C' ,
+                    letter = 'H' if (question_number % 2 == 1 and (section_object.type == 'english' or section_object.type == 'math' or section_object.type == 'science')) else 'C' ,
                     question = question_object
                 )
 
                 answer_object_D, created = Answer.objects.get_or_create(
                     text = row[8].value,
-                    letter = 'J' if (question_number % 2 == 1 and section_object.type == 'english') else 'D' ,
+                    letter = 'J' if (question_number % 2 == 1 and (section_object.type == 'english' or section_object.type == 'math' or section_object.type == 'science')) else 'D' ,
                     question = question_object
                 )
 
