@@ -53,87 +53,87 @@ def render_pdf_view(request, pk, username):
                 raw_reading_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 reading_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
                 omitted_reading = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                reading_questions = Question.objects.filter(exam=exam, section=section)
+                reading_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
                 reading_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
             elif (section.type == 'writing'):
                 raw_writing_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 writing_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
                 omitted_writing = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                writing_questions = Question.objects.filter(exam=exam, section=section)
-                writing_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                writing_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                writing_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
             elif (section.type == 'math1'):
                 raw_math1_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 math1_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
                 omitted_math1 = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                math1_questions = Question.objects.filter(exam=exam, section=section)
-                math1_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                math1_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                math1_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
             elif (section.type == 'math2'):
                 raw_math2_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 math2_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
                 omitted_math2 = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                math2_questions = Question.objects.filter(exam=exam, section=section)
-                math2_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                math2_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                math2_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
         elif exam_type == 'ACT':
             if (section.type == 'english'):
                 raw_english_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 english_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
                 omitted_english = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                english_questions = Question.objects.filter(exam=exam, section=section)
-                english_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                english_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                english_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
             elif (section.type == 'math'):
                 raw_math_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 math_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
                 omitted_math = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                math_questions = Question.objects.filter(exam=exam, section=section)
-                math_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                math_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                math_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
             elif (section.type == 'reading'):
                 raw_reading_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 reading_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
                 omitted_reading = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                reading_questions = Question.objects.filter(exam=exam, section=section)
-                reading_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                reading_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                reading_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
             elif (section.type == 'science'):
                 raw_science_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 science_score = Result.objects.get(user=user, exam=exam, section=section).scaled_score
                 omitted_science = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                science_questions = Question.objects.filter(exam=exam, section=section)
-                science_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                science_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                science_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
         elif exam_type == 'DIAGNOSTIC':
             if (section.type == 'reading'):
                 raw_reading_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 omitted_reading = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                reading_questions = Question.objects.filter(exam=exam, section=section)
-                reading_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                reading_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                reading_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
             elif (section.type == 'writing'):
                 raw_writing_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 omitted_writing = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                writing_questions = Question.objects.filter(exam=exam, section=section)
-                writing_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                writing_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                writing_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
             elif (section.type == 'math1'):
                 raw_math1_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 omitted_math1 = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                math1_questions = Question.objects.filter(exam=exam, section=section)
-                math1_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                math1_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                math1_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
             elif (section.type == 'math2'):
                 raw_math2_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 omitted_math2 = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                math2_questions = Question.objects.filter(exam=exam, section=section)
-                math2_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                math2_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                math2_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
             elif (section.type == 'english'):
                 raw_english_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 omitted_english = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                english_questions = Question.objects.filter(exam=exam, section=section)
-                english_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                english_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                english_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
             elif (section.type == 'math'):
                 raw_math_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 omitted_math = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                math_questions = Question.objects.filter(exam=exam, section=section)
-                math_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                math_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                math_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
             elif (section.type == 'science'):
                 raw_science_score = Result.objects.get(user=user, exam=exam, section=section).raw_score
                 omitted_science = Student_Answer.objects.filter(user=user, exam=exam, section=section.type, answer='N').count()
-                science_questions = Question.objects.filter(exam=exam, section=section)
-                science_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).values_list('answer', flat=True)
+                science_questions = Question.objects.filter(exam=exam, section=section).order_by('question_number')
+                science_student_answers = Student_Answer.objects.filter(user=user, exam=exam, section=section.type).order_by('question_number').values_list('answer', flat=True)
 
     if exam_type == 'SAT':
         total_score = reading_score + writing_score + math1_score + math2_score
