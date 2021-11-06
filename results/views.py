@@ -220,6 +220,7 @@ def render_pdf_view(request, pk, username):
         math_category_data = {
             'FA':[0,0,None],
             'WP':[0,0,None],
+            'VS':[0,0,None],
             'SE':[0,0,None],
             'Q':[0,0,None],
             'FOIL':[0,0,None],
@@ -240,6 +241,7 @@ def render_pdf_view(request, pk, username):
             'RE':[0,0,None],
             'MISC':[0,0,None],
             'MMM':[0,0,None],
+            'FN':[0,0,None],
         }
         category_data = {
             'CM':[0,0, None],
@@ -523,6 +525,7 @@ def render_pdf_view(request, pk, username):
         math_category_data = {
             'FA':[0,0,None],
             'WP':[0,0,None],
+            'VS':[0,0,None],
             'SE':[0,0,None],
             'Q':[0,0,None],
             'FOIL':[0,0,None],
@@ -543,6 +546,7 @@ def render_pdf_view(request, pk, username):
             'RE':[0,0,None],
             'MISC':[0,0,None],
             'MMM':[0,0,None],
+            'FN':[0,0,None],
         }
 
         category_data = {

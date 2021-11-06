@@ -142,6 +142,9 @@
     {% endif %}
     <form id="section-form">
       {% csrf_token %}
+      {% if section.type == 'english' %}
+      <p>For each question in this section, refer to the related number in the passage</p>
+      {% endif %}
       <div id="section-box">
       </div>
       <!-- Button trigger modal -->

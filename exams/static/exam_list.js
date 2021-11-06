@@ -174,7 +174,7 @@ function filterExamType(selection) {
       hasSelectedRecentExam = true
     } else {
       // select the first SAT exam
-      getExamDetails('SAT Mock Test 2-btn')
+      getExamDetails('SAT Mock Test 1-btn')
     }
 
 
@@ -197,7 +197,7 @@ function filterExamType(selection) {
       hasSelectedRecentExam = true
     } else {
       // select the first ACT exam
-      getExamDetails('ACT Mock Test 2-btn')
+      getExamDetails('ACT Mock Test 1-btn')
     }
   } else if (examType == 'SAT/ACT Diagnostic Test') {
     //hide all exam buttons

@@ -62,14 +62,14 @@ def file_upload(request):
 
                 #EXAM TYPE IS SAT OR ACT
                 exam_type = row[1].value
-                if exam_type is None or not (exam_type == 'ACT' or exam_type == 'SAT' or exam_type == 'DIAGNOSTIC'):
-                    Exam.objects.get(name=exam_name).delete()
-                    return render(request, 'exams/file_upload.html', {'error': 'The exam has been uploaded without an accepted exam type. Please specify the type in the Excel file (SAT or ACT)'})
+
                 exam_object, created = Exam.objects.get_or_create(
                     name = exam_name,
                     type = row[1].value,
                 )
-
+                if exam_type is None or not (exam_type == 'ACT' or exam_type == 'SAT' or exam_type == 'DIAGNOSTIC'):
+                    Exam.objects.get(name=exam_name).delete()
+                    return render(request, 'exams/file_upload.html', {'error': 'The exam has been uploaded without an accepted exam type. Please specify the type in the Excel file (SAT or ACT)'})
             #update the previous section's num_passage field
             if section_object is not None:
                 section_object.num_passages = num_passages
