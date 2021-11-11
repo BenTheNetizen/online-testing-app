@@ -185,6 +185,12 @@ def file_upload(request):
 
             question_categories = row[11].value
 
+            # replace the "RG" category to "GF" only for the science section
+            if current_section == "science":
+                for question_category in question_categories:
+                    if "RG" in question_category:
+                        question_category = "GF"
+
             if question_passage is not None:
                 if question_passage > num_passages:
                     num_passages = question_passage
