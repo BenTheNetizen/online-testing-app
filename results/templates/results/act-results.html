@@ -17,18 +17,31 @@
   <style>
     @font-face{
         font-family:"mainFont";
-        src:url("{% static 'css/fonts/28a6da92-8a64-42a5-9565-914caf257538r.woff2' %}") format("woff2"),url("{% static 'css/fonts/6e6d9ee8-cbc5-4670-b243-c90a93b3a8d2r.woff' %}") format("woff");
+        src:url("{% static 'css/Fonts/28a6da92-8a64-42a5-9565-914caf257538r.woff2' %}") format("woff2"),url("{% static 'css/fonts/6e6d9ee8-cbc5-4670-b243-c90a93b3a8d2r.woff' %}") format("woff");
     }
 
     @font-face{
         font-family:"mainFontBold";
-        src:url("{% static 'css/fonts/67fc974b-bcc7-48aa-bff0-15c824085f7dr.woff2' %}") format("woff2"),url("{% static 'css/fonts/30bc8000-1637-4079-9dd6-d93c7c1d8245r.woff' %}") format("woff");
+        src:url("{% static 'css/Fonts/67fc974b-bcc7-48aa-bff0-15c824085f7dr.woff2' %}") format("woff2"),url("{% static 'css/fonts/30bc8000-1637-4079-9dd6-d93c7c1d8245r.woff' %}") format("woff");
     }
   </style>
 </head>
 
 <body>
   <div class='ca-container'>
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top">
+      <a href="{% url 'exams:exam-list-view' %}" class="logo">
+        <img src="/static/assets/img/logo-scaled-final.png" style="width: 140px; height: 36px;">
+      </a>
+
+      <script>
+        var isChrome = !!window.chrome;
+        if (isChrome) {
+            $('.logo img').css('image-rendering', '-webkit-optimize-contrast');
+        }
+      </script>
+    </header><!-- End Header -->
     <div class='ca-content'>
       <div class="general-info">
         <div><span class="general-info-label ca-bold">Name: </span> {{user_name}}</div>
@@ -53,7 +66,7 @@
             </div>
           -->
             <div class="sat-user-perc ca-flex-half">
-              <div class='ca-bold'>{{percentile}}</div>
+              <div class='ca-bold ca-font-mid'>{{percentile}}</div>
               <div class='ca-font-small'>ACT User Percentile</div>
             </div>
           </div>
@@ -80,8 +93,8 @@
               class="section-scores-perc ca-font-small ca-inline-b">Nationally Representative<br>Sample
               Percentile</span></div>
             -->
-          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold">{{english_percentile}}</span><span
-              class="section-scores-perc ca-font-small">ACT User Percentile</span></div>
+          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold ca-font-mid">{{english_percentile}}</span><span
+              class="section-scores-perc ca-font-small ca-line-height-mid">ACT User Percentile</span></div>
         </div>
 
         <div class="ca-flex-full"><br></div>
@@ -98,8 +111,8 @@
               class="section-scores-perc ca-font-small ca-inline-b">Nationally Representative<br>Sample
               Percentile</span></div>
             -->
-          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold">{{math_percentile}}</span><span
-              class="section-scores-perc ca-font-small">ACT User Percentile</span></div>
+          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold ca-font-mid">{{math_percentile}}</span><span
+              class="section-scores-perc ca-font-small ca-line-height-mid">ACT User Percentile</span></div>
         </div>
 
         <div class="ca-flex-full"><br></div>
@@ -116,8 +129,8 @@
               class="section-scores-perc ca-font-small ca-inline-b">Nationally Representative<br>Sample
               Percentile</span></div>
             -->
-          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold">{{science_percentile}}</span><span
-              class="section-scores-perc ca-font-small">ACT User Percentile</span></div>
+          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold ca-font-mid">{{science_percentile}}</span><span
+              class="section-scores-perc ca-font-small ca-line-height-mid">ACT User Percentile</span></div>
         </div>
 
         <div class="ca-flex-full"><br></div>
@@ -134,8 +147,8 @@
               class="section-scores-perc ca-font-small ca-inline-b">Nationally Representative<br>Sample
               Percentile</span></div>
             -->
-          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold">{{math_percentile}}</span><span
-              class="section-scores-perc ca-font-small">ACT User Percentile</span></div>
+          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold ca-font-mid">{{math_percentile}}</span><span
+              class="section-scores-perc ca-font-small ca-line-height-mid">ACT User Percentile</span></div>
         </div>
 
       </div>
@@ -169,14 +182,14 @@
             <div class='questions-overview-summary ca-flex'>
               <h2>Questions Overview</h2>
               <div class='ca-font-small'>Below is a sumary of your entire exam with the number of questions you answered
-                incorrectly.......</div>
+                incorrectly.</div>
               <hr class="ca-flex-full" />
               <h3 class='ca-bold ca-flex-full'>English</h3>
               <div class='ca-flex-half '>
                 <div class='ca-font-big ca-bold'>75</div>
                 <div class='ca-font-small'>Total Questions</div>
               </div>
-              <div class='ca-flex-half'>
+              <div class='ca-flex-half' style="margin-bottom: 10px;">
                 <div class='ca-font-big ca-bold'>{{raw_english_score}}</div>
                 <div class='ca-font-small'>Correct Answers</div>
               </div>
@@ -195,7 +208,7 @@
                 <div class='ca-font-big ca-bold'>60</div>
                 <div class='ca-font-small'>Total Questions</div>
               </div>
-              <div class='ca-flex-half'>
+              <div class='ca-flex-half' style="margin-bottom: 10px;">
                 <div class='ca-font-big ca-bold'>{{raw_math_score}}</div>
                 <div class='ca-font-small'>Correct Answers</div>
               </div>
@@ -214,7 +227,7 @@
                 <div class='ca-font-big ca-bold'>40</div>
                 <div class='ca-font-small'>Total Questions</div>
               </div>
-              <div class='ca-flex-half'>
+              <div class='ca-flex-half' style="margin-bottom: 10px;">
                 <div class='ca-font-big ca-bold'>{{raw_reading_score}}</div>
                 <div class='ca-font-small'>Correct Answers</div>
               </div>
@@ -234,7 +247,7 @@
                 <div class='ca-font-big ca-bold'>40</div>
                 <div class='ca-font-small'>Total Questions</div>
               </div>
-              <div class='ca-flex-half'>
+              <div class='ca-flex-half' style="margin-bottom: 10px;">
                 <div class='ca-font-big ca-bold'>{{raw_science_score}}</div>
                 <div class='ca-font-small'>Correct Answers</div>
               </div>
@@ -250,10 +263,10 @@
               <hr class="ca-flex-full" />
 
               <h3 class='ca-bold ca-flex-full'>Key</h3>
-              <div class="ca-flex-one-third">&check;</div>
+              <div class="ca-flex-one-third" style="color: #66a1a5">&check;</div>
               <div class="ca-flex-half">Correct</div>
               <div class="ca-flex-one-third" style='color: darkred'>&cross;</div>
-              <div class="ca-flex-half">Omitted</div>
+              <div class="ca-flex-half">Incorrect/Omitted</div>
               <!--
               <div class="ca-flex-one-third">
                 <span class="difficulty-level easy"><span></span><span></span><span></span></span>
@@ -297,7 +310,7 @@
                         <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
                         <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
                         {% if student_answer == question.correct_answer %}
-                        <div class='ca-cell ca-flex-one-third'>&check;</div>
+                        <div class='ca-cell ca-flex-one-third' style="color: #66a1a5">&check;</div>
                         {% elif student_answer == 'N' %}
                         <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
                         {% else %}
@@ -333,7 +346,7 @@
                         <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
                         <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
                         {% if student_answer == question.correct_answer %}
-                        <div class='ca-cell ca-flex-one-third'>&check;</div>
+                        <div class='ca-cell ca-flex-one-third' style="color: #66a1a5">&check;</div>
                         {% elif student_answer == 'N' %}
                         <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
                         {% else %}
@@ -371,7 +384,7 @@
                               <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
                               <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
                               {% if student_answer == question.correct_answer %}
-                              <div class='ca-cell ca-flex-one-third'>&check;</div>
+                              <div class='ca-cell ca-flex-one-third' style="color: #66a1a5">&check;</div>
                               {% elif student_answer == 'N' %}
                               <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
                               {% else %}
@@ -409,7 +422,7 @@
                                 <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
                                 <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
                                 {% if student_answer == question.correct_answer %}
-                                <div class='ca-cell ca-flex-one-third'>&check;</div>
+                                <div class='ca-cell ca-flex-one-third' style="color: #66a1a5">&check;</div>
                                 {% elif student_answer == 'N' %}
                                 <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
                                 {% else %}
@@ -470,7 +483,7 @@
           <div class='detailed-breakdown ca-flex ca-flex-full ca-horz-center'>
             <hr class='ca-flex-full' style='margin-top: 40px' />
             <div class='ca-flex ca-flex-one-third' style='align-content: flex-start'>
-              <h2 class='ca-flex-full'>Reading</h2>
+              <h2 class='ca-flex-full'>Reading/Science</h2>
               {% if reading_science_category_data.D.0 > 0 %}
               <div class='ca-flex ca-flex-full' style='position: relative;'>
                 <div class='ca-inline-b' >Direct</div>

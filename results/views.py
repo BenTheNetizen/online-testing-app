@@ -753,10 +753,16 @@ def render_pdf_view(request, pk, username):
         #incorrect_math1 = 25 - (omitted_math1 + raw_math1_score)
         #incorrect_math2 = 38 - (omitted_math2 + raw_math2_score)
 
-        #reading_questions_answers = zip(reading_questions, reading_student_answers)
-        #writing_questions_answers = zip(writing_questions, writing_student_answers)
-        #math1_questions_answers = zip(math1_questions, math1_student_answers)
-        #math2_questions_answers = zip(math2_questions, math2_student_answers)
+        #SAT answers
+        reading_questions_answers = zip(reading_questions, reading_student_answers)
+        writing_questions_answers = zip(writing_questions, writing_student_answers)
+        math1_questions_answers = zip(math1_questions, math1_student_answers)
+        math2_questions_answers = zip(math2_questions, math2_student_answers)
+
+        #ACT answers
+        english_questions_answers = zip(english_questions, english_student_answers)
+        math_questions_answers = zip(math_questions, math_student_answers)
+        science_questions_answers = zip(science_questions, science_student_answers)
 
         # Get Percentiles
         module_dir = os.path.dirname(__file__) #get current directory
@@ -809,5 +815,13 @@ def render_pdf_view(request, pk, username):
             'act_percentile':act_percentile,
             'raw_act_percentile':raw_act_percentile,
             'raw_sat_percentile':raw_sat_percentile,
+            'reading_questions_answers':reading_questions_answers,
+            'writing_questions_answers':writing_questions_answers,
+            'math1_questions_answers':math1_questions_answers,
+            'math2_questions_answers':math2_questions_answers,
+            'test_questions_answers':reading_questions_answers,
+            'english_questions_answers':english_questions_answers,
+            'math_questions_answers':math_questions_answers,
+            'science_questions_answers':science_questions_answers,
         }
         return render(request, 'results/diagnostic-score-report.html', context)

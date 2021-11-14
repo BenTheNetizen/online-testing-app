@@ -17,18 +17,33 @@
   <style>
     @font-face{
         font-family:"mainFont";
-        src:url("{% static 'css/fonts/28a6da92-8a64-42a5-9565-914caf257538r.woff2' %}") format("woff2"),url("{% static 'css/fonts/6e6d9ee8-cbc5-4670-b243-c90a93b3a8d2r.woff' %}") format("woff");
+        src:url("{% static 'css/Fonts/28a6da92-8a64-42a5-9565-914caf257538r.woff2' %}") format("woff2"),url("{% static 'css/fonts/6e6d9ee8-cbc5-4670-b243-c90a93b3a8d2r.woff' %}") format("woff");
     }
 
     @font-face{
         font-family:"mainFontBold";
-        src:url("{% static 'css/fonts/67fc974b-bcc7-48aa-bff0-15c824085f7dr.woff2' %}") format("woff2"),url("{% static 'css/fonts/30bc8000-1637-4079-9dd6-d93c7c1d8245r.woff' %}") format("woff");
+        src:url("{% static 'css/Fonts/67fc974b-bcc7-48aa-bff0-15c824085f7dr.woff2' %}") format("woff2"),url("{% static 'css/fonts/30bc8000-1637-4079-9dd6-d93c7c1d8245r.woff' %}") format("woff");
     }
+
   </style>
 </head>
 
 <body>
+  
   <div class='ca-container'>
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top">
+      <a href="{% url 'exams:exam-list-view' %}" class="logo">
+        <img src="/static/assets/img/logo-scaled-final.png" style="width: 140px; height: 36px;">
+      </a>
+
+      <script>
+        var isChrome = !!window.chrome;
+        if (isChrome) {
+            $('.logo img').css('image-rendering', '-webkit-optimize-contrast');
+        }
+      </script>
+    </header><!-- End Header -->
     <div class='ca-content'>
       <div class="general-info">
         <div><span class="general-info-label ca-bold">Name: </span> {{user_name}}</div>
@@ -53,7 +68,7 @@
             </div>
           -->
             <div class="sat-user-perc ca-flex-half">
-              <div class='ca-bold'>{{percentile}}</div>
+              <div class='ca-bold ca-font-mid'>{{percentile}}</div>
               <div class='ca-font-small'>SAT User Percentile</div>
             </div>
           </div>
@@ -64,7 +79,7 @@
         </div>
       </div>
 
-      <hr />
+      <hr style="margin-top: 13px;" />
 
       <h2>Section Scores</h2>
       <div class='ca-flex'>
@@ -80,8 +95,8 @@
               class="section-scores-perc ca-font-small ca-inline-b">Nationally Representative<br>Sample
               Percentile</span></div>
             -->
-          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold">{{reading_writing_percentile}}</span><span
-              class="section-scores-perc ca-font-small">SAT User Percentile</span></div>
+          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold ca-font-mid" >{{reading_writing_percentile}}</span><span
+              class="section-scores-perc ca-font-small ca-line-height-mid">SAT User Percentile</span></div>
         </div>
 
         <div class="ca-flex-full"><br></div>
@@ -98,8 +113,8 @@
               class="section-scores-perc ca-font-small ca-inline-b">Nationally Representative<br>Sample
               Percentile</span></div>
             -->
-          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold">{{math_percentile}}</span><span
-              class="section-scores-perc ca-font-small">SAT User Percentile</span></div>
+          <div class='ca-flex-full ca-flex ca-vert-center'><span class="ca-bold ca-font-mid">{{math_percentile}}</span><span
+              class="section-scores-perc ca-font-small ca-line-height-mid">SAT User Percentile</span></div>
         </div>
 
       </div>
@@ -107,18 +122,18 @@
       <hr />
 
       <h2>Test Scores</h2>
-      <div class='ca-flex'>
-        <div class='ca-flex-one-third ca-flex ca-vert-center'>
+      <div class='ca-flex' style='justify-content: space-between;'>
+        <div class='ca-flex ca-vert-center'>
           <span class="ca-font-big ca-bold">{{reading_test_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
               40</span></span>
           <div class="ca-flex-full">Reading</div>
         </div>
-        <div class='ca-flex-one-third ca-flex ca-vert-center'>
+        <div class='ca-flex ca-vert-center'>
           <span class="ca-font-big ca-bold">{{writing_test_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
               40</span></span>
           <div class="ca-flex-full">Writing and Language</div>
         </div>
-        <div class='ca-flex-one-third ca-flex ca-vert-center'>
+        <div class='ca-flex ca-vert-center'>
           <span class="ca-font-big ca-bold">{{math_test_score}}</span><span class="score-range">|&nbsp;<span class='ca-italic'>10 to
               40</span></span>
           <div class="ca-flex-full">Math</div>
@@ -180,19 +195,19 @@
         </div>
       </div>
 
-<div id="page-2">
+    <div id="page-2">
       <div class='questions-overview ca-flex'>
         <div class='questions-overview-summary ca-flex'>
           <h2>Questions Overview</h2>
           <div class='ca-font-small'>Below is a sumary of your entire exam with the number of questions you answered
-            incorrectly.......</div>
+            incorrectly.</div>
           <hr class="ca-flex-full" />
           <h3 class='ca-bold ca-flex-full'>Reading</h3>
           <div class='ca-flex-half '>
             <div class='ca-font-big ca-bold'>52</div>
             <div class='ca-font-small'>Total Questions</div>
           </div>
-          <div class='ca-flex-half'>
+          <div class='ca-flex-half' style="margin-bottom: 10px;">
             <div class='ca-font-big ca-bold'>{{raw_reading_score}}</div>
             <div class='ca-font-small'>Correct Answers</div>
           </div>
@@ -211,7 +226,7 @@
             <div class='ca-font-big ca-bold'>44</div>
             <div class='ca-font-small'>Total Questions</div>
           </div>
-          <div class='ca-flex-half'>
+          <div class='ca-flex-half' style="margin-bottom: 10px;">
             <div class='ca-font-big ca-bold'>{{raw_writing_score}}</div>
             <div class='ca-font-small'>Correct Answers</div>
           </div>
@@ -230,7 +245,7 @@
             <div class='ca-font-big ca-bold'>25</div>
             <div class='ca-font-small'>Total Questions</div>
           </div>
-          <div class='ca-flex-half'>
+          <div class='ca-flex-half' style="margin-bottom: 10px;">
             <div class='ca-font-big ca-bold'>{{raw_math1_score}}</div>
             <div class='ca-font-small'>Correct Answers</div>
           </div>
@@ -250,7 +265,7 @@
             <div class='ca-font-big ca-bold'>38</div>
             <div class='ca-font-small'>Total Questions</div>
           </div>
-          <div class='ca-flex-half'>
+          <div class='ca-flex-half' style="margin-bottom: 10px;">
             <div class='ca-font-big ca-bold'>{{raw_math2_score}}</div>
             <div class='ca-font-small'>Correct Answers</div>
           </div>
@@ -266,10 +281,10 @@
           <hr class="ca-flex-full" />
 
           <h3 class='ca-bold ca-flex-full'>Key</h3>
-          <div class="ca-flex-one-third">&check;</div>
+          <div class="ca-flex-one-third" style="color: #66a1a5">&check;</div>
           <div class="ca-flex-half">Correct</div>
           <div class="ca-flex-one-third" style='color: darkred'>&cross;</div>
-          <div class="ca-flex-half">Omitted</div>
+          <div class="ca-flex-half">Incorrect/Omitted</div>
           <!--
           <div class="ca-flex-one-third">
             <span class="difficulty-level easy"><span></span><span></span><span></span></span>
@@ -313,7 +328,7 @@
                     <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
                     <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
                     {% if student_answer == question.correct_answer %}
-                    <div class='ca-cell ca-flex-one-third'>&check;</div>
+                    <div class='ca-cell ca-flex-one-third' style="color: #66a1a5">&check;</div>
                     {% elif student_answer == 'N' %}
                     <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
                     {% else %}
@@ -349,7 +364,7 @@
                     <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
                     <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
                     {% if student_answer == question.correct_answer %}
-                    <div class='ca-cell ca-flex-one-third'>&check;</div>
+                    <div class='ca-cell ca-flex-one-third' style="color: #66a1a5">&check;</div>
                     {% elif student_answer == 'N' %}
                     <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
                     {% else %}
@@ -387,7 +402,7 @@
                           <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
                           <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
                           {% if student_answer == question.correct_answer %}
-                          <div class='ca-cell ca-flex-one-third'>&check;</div>
+                          <div class='ca-cell ca-flex-one-third' style="color: #66a1a5">&check;</div>
                           {% elif student_answer == 'N' %}
                           <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
                           {% else %}
@@ -422,7 +437,7 @@
                           <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
                           <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
                           {% if student_answer == question.correct_answer %}
-                          <div class='ca-cell ca-flex-one-third'>&check;</div>
+                          <div class='ca-cell ca-flex-one-third' style="color: #66a1a5">&check;</div>
                           {% elif student_answer == 'N' %}
                           <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
                           {% else %}
@@ -461,7 +476,7 @@
                           <div class='ca-cell ca-flex-one-fourth'>{{question.question_number}}</div>
                           <div class='ca-cell ca-flex-half align-left'>{{question.correct_answer}}</div>
                           {% if student_answer == question.correct_answer %}
-                          <div class='ca-cell ca-flex-one-fourth'>&check;</div>
+                          <div class='ca-cell ca-flex-one-fourth' style="color: #66a1a5">&check;</div>
                           {% elif student_answer == 'N' %}
                           <div class='ca-cell ca-flex-one-fourth' style='color: darkred'>&cross;</div>
                           {% else %}
@@ -502,7 +517,7 @@
                             <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
                             <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
                             {% if student_answer == question.correct_answer %}
-                            <div class='ca-cell ca-flex-one-third'>&check;</div>
+                            <div class='ca-cell ca-flex-one-third' style="color: #66a1a5">&check;</div>
                             {% elif student_answer == 'N' %}
                             <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
                             {% else %}
@@ -537,7 +552,7 @@
                             <div class='ca-cell ca-flex-one-third'>{{question.question_number}}</div>
                             <div class='ca-cell ca-flex-one-third'>{{question.correct_answer}}</div>
                             {% if student_answer == question.correct_answer %}
-                            <div class='ca-cell ca-flex-one-third'>&check;</div>
+                            <div class='ca-cell ca-flex-one-third' style="color: #66a1a5">&check;</div>
                             {% elif student_answer == 'N' %}
                             <div class='ca-cell ca-flex-one-third' style='color: darkred'>&cross;</div>
                             {% else %}
@@ -576,7 +591,7 @@
                             <div class='ca-cell ca-flex-one-fourth'>{{question.question_number}}</div>
                             <div class='ca-cell ca-flex-half align-left'>{{question.correct_answer}}</div>
                             {% if student_answer == question.correct_answer %}
-                            <div class='ca-cell ca-flex-one-fourth'>&check;</div>
+                            <div class='ca-cell ca-flex-one-fourth' style="color: #66a1a5">&check;</div>
                             {% elif student_answer == 'N' %}
                             <div class='ca-cell ca-flex-one-fourth' style='color: darkred'>&cross;</div>
                             {% else %}
@@ -601,10 +616,9 @@
 
             </div>
           </div>
-
-</div>
-</div>
-</div>
+        </div>
+      </div>
+    </div> <!--end of page 2-->
 
 <div id="page-3">
   <h2 class='ca-flex-full' style='margin-bottom:20px;'>Breakdown of Questions</h2>
