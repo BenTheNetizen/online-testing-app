@@ -748,10 +748,13 @@ def render_pdf_view(request, pk, username):
     elif exam_type == 'DIAGNOSTIC':
         sat_raw_math_score = raw_math1_score + raw_math2_score
 
-        #incorrect_reading = 52 - (omitted_reading + raw_reading_score)
-        #incorrect_writing = 44 - (omitted_writing + raw_writing_score)
-        #incorrect_math1 = 25 - (omitted_math1 + raw_math1_score)
-        #incorrect_math2 = 38 - (omitted_math2 + raw_math2_score)
+        incorrect_reading = 21 - (omitted_reading + raw_reading_score)
+        incorrect_writing = 22 - (omitted_writing + raw_writing_score)
+        incorrect_math1 = 10 - (omitted_math1 + raw_math1_score)
+        incorrect_math2 = 15 - (omitted_math2 + raw_math2_score)
+        incorrect_math = 30 - (omitted_math + raw_math_score)
+        incorrect_english = 30 - (omitted_english + raw_english_score)
+        incorrect_science = 21 - (omitted_science + raw_science_score)
 
         #SAT answers
         reading_questions_answers = zip(reading_questions, reading_student_answers)
@@ -791,12 +794,232 @@ def render_pdf_view(request, pk, username):
         questions_correct_index = percentiles_df.loc[percentiles_df['Number of Questions Correct'] == raw_science_score].index[0]
         act_science_score = percentiles_df['Diagnostic ACT Science'][questions_correct_index]
 
-        act_total_score = act_math_score + act_english_score + act_science_score
+        act_total_score = (act_math_score + act_english_score + act_science_score) // 3
 
         percentile_index = percentiles_df.loc[percentiles_df['ACT'] == act_total_score].index[0]
         percentile = percentiles_df['ACT Percentiles'][percentile_index]
         raw_act_percentile = percentile
         act_percentile = ordinal(percentile)
+
+        # GET CATEGORY DATA
+        questions = Question.objects.filter(exam=exam)
+
+        subscores_category_data = {
+            'CM':[0,0,0,None],
+            'PSDA':[0,0,0,None],
+            'HA':[0,0,0,None],
+            'WC':[0,0,0,None],
+            'EI':[0,0,0,None],
+            'PAM':[0,0,0,None],
+            'SEC':[0,0,0,None],
+        }
+        reading_science_category_data = {
+            'D':[0,0,None],
+            'I':[0,0,None],
+            'S':[0,0,None],
+            'GF':[0,0,None],
+            'VC':[0,0,None],
+            'F':[0,0,None],
+            'NS':[0,0,None],
+            'SS':[0,0,None],
+            'H':[0,0,None],
+            'DP':[0,0,None],
+        }
+        english_category_data = {
+            'A':[0,0,None],
+            'P':[0,0,None],
+            'ST':[0,0,None],
+            'VC':[0,0,None],
+            'CW':[0,0,None],
+            'ID':[0,0,None],
+            'COMP':[0,0,None],
+            'PS':[0,0,None],
+            'R':[0,0,None],
+            'TW':[0,0,None],
+            'SP':[0,0,None],
+            'RG':[0,0,None],
+            'UP':[0,0,None],
+            'TS':[0,0,None],
+            'SX':[0,0,None],
+        }
+        math_category_data = {
+            'FA':[0,0,None],
+            'WP':[0,0,None],
+            'VS':[0,0,None],
+            'SE':[0,0,None],
+            'Q':[0,0,None],
+            'FOIL':[0,0,None],
+            'AI':[0,0,None],
+            'EXP':[0,0,None],
+            'GEO':[0,0,None],
+            'CR':[0,0,None],
+            'TR':[0,0,None],
+            '3D':[0,0,None],
+            'PL':[0,0,None],
+            'RAT':[0,0,None],
+            'CN':[0,0,None],
+            'TRIG':[0,0,None],
+            'RG':[0,0,None],
+            'PROB':[0,0,None],
+            'STAT':[0,0,None],
+            'LOG':[0,0,None],
+            'RE':[0,0,None],
+            'MISC':[0,0,None],
+            'MMM':[0,0,None],
+            'FN':[0,0,None],
+        }
+
+        category_data = {
+            'CM':[0,0, None],
+            'PSDA':[0,0,None],
+            'HA':[0,0,None],
+            'WC':[0,0,None],
+            'EI':[0,0,None],
+            'PAM':[0,0,None],
+            'SEC':[0,0,None],
+            'D':[0,0,None],
+            'I':[0,0,None],
+            'S':[0,0,None],
+            'GF':[0,0,None],
+            'VC':[0,0,None],
+            'F':[0,0,None],
+            'NS':[0,0,None],
+            'SS':[0,0,None],
+            'H':[0,0,None],
+            'DP':[0,0,None],
+            'A':[0,0,None],
+            'P':[0,0,None],
+            'ST':[0,0,None],
+            'VC':[0,0,None],
+            'CW':[0,0,None],
+            'ID':[0,0,None],
+            'COMP':[0,0,None],
+            'PS':[0,0,None],
+            'R':[0,0,None],
+            'TW':[0,0,None],
+            'SP':[0,0,None],
+            'RG':[0,0,None],
+            'UP':[0,0,None],
+            'TS':[0,0,None],
+            'SX':[0,0,None],
+            'FA':[0,0,None],
+            'WP':[0,0,None],
+            'SE':[0,0,None],
+            'Q':[0,0,None],
+            'FOIL':[0,0,None],
+            'AI':[0,0,None],
+            'EXP':[0,0,None],
+            'GEO':[0,0,None],
+            'CR':[0,0,None],
+            'TR':[0,0,None],
+            '3D':[0,0,None],
+            'PL':[0,0,None],
+            'RAT':[0,0,None],
+            'CN':[0,0,None],
+            'TRIG':[0,0,None],
+            'RG':[0,0,None],
+            'PROB':[0,0,None],
+            'STAT':[0,0,None],
+            'LOG':[0,0,None],
+            'RE':[0,0,None],
+            'MISC':[0,0,None],
+            'MMM':[0,0,None],
+            'MC':[0,0,None],
+            'FR':[0,0,None],
+            'OI':[0,0,None],
+        }
+
+        for question in questions:
+            category_string = question.categories
+            categories = None
+            try:
+                categories = category_string.split(',')
+            except:
+                # this case occurs if there is only one category
+                categories = [category_string]
+
+            for category in categories:
+
+                category = category.replace(' ', '')
+
+                # handle the subscores category
+                if category in subscores_category_data.keys():
+                    # Increase the count of the category
+                    subscores_category_data[category][0] += 1
+                    # If answered correctly, increase the correct count of that category
+                    selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                    if selected_answer.is_correct:
+                        subscores_category_data[category][1] += 1
+
+                if question.section.type == 'reading' or question.section.type == 'science':
+                    if category in reading_science_category_data.keys():
+                        # Increase the count of the category
+                        reading_science_category_data[category][0] += 1
+                        # If answered correctly, increase the correct count of that category
+                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        if selected_answer.is_correct:
+                            reading_science_category_data[category][1] += 1
+                elif question.section.type == 'english' or question.section.type == 'writing':
+                    if category in english_category_data.keys():
+                        # Increase the count of the category
+                        english_category_data[category][0] += 1
+                        # If answered correctly, increase the correct count of that category
+                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        if selected_answer.is_correct:
+                            english_category_data[category][1] += 1
+                elif question.section.type == 'math' or question.section.type == 'math1' or question.section.type == 'math2':
+                    if category in math_category_data.keys():
+                        # Increase the count of the category
+                        math_category_data[category][0] += 1
+                        # If answered correctly, increase the correct count of that category
+                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        if selected_answer.is_correct:
+                            math_category_data[category][1] += 1
+
+                if category not in category_data.keys():
+                    print(category + ' is not in the category_data dictionary!!!')
+
+        # Loop through the dictionary and perform the percentages computation
+        for key in subscores_category_data:
+            # NOTE: subscores are out of 15, so we have an additional value in the list
+            # Assign 'NA' to categories with 0 appearances
+            if subscores_category_data[key][0] == 0:
+                subscores_category_data[key][3] = 'NA'
+            else:
+                # Assign the fraction in proportion to 15
+                subscores_category_data[key][3] = int((subscores_category_data[key][1] * 15) / subscores_category_data[key][0])
+                # Get percentage from the proportion to 15
+                subscores_category_data[key][2] = int((subscores_category_data[key][3] / 15) * 100)
+
+        for key in reading_science_category_data:
+            # Assign 'NA' to categories with 0 appearances
+            if reading_science_category_data[key][0] == 0:
+                reading_science_category_data[key][2] = 'NA'
+                # WE ARE SETTING THIS EQAUL TO 0 FOR NOW
+                reading_science_category_data[key][2] = 0
+            else:
+                # Assign the percentage to the third element in the value list
+                reading_science_category_data[key][2] = int((reading_science_category_data[key][1] / reading_science_category_data[key][0]) * 100)
+
+        for key in english_category_data:
+            # Assign 'NA' to categories with 0 appearances
+            if english_category_data[key][0] == 0:
+                english_category_data[key][2] = 'NA'
+                # WE ARE SETTING THIS EQAUL TO 0 FOR NOW
+                english_category_data[key][2] = 0
+            else:
+                # Assign the percentage to the third element in the value list
+                english_category_data[key][2] = int((english_category_data[key][1] / english_category_data[key][0]) * 100)
+
+        for key in math_category_data:
+            # Assign 'NA' to categories with 0 appearances
+            if math_category_data[key][0] == 0:
+                math_category_data[key][2] = 'NA'
+                # WE ARE SETTING THIS EQAUL TO 0 FOR NOW
+                math_category_data[key][2] = 0
+            else:
+                # Assign the percentage to the third element in the value list
+                math_category_data[key][2] = int((math_category_data[key][1] / math_category_data[key][0]) * 100)
 
         context = {
             'exam':exam,
@@ -804,10 +1027,24 @@ def render_pdf_view(request, pk, username):
             'user_name':user_name,
             'current_date':current_date,
             'sat_reading_score':math.trunc(sat_reading_score),
+            'raw_reading_score':raw_reading_score,
+            'omitted_reading':omitted_reading,
             'sat_writing_score':math.trunc(sat_writing_score),
+            'raw_writing_score':raw_writing_score,
+            'omitted_writing':omitted_writing,
             'sat_math_score':math.trunc(sat_math_score),
+            'raw_math1_score':raw_math1_score,
+            'omitted_math1':omitted_math1,
+            'raw_math2_score':raw_math2_score,
+            'omitted_math2':omitted_math2,
+            'raw_math_score':raw_math_score,
+            'omitted_math':omitted_math,
             'act_english_score':math.trunc(act_english_score),
+            'raw_english_score':raw_english_score,
+            'omitted_english':omitted_english,
             'act_science_score':math.trunc(act_science_score),
+            'raw_science_score':raw_science_score,
+            'omitted_science':omitted_science,
             'act_math_score':math.trunc(act_math_score),
             'sat_total_score':math.trunc(sat_total_score),
             'act_total_score':math.trunc(act_total_score),
@@ -823,5 +1060,16 @@ def render_pdf_view(request, pk, username):
             'english_questions_answers':english_questions_answers,
             'math_questions_answers':math_questions_answers,
             'science_questions_answers':science_questions_answers,
+            'reading_science_category_data':reading_science_category_data,
+            'english_category_data':english_category_data,
+            'math_category_data':math_category_data,
+            'incorrect_math':incorrect_math,
+            'incorrect_math1':incorrect_math1,
+            'incorrect_math2':incorrect_math2,
+            'incorrect_english':incorrect_english,
+            'incorrect_reading':incorrect_reading,
+            'incorrect_science':incorrect_science,
+            'incorrect_writing':incorrect_writing,
+
         }
         return render(request, 'results/diagnostic-score-report.html', context)
