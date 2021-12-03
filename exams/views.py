@@ -866,6 +866,9 @@ def save_section_view(request, pk, section_name):
                         if correct_answer[0] == '.':
                             correct_answer = '0' + correct_answer
 
+                        selected_answer = selected_answer if '/' in selected_answer else float(selected_answer)
+                        correct_answer = correct_answer if '/' in correct_answer else float(correct_answer)
+
                         if selected_answer == correct_answer:
                             raw_score += 1
                             selected_answer_object.is_correct = True
