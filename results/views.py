@@ -313,6 +313,8 @@ def render_pdf_view(request, pk, username):
                 categories = [category_string]
 
             for category in categories:
+                if category is None:
+                    break 
                 category = category.replace(' ', '')
 
                 # handle the subscores category
