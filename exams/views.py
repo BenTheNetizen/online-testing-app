@@ -213,6 +213,41 @@ def file_upload(request):
                     return render(request, 'exams/file_upload.html', {'error': f'Question {question_number} in section {section_object.name} has a missing answer'})
 
             #create answers to question
+            is_abcd_question = False 
+            is_fghjk_question = False 
+            if correct_answer == 'F' or correct_answer == 'G' or correct_answer == 'H' or correct_answer == 'J' or correct_answer == 'K':
+                is_fghjk_question = True 
+            elif correct_answer == 'A' or correct_answer == 'B' or correct_answer == 'C' or correct_answer == 'D' or correct_answer == 'E':
+                is_abcd_question = True 
+
+            answer_object_A, created = Answer.objects.get_or_create(
+                text = row[5].value,
+                letter = 'F' if is_fghjk_question else 'A',
+                question = question_object
+            )
+            answer_object_B, created = Answer.objects.get_or_create(
+                text = row[6].value,
+                letter = 'G' if is_fghjk_question else 'B',
+                question = question_object
+            )
+            answer_object_C, created = Answer.objects.get_or_create(
+                text = row[7].value,
+                letter = 'H' if is_fghjk_question else 'C',
+                question = question_object
+            )
+            answer_object_D, created = Answer.objects.get_or_create(
+                text = row[8].value,
+                letter = 'J' if is_fghjk_question else 'D',
+                question = question_object
+            )
+            if row[9].value is not None:
+                answer_object_E, created = Answer.objects.get_or_create(
+                    text = row[9].value,
+                    letter = 'K' if is_fghjk_question else 'E',
+                    question = question_object
+                )
+
+            """
             if exam_type != 'DIAGNOSTIC':
                 answer_object_A, created = Answer.objects.get_or_create(
                     text = row[5].value,
@@ -270,16 +305,8 @@ def file_upload(request):
                         letter = 'K' if (question_number % 2 == 1) else 'E',
                         question = question_object
                     )
-            """
-            elif exam_type == 'DIAGNOSTIC':
-                if row[9].value is not None:
-                    answer_object_E, created = Answer.objects.get_or_create(
-                        text = row[9].value,
-                        letter = 'E',
-                        question = question_object
-                    )
-            """
-
+            
+        """
         #assign images to the respective questions in each section
         #NOTE: for reading passages, the image should be representative of the entire passage
         if exam_type == 'SAT':
