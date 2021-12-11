@@ -447,7 +447,7 @@ def render_pdf_view(request, pk, username):
         #return render(request, 'results/og-score-report.html', context)
 
     elif exam_type == 'ACT':
-        total_score = english_score + math_score + reading_score + science_score
+        total_score = (english_score + math_score + reading_score + science_score) // 4
 
         incorrect_english = 75 - (omitted_english + raw_english_score)
         incorrect_math = 60 - (omitted_math + raw_math_score)

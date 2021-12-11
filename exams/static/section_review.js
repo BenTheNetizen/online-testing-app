@@ -38,6 +38,7 @@ function getPassage(value) {
     success: function(response) {
       console.log(response)
 
+      // 'data' is composed of two elements, the first is the question number and the second is the question data
       const data = response.data
       console.log(data)
 
@@ -50,7 +51,7 @@ function getPassage(value) {
             //NOTE THAT 'questionData' IS AN ARRAY
             //questionData[0] are the question texts
             //questionData[1] are the answers
-            //questionData[2] is either '' or contains the answer that was previously selected\
+            //questionData[2] is either '' or contains the answer that was previously selected
             //questionData[3] is the image URL
             var sectionBoxString = ''
             if (questionData[3] != null) {
@@ -221,6 +222,7 @@ function getPassage(value) {
             $('.answers-container').css('width', '50%')
           }
         })
+      // BELOW IS FOR NON-MATH SECTIONS
       } else {
         //clearing the images and questions
         sectionBox.innerHTML = ''
@@ -238,8 +240,10 @@ function getPassage(value) {
         //handling the questions displaying
         data.forEach(el => {
           for (const [questionNum, questionData] of Object.entries(el)) {
+            console.log(`DISPLAYING QUESTION ${questionNum}`)
             //NOTE THAT 'questionData' IS AN ARRAY
-            //questionData[0] is question text; questionData[1] are the answers;
+            //questionData[0] is question text; 
+            //questionData[1] are the answers;
             //questionData[2] is either '' or contains the answer that was previously selected
             var sectionBoxString = ''
             if (questionData[0].includes('no question')) {
@@ -278,7 +282,9 @@ function getPassage(value) {
             questionData[1].forEach(answer=>{
               var answerWithQuotes = answer
               answer = answer.replaceAll('"', '&quot;')
+              // if student actually answered the question
               if (answer == questionData[2] && questionData[2] != null) {
+                // if student answer is correct
                 if ( `${answerWithQuotes}` ==  `${correctAnswers[questionNum-1]}`) {
                   console.log('correct!!!' + questionNum)
                   $('#question'+questionNum).parent().find('.material-icons').addClass('answered')
@@ -298,7 +304,9 @@ function getPassage(value) {
                 </label>
                 `
                 }
+                // if answer incorrect
                 else {
+                  console.log(`QUESTION ${questionNum} INCORRECT`);
                   sectionBoxString += `
                 <!--
                   <div>
@@ -313,7 +321,9 @@ function getPassage(value) {
                 </label>
                 `
                 }
+              // if student left question blank
               } else {
+                console.log(`ANSWER: ${answerWithQuotes}, CORRECT ANSWER: ${correctAnswers[questionNum-1]}`)
                 if ( `${answerWithQuotes}` ==  `${correctAnswers[questionNum-1]}`) {
                   console.log('wrong!!!' + questionNum)
                   $('#question'+questionNum).parent().find('.material-icons').addClass('answered')
@@ -337,6 +347,7 @@ function getPassage(value) {
                   `
                 }
                 else {
+                  console.log("INSIDE LINE 340");
                   sectionBoxString += `
                   <!--
                   <div>
@@ -362,7 +373,7 @@ function getPassage(value) {
 
             // STYLE THE CORRECT ANSWER BELOW HERE
             let question_text = questionData[0].replaceAll('&quot;', '"')
-            console.log(`Question ${questionNum}: ${question_text}-${correctAnswers[questionNum-1]}-label`)
+            //console.log(`Question ${questionNum}: ${question_text}-${correctAnswers[questionNum-1]}-label`)
 
             //document.getElementById(`${question_text}-${correctAnswers[questionNum-1]}-label`).style.color = "green";
           }
