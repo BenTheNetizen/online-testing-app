@@ -213,12 +213,15 @@ def file_upload(request):
                     return render(request, 'exams/file_upload.html', {'error': f'Question {question_number} in section {section_object.name} has a missing answer'})
 
             #create answers to question
-            is_abcd_question = False 
-            is_fghjk_question = False 
+            is_abcd_question = False
+            is_fghjk_question = False
             if correct_answer == 'F' or correct_answer == 'G' or correct_answer == 'H' or correct_answer == 'J' or correct_answer == 'K':
-                is_fghjk_question = True 
+                is_fghjk_question = True
             elif correct_answer == 'A' or correct_answer == 'B' or correct_answer == 'C' or correct_answer == 'D' or correct_answer == 'E':
-                is_abcd_question = True 
+                is_abcd_question = True
+            elif not is_open_ended_math_question:
+                Exam.objects.get(name=exam_name).delete()
+                return render(request, 'exams/file_upload.html', {'error': f'Question {question_number} in section {section_object.name} has an invalid answer key'})
 
             answer_object_A, created = Answer.objects.get_or_create(
                 text = row[5].value,
@@ -305,7 +308,7 @@ def file_upload(request):
                         letter = 'K' if (question_number % 2 == 1) else 'E',
                         question = question_object
                     )
-            
+
         """
         #assign images to the respective questions in each section
         #NOTE: for reading passages, the image should be representative of the entire passage
