@@ -1,6 +1,9 @@
 # CUSTOM GIT IGNORE
 static/assets/img/exam-materials/
 
+# VS Code Settings
+.vscode
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
