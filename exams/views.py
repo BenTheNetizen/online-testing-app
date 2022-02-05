@@ -454,7 +454,7 @@ def file_upload(request):
     return render(request, 'exams/file_upload.html')
 
 def index(request):
-    #print(request.user)
+    print(request.user)
     #REDIRECTS TO THE EXAM LIST VIEW IF THE USER IS ALREADY LOGGED IN
     if request.user.is_authenticated:
         return redirect('exams:exam-list-view')
@@ -663,7 +663,7 @@ def save_timer_view(request, pk, section_name):
     student = Student.objects.get(user=user)
     student.recent_exam = exam
     student.save()
-    #print('RECENT EXAM: ' + student.recent_exam.name)
+    print('RECENT EXAM: ' + student.recent_exam.name)
 
     return JsonResponse({})
 
@@ -862,7 +862,7 @@ def save_section_view(request, pk, section_name):
 
         #grabs the questions and section displayed on the site
         user = request.user
-        #print('USER: ' + str(user))
+        print('USER: ' + str(user))
         section = Section.objects.get(type=section_name, exam=pk)
         questions = section.get_questions()
         exam = Exam.objects.get(pk=pk)
@@ -919,8 +919,17 @@ def save_section_view(request, pk, section_name):
                 score_index = scoring_df.loc[scoring_df[f"{exam.type}_score"] == raw_score].index[0]
                 section_ = section.type
                 section_ = 'math' if section_ == 'math1' or section_ == 'math2' else section_
-                scaled_score = scoring_df.loc[score_index, f"{exam.type}_{section_}"]
-
+                if section_ == 'math':
+                    other_math_section = 'math1' if section.type == 'math2' else 'math2'
+                    other_math_section = Section.objects.get(exam=exam, type=other_math_section)
+                    if Result.objects.filter(user=user, exam=exam, section=other_math_section).exists():
+                        other_math_section_result = Result.objects.get(user=user, exam=exam, section=other_math_section)
+                        scaled_score = scoring_df.loc[score_index, f"{exam.type}_{section_}"] // 2
+                        other_math_section_result.scaled_score = scaled_score 
+                        other_math_section_result.save()
+                else:
+                    scaled_score = scoring_df.loc[score_index, f"{exam.type}_{section_}"]
+            
             """
             if exam.type == 'SAT':
                 if section.type == 'reading':
@@ -957,6 +966,7 @@ def save_section_view(request, pk, section_name):
                     scaled_score = round(scaled_score)
                     scaled_score = 1 if scaled_score < 1 else scaled_score
             """
+
             Result.objects.create(section=section, user=user, exam=exam, raw_score=raw_score, scaled_score=scaled_score)
 
         #Deletes SectionInstance object, since the section has been finished
@@ -967,7 +977,7 @@ def save_section_view(request, pk, section_name):
 
 @login_required
 def save_question_view(request, pk, section_name):
-    #print("received request")
+    print("received request")
 
     if request.is_ajax():
 
@@ -1005,7 +1015,7 @@ def save_question_view(request, pk, section_name):
                 exam = exam,
                 user = user,
         )
-        #print("CREATED STUDENT ANSWER OBJECT")
+        print("CREATED STUDENT ANSWER OBJECT")
     return JsonResponse({
         'hello':'hello'
     })
@@ -1021,7 +1031,7 @@ def get_next_section_view(request, pk, section_name):
     next_section = None
 
     for i in range(1, num_sections):
-        #print('SECTION INDEX: ' + str(section_index))
+        print('SECTION INDEX: ' + str(section_index))
         # If section_index > num_sections, start searching for available section at ordering 1
         if section_index > num_sections:
             section_index = 1
