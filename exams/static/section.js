@@ -45,7 +45,7 @@ function sendData(goToHub) {
       url: `${url}save`,
       data: data,
       success: function(response) {
-        console.log(`completedExam: ${hasCompletedExam}`)
+        //console.log(`completedExam: ${hasCompletedExam}`)
         //GO TO HUB IF EXAM IS COMPLETED OR USER SELECTS TO GO BACK TO HUB
         if (hasCompletedExam || goToHub) {
           window.location.href= window.location.origin + '/exam-list'
@@ -95,8 +95,8 @@ function radioChecked(elt, questionNum) {
   }
   // else, when label containing input with type radio is passed as arg, do this
   else {
-    console.log('radio checked!')
-    console.log($(elt).find('input').attr('name'))
+    //console.log('radio checked!')
+    //console.log($(elt).find('input').attr('name'))
     $(elt).parent().find('label').css('backgroundColor', 'white')
     $(elt).css('backgroundColor', '#f5f5f5')
     $(elt).find('input').prop("checked", true)
@@ -104,7 +104,7 @@ function radioChecked(elt, questionNum) {
     question = $(elt).find('input').attr('name')
     answer = $(elt).find('input').attr('value')
   }
-  console.log(`questionNum: ${questionNum}`)
+  //console.log(`questionNum: ${questionNum}`)
   $.ajax({
       type: 'POST',
       url: `${url}save-question`,
@@ -127,13 +127,13 @@ function radioChecked(elt, questionNum) {
 function getPassage(value) {
   if (value == 'prev' && passageNum > 1)
   {
-    console.log('CHANGE PASSAGE TO PREV')
+    //console.log('CHANGE PASSAGE TO PREV')
     passageNum -= 1
 
   }
   if (value == 'next' && passageNum < maxPassages)
   {
-    console.log('CHANGE PASSAGE TO NEXT')
+    //console.log('CHANGE PASSAGE TO NEXT')
     passageNum += 1
   }
 
@@ -147,10 +147,10 @@ function getPassage(value) {
     type: 'GET',
     url: ajax_url,
     success: function(response) {
-      console.log(response)
+      //console.log(response)
 
       const data = response.data
-      console.log(data)
+      //console.log(data)
 
       //handling for math section only
       if (isMathSection) {
@@ -246,9 +246,9 @@ function getPassage(value) {
         sectionMaterial.innerHTML = ''
 
         //handling the passage displaying
-        console.log(response.img_urls)
+        //console.log(response.img_urls)
         for (i in response.img_urls) {
-          console.log(response.img_urls[i])
+          //console.log(response.img_urls[i])
           sectionMaterial.innerHTML += `
             <img src="${response.img_urls[i]}">
             `
@@ -365,7 +365,7 @@ function getNextSection(isTimeExpired) {
       url: `${url}get-next-section`,
       data: data,
       success: function(response) {
-        console.log(response)
+        //console.log(response)
 
         hasCompletedExam = response.has_completed_exam
         // Exam completed, display completed exam modal

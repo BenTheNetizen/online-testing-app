@@ -17,12 +17,12 @@ getPassage()
 function getPassage(value) {
   if (value == 'prev' && passageNum > 1)
   {
-    console.log('CHANGE PASSAGE TO PREV')
+    //console.log('CHANGE PASSAGE TO PREV')
     passageNum -= 1
   }
   if (value == 'next' && passageNum < maxPassages)
   {
-    console.log('CHANGE PASSAGE TO NEXT')
+    //console.log('CHANGE PASSAGE TO NEXT')
     passageNum += 1
   }
 
@@ -36,11 +36,11 @@ function getPassage(value) {
     type: 'GET',
     url: ajax_url,
     success: function(response) {
-      console.log(response)
+      //console.log(response)
 
       // 'data' is composed of two elements, the first is the question number and the second is the question data
       const data = response.data
-      console.log(data)
+      //console.log(data)
 
       if (isMathSection) {
         // make math section form wider than in reading section
@@ -137,7 +137,7 @@ function getPassage(value) {
               questionData[1].forEach(answer=>{
                 if (answer == questionData[2] && questionData[2] != null) {
                   if ( `${answer}` ==  `${correctAnswers[questionNum-1]}`) {
-                    console.log('correct!!!' + questionNum)
+                    //console.log('correct!!!' + questionNum)
                     $('#question'+questionNum).parent().find('.material-icons').addClass('answered')
                     $('#question'+questionNum).parent().show()
 
@@ -230,9 +230,9 @@ function getPassage(value) {
         $('.question-tracker > div').hide();
 
         //handling the passage displaying
-        console.log(response.img_urls)
+        //console.log(response.img_urls)
         for (i in response.img_urls) {
-          console.log(response.img_urls[i])
+          //console.log(response.img_urls[i])
           sectionMaterial.innerHTML += `
             <img src="${response.img_urls[i]}">
             `
@@ -240,7 +240,7 @@ function getPassage(value) {
         //handling the questions displaying
         data.forEach(el => {
           for (const [questionNum, questionData] of Object.entries(el)) {
-            console.log(`DISPLAYING QUESTION ${questionNum}`)
+            //console.log(`DISPLAYING QUESTION ${questionNum}`)
             //NOTE THAT 'questionData' IS AN ARRAY
             //questionData[0] is question text; 
             //questionData[1] are the answers;
@@ -286,7 +286,7 @@ function getPassage(value) {
               if (answer == questionData[2] && questionData[2] != null) {
                 // if student answer is correct
                 if ( `${answerWithQuotes}` ==  `${correctAnswers[questionNum-1]}`) {
-                  console.log('correct!!!' + questionNum)
+                  //console.log('correct!!!' + questionNum)
                   $('#question'+questionNum).parent().find('.material-icons').addClass('answered')
                   $('#question'+questionNum).parent().show()
 
@@ -306,7 +306,7 @@ function getPassage(value) {
                 }
                 // if answer incorrect
                 else {
-                  console.log(`QUESTION ${questionNum} INCORRECT`);
+                  //console.log(`QUESTION ${questionNum} INCORRECT`);
                   sectionBoxString += `
                 <!--
                   <div>
@@ -323,9 +323,9 @@ function getPassage(value) {
                 }
               // if student left question blank
               } else {
-                console.log(`ANSWER: ${answerWithQuotes}, CORRECT ANSWER: ${correctAnswers[questionNum-1]}`)
+                //console.log(`ANSWER: ${answerWithQuotes}, CORRECT ANSWER: ${correctAnswers[questionNum-1]}`)
                 if ( `${answerWithQuotes}` ==  `${correctAnswers[questionNum-1]}`) {
-                  console.log('wrong!!!' + questionNum)
+                  //console.log('wrong!!!' + questionNum)
                   $('#question'+questionNum).parent().find('.material-icons').addClass('answered')
                   $('#question'+questionNum).parent().find('.material-icons').text('close')
                   $('#question'+questionNum).parent().find('.material-icons').addClass('material-icons-close')
@@ -347,7 +347,7 @@ function getPassage(value) {
                   `
                 }
                 else {
-                  console.log("INSIDE LINE 340");
+                  //console.log("INSIDE LINE 340");
                   sectionBoxString += `
                   <!--
                   <div>

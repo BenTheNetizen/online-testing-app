@@ -5,7 +5,8 @@ from django.http import JsonResponse
 from questions.models import Question, Answer, Result, Student_Answer
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-import csv, io, re, datetime, math
+import re, os
+import pandas as pd
 from openpyxl import load_workbook
 from django.urls import reverse
 #from results.models import Result
@@ -453,7 +454,7 @@ def file_upload(request):
     return render(request, 'exams/file_upload.html')
 
 def index(request):
-    print(request.user)
+    #print(request.user)
     #REDIRECTS TO THE EXAM LIST VIEW IF THE USER IS ALREADY LOGGED IN
     if request.user.is_authenticated:
         return redirect('exams:exam-list-view')
@@ -662,7 +663,7 @@ def save_timer_view(request, pk, section_name):
     student = Student.objects.get(user=user)
     student.recent_exam = exam
     student.save()
-    print('RECENT EXAM: ' + student.recent_exam.name)
+    #print('RECENT EXAM: ' + student.recent_exam.name)
 
     return JsonResponse({})
 
@@ -851,7 +852,6 @@ def section_break_view(request, pk, break_num, next_section_name):
 @login_required
 # SAVES THE SECTION TO THE DATABASE, CREATES RESULT OBJECT, DELETES SectionInstance object
 def save_section_view(request, pk, section_name):
-    print(request.POST)
     if request.is_ajax():
 
         #data = request.POST
@@ -862,7 +862,7 @@ def save_section_view(request, pk, section_name):
 
         #grabs the questions and section displayed on the site
         user = request.user
-        print('USER: ' + str(user))
+        #print('USER: ' + str(user))
         section = Section.objects.get(type=section_name, exam=pk)
         questions = section.get_questions()
         exam = Exam.objects.get(pk=pk)
@@ -910,7 +910,18 @@ def save_section_view(request, pk, section_name):
         #CREATE SECTION RESULT OBJECT ONLY IF IT DOES NOT EXIST
         if not Result.objects.filter(user=user, exam=exam, section=section).exists():
             # Calculate scaled score for the section depending on the exam type
+            module_dir = os.path.dirname(__file__)
+            scoring_sheet_file_path = os.path.join(module_dir, 'scoring_files/Scoring.csv')
+            scoring_df = pd.read_csv(scoring_sheet_file_path)
             scaled_score = None
+            
+            if exam.type == 'SAT' or exam.type == 'ACT':
+                score_index = scoring_df.loc[scoring_df[f"{exam.type}_score"] == raw_score].index[0]
+                section_ = section.type
+                section_ = 'math' if section_ == 'math1' or section_ == 'math2' else section_
+                scaled_score = scoring_df.loc[score_index, f"{exam.type}_{section_}"]
+
+            """
             if exam.type == 'SAT':
                 if section.type == 'reading':
                     scaled_score = 400 - 5 * (52 - raw_score)
@@ -945,7 +956,7 @@ def save_section_view(request, pk, section_name):
                     scaled_score = 36 - (40 - raw_score)
                     scaled_score = round(scaled_score)
                     scaled_score = 1 if scaled_score < 1 else scaled_score
-
+            """
             Result.objects.create(section=section, user=user, exam=exam, raw_score=raw_score, scaled_score=scaled_score)
 
         #Deletes SectionInstance object, since the section has been finished
@@ -956,7 +967,7 @@ def save_section_view(request, pk, section_name):
 
 @login_required
 def save_question_view(request, pk, section_name):
-    print("received request")
+    #print("received request")
 
     if request.is_ajax():
 
@@ -994,7 +1005,7 @@ def save_question_view(request, pk, section_name):
                 exam = exam,
                 user = user,
         )
-        print("CREATED STUDENT ANSWER OBJECT")
+        #print("CREATED STUDENT ANSWER OBJECT")
     return JsonResponse({
         'hello':'hello'
     })
@@ -1010,7 +1021,7 @@ def get_next_section_view(request, pk, section_name):
     next_section = None
 
     for i in range(1, num_sections):
-        print('SECTION INDEX: ' + str(section_index))
+        #print('SECTION INDEX: ' + str(section_index))
         # If section_index > num_sections, start searching for available section at ordering 1
         if section_index > num_sections:
             section_index = 1

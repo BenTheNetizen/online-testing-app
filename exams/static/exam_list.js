@@ -15,19 +15,19 @@ const examButtons = document.getElementsByClassName('choose-exam-btn');
 //run this function to filter by default and select first exam (SAT)
 if (recentExamType != null) {
   if (recentExamType == 'SAT') {
-    console.log('RECENT EXAM IS SAT')
+    //console.log('RECENT EXAM IS SAT')
     filterExamType('<li>SAT Mock Exams</li>')
   }
   else if (recentExamType == 'ACT') {
-    console.log('RECENT EXAM IS ACT')
+    //console.log('RECENT EXAM IS ACT')
     filterExamType('<li>ACT Mock Exams</li>')
   }
   else if (recentExamType == 'DIAGNOSTIC') {
-    console.log('RECENT EXAM IS DIAGNOSTIC')
+    //console.log('RECENT EXAM IS DIAGNOSTIC')
     filterExamType('<li>SAT/ACT Diagnostic Test</li>')
   }
   else {
-    console.log('RECENT EXAM HAS NO EXAM TYPE!??!')
+    //console.log('RECENT EXAM HAS NO EXAM TYPE!??!')
   }
 } else {
   filterExamType('<li>SAT Mock Exams</li>')
@@ -37,7 +37,7 @@ if (recentExamType != null) {
 function getExamDetails(btnId) {
   const btn = document.getElementById(btnId)
   const examName = btn.getAttribute("data-exam-name")
-  console.log(`examName: ${examName}`)
+  //console.log(`examName: ${examName}`)
   const examPk = btn.getAttribute("data-exam-pk")
   const examDetailsDiv = document.getElementById(examName + "-details")
 
@@ -144,13 +144,13 @@ function getExamDetails(btnId) {
       }
     },
     error: function(error) {
-      console.log(error)
+      //console.log(error)
     }
   })
 }
 
 function filterExamType(selection) {
-  console.log(`Selection: ${selection}`);
+  //console.log(`Selection: ${selection}`);
   let examType = $(selection).text()
   let selectedExam = document.getElementById('selected-exam')
 
@@ -169,7 +169,7 @@ function filterExamType(selection) {
 
     // select the most recent exam if it exists
     if (recentExam != null && !hasSelectedRecentExam) {
-      console.log('RECENT EXAM EXISTS')
+      //console.log('RECENT EXAM EXISTS')
       getExamDetails(`${recentExam}-btn`)
       hasSelectedRecentExam = true
     } else {
@@ -248,7 +248,7 @@ function changeSectionTime(value, examPk, elt) {
 
     },
     error: function(error) {
-      console.log(error)
+      //console.log(error)
     }
   })
 
@@ -280,7 +280,7 @@ function resetExam(examPk, targetBtnId) {
       document.getElementById(`${examPk}-sections-completed`).innerHTML = '0'
     },
     error: function(error) {
-      console.log(error)
+      //console.log(error)
     }
   })
 }
