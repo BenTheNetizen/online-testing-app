@@ -916,7 +916,6 @@ def save_section_view(request, pk, section_name):
             scaled_score = None
             
             if exam.type == 'SAT' or exam.type == 'ACT':
-                score_index = scoring_df.loc[scoring_df[f"{exam.type}_score"] == raw_score].index[0]
                 section_ = section.type
                 section_ = 'math' if section_ == 'math1' or section_ == 'math2' else section_
                 if section_ == 'math' and exam.type == 'SAT':
@@ -924,10 +923,13 @@ def save_section_view(request, pk, section_name):
                     other_math_section = Section.objects.get(exam=exam, type=other_math_section)
                     if Result.objects.filter(user=user, exam=exam, section=other_math_section).exists():
                         other_math_section_result = Result.objects.get(user=user, exam=exam, section=other_math_section)
+                        raw_score += other_math_section_result.raw_score
+                        score_index = scoring_df.loc[scoring_df[f"{exam.type}_score"] == raw_score].index[0]
                         scaled_score = scoring_df.loc[score_index, f"{exam.type}_{section_}"] // 2
                         other_math_section_result.scaled_score = scaled_score 
                         other_math_section_result.save()
                 else:
+                    score_index = scoring_df.loc[scoring_df[f"{exam.type}_score"] == raw_score].index[0]
                     scaled_score = scoring_df.loc[score_index, f"{exam.type}_{section_}"]
             
             """
