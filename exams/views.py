@@ -919,7 +919,7 @@ def save_section_view(request, pk, section_name):
                 score_index = scoring_df.loc[scoring_df[f"{exam.type}_score"] == raw_score].index[0]
                 section_ = section.type
                 section_ = 'math' if section_ == 'math1' or section_ == 'math2' else section_
-                if section_ == 'math':
+                if section_ == 'math' and exam.type == 'SAT':
                     other_math_section = 'math1' if section.type == 'math2' else 'math2'
                     other_math_section = Section.objects.get(exam=exam, type=other_math_section)
                     if Result.objects.filter(user=user, exam=exam, section=other_math_section).exists():
