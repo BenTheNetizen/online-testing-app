@@ -885,7 +885,7 @@ def save_section_view(request, pk, section_name):
                         selected_answer_object.is_correct = True
                         selected_answer_object.save()
                 # handling the free response correct answers
-                else:
+                elif selected_answer != 'N' and selected_answer != '':
                     #import pdb; pdb.set_trace()
                     correct_answers = correct_answer.split(',')
                     
