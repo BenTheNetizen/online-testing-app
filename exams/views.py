@@ -888,8 +888,10 @@ def save_section_view(request, pk, section_name):
                 else:
                     #import pdb; pdb.set_trace()
                     correct_answers = correct_answer.split(',')
+                    
                     for correct_answer in correct_answers:
                         # avoid issue where users can submit 0.5 or .5, for example
+                        selected_answer = str(selected_answer)
                         if selected_answer[0] == '.':
                             selected_answer = '0' + selected_answer
 
