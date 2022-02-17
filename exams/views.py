@@ -1007,7 +1007,7 @@ def save_question_view(request, pk, section_name):
 
         # Checks if there has already been an answer to the question and updates if true, otherwise created the student_answer object
         if Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number).exists():
-            student_answer = Student_Answer.objects.get(question_number=question.question_number, section=section_name, exam=exam, user=user)
+            student_answer = Student_Answer.objects.filter(question_number=question.question_number, section=section_name, exam=exam, user=user)[0]
             student_answer.answer = selected_answer
             student_answer.save()
         else:
