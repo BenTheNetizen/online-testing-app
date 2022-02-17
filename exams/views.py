@@ -875,7 +875,7 @@ def save_section_view(request, pk, section_name):
         for question in questions:
             if Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number).exists():
                 #'selected_answer' is the student's answer
-                selected_answer_object = Student_Answer.objects.get(user=user, exam=exam, section=section_name, question_number=question.question_number)
+                selected_answer_object = Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number)[0]
                 selected_answer = selected_answer_object.answer
                 correct_answer = question.correct_answer
                 # handling the multiple choice correct answers
