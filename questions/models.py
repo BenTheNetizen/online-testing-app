@@ -40,6 +40,11 @@ def delete_file_if_unused(model,instance,field,instance_file_field):
     if not other_refs_exist:
         instance_file_field.delete(False)
 
+# TO ADD A NEW IMAGE FROM THE SHELL:
+# response = requests.get(imageUrl)
+# set question.material = response.content
+# make sure to set question.material.url and question.material.name
+# save question model
 class Question(models.Model):
     question_number = models.IntegerField(default=-1)
     text = models.CharField(max_length=1000, default=" ")
