@@ -322,7 +322,7 @@ def render_pdf_view(request, pk, username):
                     # Increase the count of the category
                     subscores_category_data[category][0] += 1
                     # If answered correctly, increase the correct count of that category
-                    selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                    selected_answer = Student_Answer.objects.filter(user=user, exam=exam, question=question)[0]
                     if selected_answer.is_correct:
                         subscores_category_data[category][1] += 1
 
@@ -331,7 +331,7 @@ def render_pdf_view(request, pk, username):
                         # Increase the count of the category
                         reading_category_data[category][0] += 1
                         # If answered correctly, increase the correct count of that category
-                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        selected_answer = Student_Answer.objects.filter(user=user, exam=exam, question=question)[0]
                         if selected_answer.is_correct:
                             reading_category_data[category][1] += 1
                 elif question.section.type == 'writing':
@@ -339,7 +339,7 @@ def render_pdf_view(request, pk, username):
                         # Increase the count of the category
                         english_category_data[category][0] += 1
                         # If answered correctly, increase the correct count of that category
-                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        selected_answer = Student_Answer.objects.filter(user=user, exam=exam, question=question)[0]
                         if selected_answer.is_correct:
                             english_category_data[category][1] += 1
                 elif question.section.type == 'math1' or question.section.type == 'math2':
@@ -347,7 +347,7 @@ def render_pdf_view(request, pk, username):
                         # Increase the count of the category
                         math_category_data[category][0] += 1
                         # If answered correctly, increase the correct count of that category
-                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        selected_answer = Student_Answer.objects.filter(user=user, exam=exam, question=question)[0]
                         if selected_answer.is_correct:
                             math_category_data[category][1] += 1
 
@@ -628,7 +628,7 @@ def render_pdf_view(request, pk, username):
                     # Increase the count of the category
                     subscores_category_data[category][0] += 1
                     # If answered correctly, increase the correct count of that category
-                    selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                    selected_answer = Student_Answer.objects.filter(user=user, exam=exam, question=question)[0]
                     if selected_answer.is_correct:
                         subscores_category_data[category][1] += 1
 
@@ -637,7 +637,7 @@ def render_pdf_view(request, pk, username):
                         # Increase the count of the category
                         reading_science_category_data[category][0] += 1
                         # If answered correctly, increase the correct count of that category
-                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        selected_answer = Student_Answer.objects.filter(user=user, exam=exam, question=question)[0]
                         if selected_answer.is_correct:
                             reading_science_category_data[category][1] += 1
                 elif question.section.type == 'english':
@@ -645,7 +645,7 @@ def render_pdf_view(request, pk, username):
                         # Increase the count of the category
                         english_category_data[category][0] += 1
                         # If answered correctly, increase the correct count of that category
-                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        selected_answer = Student_Answer.objects.filter(user=user, exam=exam, question=question)[0]
                         if selected_answer.is_correct:
                             english_category_data[category][1] += 1
                 elif question.section.type == 'math':
@@ -653,7 +653,7 @@ def render_pdf_view(request, pk, username):
                         # Increase the count of the category
                         math_category_data[category][0] += 1
                         # If answered correctly, increase the correct count of that category
-                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        selected_answer = Student_Answer.objects.filter(user=user, exam=exam, question=question)[0]
                         if selected_answer.is_correct:
                             math_category_data[category][1] += 1
 
@@ -949,7 +949,7 @@ def render_pdf_view(request, pk, username):
                     # Increase the count of the category
                     subscores_category_data[category][0] += 1
                     # If answered correctly, increase the correct count of that category
-                    selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                    selected_answer = Student_Answer.objects.filter(user=user, exam=exam, question=question)[0]
                     if selected_answer.is_correct:
                         subscores_category_data[category][1] += 1
 
@@ -958,7 +958,7 @@ def render_pdf_view(request, pk, username):
                         # Increase the count of the category
                         reading_science_category_data[category][0] += 1
                         # If answered correctly, increase the correct count of that category
-                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        selected_answer = Student_Answer.objects.filter(user=user, exam=exam, question=question)[0]
                         if selected_answer.is_correct:
                             reading_science_category_data[category][1] += 1
                 elif question.section.type == 'english' or question.section.type == 'writing':
@@ -966,7 +966,7 @@ def render_pdf_view(request, pk, username):
                         # Increase the count of the category
                         english_category_data[category][0] += 1
                         # If answered correctly, increase the correct count of that category
-                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        selected_answer = Student_Answer.objects.filter(user=user, exam=exam, question=question)[0]
                         if selected_answer.is_correct:
                             english_category_data[category][1] += 1
                 elif question.section.type == 'math' or question.section.type == 'math1' or question.section.type == 'math2':
@@ -974,7 +974,7 @@ def render_pdf_view(request, pk, username):
                         # Increase the count of the category
                         math_category_data[category][0] += 1
                         # If answered correctly, increase the correct count of that category
-                        selected_answer = Student_Answer.objects.get(user=user, exam=exam, question=question)
+                        selected_answer = Student_Answer.objects.filter(user=user, exam=exam, question=question)[0]
                         if selected_answer.is_correct:
                             math_category_data[category][1] += 1
 

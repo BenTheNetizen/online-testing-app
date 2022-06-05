@@ -875,7 +875,7 @@ def save_section_view(request, pk, section_name):
         for question in questions:
             if Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number).exists():
                 #'selected_answer' is the student's answer
-                selected_answer_object = Student_Answer.objects.get(user=user, exam=exam, section=section_name, question_number=question.question_number)
+                selected_answer_object = Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number)[0]
                 selected_answer = selected_answer_object.answer
                 correct_answer = question.correct_answer
                 # handling the multiple choice correct answers
@@ -885,11 +885,13 @@ def save_section_view(request, pk, section_name):
                         selected_answer_object.is_correct = True
                         selected_answer_object.save()
                 # handling the free response correct answers
-                else:
+                elif selected_answer != 'N' and selected_answer != '':
                     #import pdb; pdb.set_trace()
                     correct_answers = correct_answer.split(',')
+                    
                     for correct_answer in correct_answers:
                         # avoid issue where users can submit 0.5 or .5, for example
+                        selected_answer = str(selected_answer)
                         if selected_answer[0] == '.':
                             selected_answer = '0' + selected_answer
 
@@ -1005,7 +1007,7 @@ def save_question_view(request, pk, section_name):
 
         # Checks if there has already been an answer to the question and updates if true, otherwise created the student_answer object
         if Student_Answer.objects.filter(user=user, exam=exam, section=section_name, question_number=question.question_number).exists():
-            student_answer = Student_Answer.objects.get(question_number=question.question_number, section=section_name, exam=exam, user=user)
+            student_answer = Student_Answer.objects.filter(question_number=question.question_number, section=section_name, exam=exam, user=user)[0]
             student_answer.answer = selected_answer
             student_answer.save()
         else:
