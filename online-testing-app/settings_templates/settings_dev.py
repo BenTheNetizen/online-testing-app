@@ -38,8 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #add new Application
-    #'tester.apps.TesterConfig',
     'crispy_forms',
     'register',
     'exams',
@@ -47,6 +45,9 @@ INSTALLED_APPS = [
     'results',
     'easy_pdf',
     'django_cleanup',
+
+    # Payments
+    'payments',
 ]
 
 MIDDLEWARE = [

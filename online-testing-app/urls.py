@@ -27,16 +27,12 @@ from register import views as v
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('tester/', include('tester.urls')),
-    #path('', RedirectView.as_view(url='tester/', permanent=True)),
+    path('', include('payments.urls', namespace='payments')), # New Url
     path('', include('exams.urls', namespace='exams')),
     path('', include('results.urls', namespace='results')),
     path('register/', v.register, name='register'),
     path('login/password_reset/', v.password_reset, name='password_reset'),
-
     path('', include('django.contrib.auth.urls')),
-
-    #path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -5,7 +5,7 @@ from django.contrib.humanize.templatetags.humanize import ordinal
 import os
 from django.http import HttpResponse
 from django.template.loader import get_template
-from xhtml2pdf import pisa
+# from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
 from questions.models import Student_Answer, Question, Result
 from exams.models import Exam, Section, User

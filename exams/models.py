@@ -64,9 +64,10 @@ class Student(models.Model):
     parent_phone_number = models.CharField(max_length=50, blank=True, null=True)
     student_access_code = models.CharField(max_length=50, blank=True, null=True)
     recent_exam = models.ForeignKey(Exam, on_delete=models.SET_NULL, null=True, blank=True)
+    is_premium = models.BooleanField(default=False) # field set to True after user pays
 
     def __str__(self):
-        return f'{self.user.username} Profile'
+        return f'{self.user.username} Profile, Premium: {self.is_premium}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
