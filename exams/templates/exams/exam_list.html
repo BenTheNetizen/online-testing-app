@@ -73,11 +73,41 @@ Exam List
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary" onclick="resetExam({{exam.id}}, '{{exam.name}}-btn')" data-dismiss="modal">Yes, reset exam</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">No, go back</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">No, go back</button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Payment Success/Cancelled Modal -->
+    <div class="modal fade" id="paymentFollowupModal" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            {% if payment_success == "SUCCESS" %}
+            <h5 class="modal-title" id="exampleModalLongTitle">Payment Successful</h5>
+            {% else %}
+            <h5 class="modal-title" id="exampleModalLongTitle">Payment Cancelled</h5>
+            {% endif %}
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span class='material-icons' aria-hidden="true">close</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            {% if payment_success == "SUCCESS" %}
+            Payment success! You can now access all features of this site.
+            {% else %}
+            Payment cancelled. You can still access the free features of this site.
+            {% endif %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <div id="{{exam.name}}-details" style="display: none">
       <div class="exam-details-header">
@@ -159,6 +189,12 @@ Exam List
 </div>
 <script src="{% static 'dropdown-list.js' %}"></script>
 <script>
+  // check if payment was successful
+  var payment_status = "{{payment_status}}";
+  console.log('DEBUG: payment_status = ' + payment_status);
+  if (payment_status == "SUCCESS" || payment_status == "CANCELLED") {
+    $('#paymentFollowupModal').modal();
+  }
   console.log('{{user}}')
   var csrf = "{{ csrf_token }}"
   const url = window.location.href

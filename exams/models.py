@@ -1,10 +1,19 @@
+from pickle import NONE
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.dispatch import receiver
 from django.db.models.signals import post_delete, pre_save
+
 # Create your models here.
+
+SUCCESS, CANCELLED, NONE = 'SUCCESS', 'CANCELLED', 'NONE'
+PAYMENT_STATUS_OPTIONS = [
+    (SUCCESS, 'Success'),
+    (CANCELLED, 'Cancelled'),
+    (NONE, None),
+]    
 
 """ Whenever ANY model is deleted, if it has a file field on it, delete the associated file too"""
 @receiver(post_delete)
@@ -65,6 +74,8 @@ class Student(models.Model):
     student_access_code = models.CharField(max_length=50, blank=True, null=True)
     recent_exam = models.ForeignKey(Exam, on_delete=models.SET_NULL, null=True, blank=True)
     is_premium = models.BooleanField(default=False) # field set to True after user pays
+    # payment status set after payment
+    payment_status = models.CharField(max_length=9, choices=PAYMENT_STATUS_OPTIONS, default=NONE, null=True)  
 
     def __str__(self):
         return f'{self.user.username} Profile, Premium: {self.is_premium}'
