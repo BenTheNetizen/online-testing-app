@@ -23,27 +23,33 @@ def success(request):
         student.is_premium = True 
         student.payment_status = SUCCESS
         student.save()
-    print('PAYMENT SUCCESSFUL')
+
     # redirects to the exam-list-view (needs to pass parameter of the payment success)
     return redirect('exams:exam-list-view')
 
 def cancelled(request):
-    return render(request, 'payments/cancelled.html', {})
+    user = request.user
+    student:Student = Student.objects.get(user=user)
+    if not student:
+        print('ERROR: in payment success: not able to find student')
+    else:
+        student.payment_status = CANCELLED
+        student.save()
+
+    # redirects to the exam-list-view (needs to pass parameter of the payment success)
+    return redirect('exams:exam-list-view')
 
 # new
 @csrf_exempt
 def stripe_config(request):
-    print('DEBUG: in stripe_config')
     if request.method == 'GET':
         stripe_config = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
         return JsonResponse(stripe_config, safe=False)
 
 @csrf_exempt
 def create_checkout_session(request):
-    print('DEBUG: in create_checkout_session')
     if request.method == 'GET':
-        domain_url = 'http://127.0.0.1:8000/payments/'
-        site_url = 'http://127.0.0.1:8000'
+        domain_url = settings.DOMAIN_URL
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             # Create new Checkout Session for the order
@@ -57,8 +63,8 @@ def create_checkout_session(request):
             # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
             checkout_session = stripe.checkout.Session.create(
                 # success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
-                success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=domain_url + 'cancelled/',
+                success_url=domain_url + '/payments/success?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=domain_url + '/payments/cancelled/',
                 payment_method_types=['card'],
                 mode='payment',
                 line_items=[

@@ -522,10 +522,10 @@ select {
 
 
 /* end of dropdown list */
-
-
-
-
+.exam-list-flex {
+  display: flex; 
+  flex-direction: row;
+}
 
 .exam-list-inner-container > p {
   margin: 25px 0px 32px;
@@ -533,6 +533,10 @@ select {
   font-size: 19px;
 }
 
+#exam-lock-img {
+  margin-right: 5px;
+  margin-bottom: 3px;
+}
 .choose-exam-btn {
   display: block;
   height: 100px;

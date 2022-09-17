@@ -23,9 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
 
+# MAKE SURE TO ADD THESE TO HEROKU
+STUDENT_ACCESS_CODE = os.environ['STUDENT_ACCESS_CODE']
+STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
+STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+DOMAIN_URL = 'https://mockexamapp.com'
 ALLOWED_HOSTS = [".herokuapp.com", "http://127.0.0.1:8000/", "www.mockexamapp.com", "mockexamapp.com"]
 
 

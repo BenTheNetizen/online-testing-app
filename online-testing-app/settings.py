@@ -23,6 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '+gnf^_b)+3a3hqcp=w6-xpl=x8n&ooimm1u&$e638w$m_++1dj'
 
+STUDENT_ACCESS_CODE = 'POTATO'
+DOMAIN_URL = 'http://127.0.0.1:8000'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

@@ -9,6 +9,61 @@ Exam List
 
 {% block content %}
 
+<!--STRPIE-->
+<script src="https://js.stripe.com/v3/" ></script>
+
+<!-- ======================== MODALS ================================= -->
+<!-- Payment Success/Cancelled Modal -->
+<div class="modal fade" id="paymentFollowupModal" tabindex="-1" role="dialog"
+aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      {% if payment_status == "SUCCESS" %}
+      <h5 class="modal-title" id="exampleModalLongTitle">Payment Successful</h5>
+      {% else %}
+      <h5 class="modal-title" id="exampleModalLongTitle">Payment Cancelled</h5>
+      {% endif %}
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span class='material-icons' aria-hidden="true">close</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      {% if payment_status == "SUCCESS" %}
+      Payment success! You can now access all features of this site.
+      {% else %}
+      Payment cancelled. You can still access the free features of this site.
+      {% endif %}
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" data-dismiss="modal">Continue</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Pre Payment Modal -->
+<div class="modal fade" id="prepaymentModal" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Unlock all tests!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span class='material-icons' aria-hidden="true">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This mock exam application only provides a few free tests. To unlock all tests, you need to pay a small fee.
+      </div>
+      <div class="modal-footer">
+        <button id="prepaymentModalSubmitBtn" class="btn btn-primary" data-dismiss="modal">Yes, proceed to checkout</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, go back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="exam-list-container">
   <div class="exam-list">
   <div class="exam-list-inner-container">
@@ -20,10 +75,29 @@ Exam List
 
     <p>Select the test or section you would like to work on and click START to begin.</p>
     {% for exam, sections_completed, num_sections in exam_info %}
+    {% if not student.is_premium and not exam.name == 'SAT Mock Test 1' and not exam.name == 'ACT Mock Test 1' %}
+    <button id="{{exam.name}}-btn" data-exam-name="{{exam.name}}" data-exam-type="{{exam.type}}" data-exam-pk="{{exam.pk}}" class="btn btn-link modal-button choose-exam-btn"
+      onclick="$('#prepaymentModal').modal()">
+    {% else %}
     <button id="{{exam.name}}-btn" data-exam-name="{{exam.name}}" data-exam-type="{{exam.type}}" data-exam-pk="{{exam.pk}}" class="btn btn-link modal-button choose-exam-btn"
       onclick="getExamDetails(this.id)">
-      <span>{{exam.name}}</span><br><span><span id="{{exam.pk}}-sections-completed" style="all:unset;">{{ sections_completed }}</span> of {{num_sections}} sections completed</span>
-      <i class="arrow right"></i>
+    {% endif %}
+      <div>
+        <span>
+          {% if not student.is_premium and not exam.name == 'SAT Mock Test 1' and not exam.name == 'ACT Mock Test 1' %}
+          <img id='exam-lock-img' src="{% static 'lock-icon.svg' %}" alt="lock-icon">
+          {% endif %}
+          {{exam.name}}
+        </span>
+        <br>
+        <span>
+          <span id="{{exam.pk}}-sections-completed" style="all:unset;">
+            {{ sections_completed }}
+          </span> 
+          of {{num_sections}} sections completed
+        </span>
+        <i class="arrow right"></i>
+      </div>
     </button>
     <br>
     {% endfor %}
@@ -78,36 +152,6 @@ Exam List
         </div>
       </div>
     </div>
-
-    <!-- Payment Success/Cancelled Modal -->
-    <div class="modal fade" id="paymentFollowupModal" tabindex="-1" role="dialog"
-      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            {% if payment_success == "SUCCESS" %}
-            <h5 class="modal-title" id="exampleModalLongTitle">Payment Successful</h5>
-            {% else %}
-            <h5 class="modal-title" id="exampleModalLongTitle">Payment Cancelled</h5>
-            {% endif %}
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span class='material-icons' aria-hidden="true">close</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            {% if payment_success == "SUCCESS" %}
-            Payment success! You can now access all features of this site.
-            {% else %}
-            Payment cancelled. You can still access the free features of this site.
-            {% endif %}
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Continue</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
 
     <div id="{{exam.name}}-details" style="display: none">
       <div class="exam-details-header">
@@ -187,17 +231,21 @@ Exam List
   </div>
   </div>
 </div>
+
 <script src="{% static 'dropdown-list.js' %}"></script>
 <script>
-  // check if payment was successful
-  var payment_status = "{{payment_status}}";
-  console.log('DEBUG: payment_status = ' + payment_status);
-  if (payment_status == "SUCCESS" || payment_status == "CANCELLED") {
-    $('#paymentFollowupModal').modal();
-  }
   console.log('{{user}}')
   var csrf = "{{ csrf_token }}"
+  var payment_status = "{{payment_status}}"
+  // display payment success if payment was made 
+  $(window).on('load', function() {
+    if (payment_status == 'SUCCESS' || payment_status == 'CANCELLED') {
+      $('#paymentFollowupModal').modal()
+    }
+  });
   const url = window.location.href
+  const stripeConfigUrl = "{% url 'payments:config' %}"
+  const stripeCreateSessionUrl = "{% url 'payments:create-checkout-session' %}"
   var recentExam
   var recentExamType
   $.ajax({

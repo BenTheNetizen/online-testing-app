@@ -14,8 +14,8 @@ app_name = 'payments'
 
 urlpatterns = [
     path('payments/index', payment_index, name='index'),
-    path('payments/config', stripe_config),
-    path('payments/create-checkout-session', create_checkout_session),
+    path('payments/config', stripe_config, name='config'),
+    path('payments/create-checkout-session', create_checkout_session, name='create-checkout-session'),
     path('payments/success/', success), # new
     path('payments/cancelled/', cancelled), # new
 ]

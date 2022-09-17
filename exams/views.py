@@ -481,9 +481,11 @@ def exam_list_view(request):
         if student.recent_exam is not None:
             recent_exam = student.recent_exam.name
         # Check if a payment was recently attempted
-        payment_status = student.payment_status
-    
-    print(f'DEBUG: payment_status: {payment_status}')
+        if student.payment_status != 'NONE':
+            payment_status = student.payment_status
+            student.payment_status = 'NONE'
+            student.save()
+
     context = {
         'exams':exams,
         'exam_info':exam_info,
@@ -491,6 +493,7 @@ def exam_list_view(request):
         'num_sections':num_sections,
         'recent_exam': recent_exam,
         'payment_status': payment_status,
+        'student': student,
     }
     return render(request, 'exams/exam_list.html', context)
 

@@ -1,7 +1,5 @@
 // static/main.js
 
-console.log("Sanity check!");
-
 // Get Stripe publishable key
 fetch("config")
 .then((result) => { return result.json(); })
