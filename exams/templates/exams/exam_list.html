@@ -30,9 +30,13 @@ aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     </div>
     <div class="modal-body">
       {% if payment_status == "SUCCESS" %}
-      Payment success! You can now access all features of this site.
+      <h4>
+      Thank you for purchasing Alexander Academy’s Mock Exam App. Time to test away!
+      </h4>
+      <br>
+      If have any questions about exams or score reports please contact tutoring@alexanderacademy.net
       {% else %}
-      Payment cancelled. You can still access the free features of this site.
+      Payment was not processed.
       {% endif %}
     </div>
     <div class="modal-footer">
@@ -48,17 +52,21 @@ aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Unlock all tests!</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Unlock The App</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span class='material-icons' aria-hidden="true">close</span>
         </button>
       </div>
       <div class="modal-body">
-        This mock exam application only provides a few free tests. To unlock all tests, you need to pay a small fee.
+        <h4>
+        Unlock Alexander Academy’s Mock Exam App for $19.99! 
+        </h4>
+        <br>
+        Choose from 14 proctored exams, with complete score reports and section by section analysis.
       </div>
       <div class="modal-footer">
-        <button id="prepaymentModalSubmitBtn" class="btn btn-primary" data-dismiss="modal">Yes, proceed to checkout</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, go back</button>
+        <button id="prepaymentModalSubmitBtn" class="btn btn-primary" data-dismiss="modal">Unlock</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Go back</button>
       </div>
     </div>
   </div>

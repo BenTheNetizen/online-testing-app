@@ -31,7 +31,7 @@ STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-DOMAIN_URL = 'https://mockexamapp.com'
+DOMAIN_URL = 'https://www.mockexamapp.com/'
 ALLOWED_HOSTS = [".herokuapp.com", "http://127.0.0.1:8000/", "www.mockexamapp.com", "mockexamapp.com"]
 
 

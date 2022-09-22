@@ -8,6 +8,7 @@ from .views import (
     create_checkout_session,
     success,
     cancelled,
+    stripe_webhook
 )
 
 app_name = 'payments'
@@ -18,4 +19,5 @@ urlpatterns = [
     path('payments/create-checkout-session', create_checkout_session, name='create-checkout-session'),
     path('payments/success/', success), # new
     path('payments/cancelled/', cancelled), # new
+    path('payments/webhook/', stripe_webhook),
 ]

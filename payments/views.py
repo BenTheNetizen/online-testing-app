@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.conf import settings # new
-from django.http.response import JsonResponse # new
+from django.http.response import JsonResponse, HttpResponse # new
 from django.views.decorators.csrf import csrf_exempt # new
 from exams.models import Student, PAYMENT_STATUS_OPTIONS, SUCCESS, CANCELLED, NONE
 
@@ -69,7 +69,7 @@ def create_checkout_session(request):
                 mode='payment',
                 line_items=[
                     {
-                        'price': 'price_1LdTOwH5qgqT3cKZ34qKZHuQ',
+                        'price': 'price_1LkqbCJgRSUkXTWR6ch5B1jv',
                         'quantity': 1,
                     }
                 ]
@@ -87,3 +87,29 @@ def create_checkout_session(request):
         except Exception as e:
             print('error: ', e)
             return JsonResponse({'error': str(e)})
+
+@csrf_exempt
+def stripe_webhook(request):
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    endpoint_secret = settings.STRIPE_ENDPOINT_SECRET
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+
+    # Handle the checkout.session.completed event
+    if event['type'] == 'checkout.session.completed':
+        print("Payment was successful.")
+        # TODO: run some custom code here
+
+    return HttpResponse(status=200)
