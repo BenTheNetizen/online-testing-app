@@ -552,12 +552,11 @@ def exam_list_recent_exam_view(request):
     # Get the most recent exam
     recent_exam = None
     recent_exam_type = None
-    # Checks if user is a student (not an admin or superuser)
-    if not user.is_superuser:
-        student = Student.objects.get(user=user)
-        if student.recent_exam is not None:
-            recent_exam = student.recent_exam.name
-            recent_exam_type = student.recent_exam.type
+
+    student = Student.objects.get(user=user)
+    if student.recent_exam is not None:
+        recent_exam = student.recent_exam.name
+        recent_exam_type = student.recent_exam.type
 
     return JsonResponse({'recent_exam': recent_exam, 'recent_exam_type': recent_exam_type})
 @login_required
