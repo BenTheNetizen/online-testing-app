@@ -475,16 +475,15 @@ def exam_list_view(request):
     recent_exam = None
 
     payment_status = None
-    # Checks if user is a student (not an admin or superuser)
-    if not user.is_superuser:
-        student:Student = Student.objects.get(user=user)
-        if student.recent_exam is not None:
-            recent_exam = student.recent_exam.name
-        # Check if a payment was recently attempted
-        if student.payment_status != 'NONE':
-            payment_status = student.payment_status
-            student.payment_status = 'NONE'
-            student.save()
+
+    student:Student = Student.objects.get(user=user)
+    if student.recent_exam is not None:
+        recent_exam = student.recent_exam.name
+    # Check if a payment was recently attempted
+    if student.payment_status != 'NONE':
+        payment_status = student.payment_status
+        student.payment_status = 'NONE'
+        student.save()
 
     context = {
         'exams':exams,
