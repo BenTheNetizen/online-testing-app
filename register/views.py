@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.conf import settings
 from .forms import UserRegisterForm, StudentRegisterForm, PasswordResetForm
 from exams.models import Student
+from .models import StudentAccessCode
 
 # Create your views here.
 def register(request):
@@ -16,8 +17,10 @@ def register(request):
             student_form = StudentRegisterForm(request.POST, instance=student)
             student_form.full_clean()
             # Give student premium if the student_access_code is correct 
-            if student_form.instance.student_access_code == settings.STUDENT_ACCESS_CODE:
-                student_form.instance.is_premium = True
+            all_codes = StudentAccessCode.objects.all()
+            for code in all_codes:
+                if code.code == student_form.instance.student_access_code:
+                    student_form.instance.is_premium = True
             student_form.save()
             username = request.POST['username']
             password = request.POST['password1']

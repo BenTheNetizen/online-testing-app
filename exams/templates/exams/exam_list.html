@@ -83,7 +83,7 @@ aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 
     <p>Select the test or section you would like to work on and click START to begin.</p>
     {% for exam, sections_completed, num_sections in exam_info %}
-    {% if not student.is_premium and not exam.name == 'SAT Mock Test 1' and not exam.name == 'ACT Mock Test 1' and not exam.name == 'Diagnostic Test' %}
+    {% if not student.is_premium and not exam.name == 'SAT Mock Test 1' and not exam.name == 'ACT Mock Test 1' %}
     <button id="{{exam.name}}-btn" data-exam-name="{{exam.name}}" data-exam-type="{{exam.type}}" data-exam-pk="{{exam.pk}}" class="btn btn-link modal-button choose-exam-btn"
       onclick="$('#prepaymentModal').modal()">
     {% else %}
@@ -92,7 +92,7 @@ aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     {% endif %}
       <div>
         <span>
-          {% if not student.is_premium and not exam.name == 'SAT Mock Test 1' and not exam.name == 'ACT Mock Test 1' and not exam.name == 'Diagnostic Test' %}
+          {% if not student.is_premium and not exam.name == 'SAT Mock Test 1' and not exam.name == 'ACT Mock Test 1' %}
           <img id='exam-lock-img' src="{% static 'lock-icon.svg' %}" alt="lock-icon">
           {% endif %}
           {{exam.name}}
@@ -207,9 +207,21 @@ aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 class="ca-btn begin">Begin this section</a>
               {% endif %}
               -->
-              <a id="exam{{exam.pk}}-{{section.type}}-start"
-                href="{% url 'exams:section-directions-view' pk=exam.id section_name=section.type %}"
-                class="ca-btn begin">Begin this section</a>
+              {% if not student.is_premium and not exam.name == 'SAT Mock Test 1' and not exam.name == 'ACT Mock Test 1' %}
+                <a id="exam{{exam.pk}}-{{section.type}}-start"
+                  class="ca-btn begin"
+                  onclick="$('#prepaymentModal').modal()"
+                >
+                <img id='exam-lock-img' src="{% static 'lock-icon.svg' %}" alt="lock-icon">Begin this section
+                </a>
+              {% else %}
+                <a id="exam{{exam.pk}}-{{section.type}}-start"
+                  href="{% url 'exams:section-directions-view' pk=exam.id section_name=section.type %}"
+                  class="ca-btn begin"
+                >
+                  Begin this section
+                </a>
+              {% endif %}
               <p id="exam{{exam.pk}}-{{section.type}}-time-remaining" class="time-remaining">Timer goes here</p>
             </div>
             <a id="exam{{exam.pk}}-{{section.type}}-reset"
@@ -251,6 +263,7 @@ aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       $('#paymentFollowupModal').modal()
     }
   });
+  const is_premium = "{{student.is_premium}}"
   const url = window.location.href
   const stripeConfigUrl = "{% url 'payments:config' %}"
   const stripeCreateSessionUrl = "{% url 'payments:create-checkout-session' %}"

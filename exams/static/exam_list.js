@@ -124,7 +124,6 @@ function getExamDetails(btnId) {
           }
           else if (section_data[2] != null) {
             // Implies that the section is in progress
-
             allSectionsCompleted = false
             var secondsLeft = section_data[3]
             if (secondsLeft <= 9) {
@@ -135,7 +134,7 @@ function getExamDetails(btnId) {
             document.getElementById(`exam${examPk}-${section}-start`).innerHTML = '<span class="material-icons material-icons-round" style="opacity: 1">play_arrow</span>Resume this section'
             $(`#exam${examPk}-${section}-start`).removeClass('begin')
             $(`#exam${examPk}-${section}-start`).addClass('resume')
-            document.getElementById(`exam${examPk}-${section}-start`).href = section_data[5]
+            if (!is_premium) document.getElementById(`exam${examPk}-${section}-start`).href = section_data[5]
             document.getElementById(`exam${examPk}-${section}-review`).style.display = 'none'
             document.getElementById(`exam${examPk}-${section}-reset`).style.display = 'none'
           }
@@ -143,8 +142,7 @@ function getExamDetails(btnId) {
             // Implies that the section has not ever been started
             allSectionsCompleted = false
             startBtn = document.getElementById(`exam${examPk}-${section}-start`)
-            startBtn.innerHTML = 'Begin this section'
-            startBtn.href = section_data[4]
+            if (!is_premium) startBtn.href = section_data[4]
             startBtn.style.display = 'block'
 
             document.getElementById(`exam${examPk}-${section}-raw-score`).innerHTML = 'Raw Score: N/A'

@@ -719,6 +719,7 @@ select {
   padding: 0 31px 0px 31px;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .ca-btn.resume {
