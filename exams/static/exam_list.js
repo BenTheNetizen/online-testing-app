@@ -2,7 +2,28 @@
 Javascript file for the exam list page
 */
 
-//the dots [... are added to make modalBtns an array
+// ====================== PAYMENTS ======================
+// Get Stripe publishable key
+fetch(stripeConfigUrl)
+.then((result) => { return result.json(); })
+.then((data) => {
+  // Initialize Stripe.js
+  const stripe = Stripe(data.publicKey);
+
+  document.querySelector("#prepaymentModalSubmitBtn").addEventListener("click", () => {
+    // Get Checkout Session ID
+    fetch(stripeCreateSessionUrl)
+    .then((result) => { return result.json(); })
+    .then((data) => {
+      console.log(data);
+      // Redirect to Stripe Checkout
+      return stripe.redirectToCheckout({sessionId: data.sessionId})
+    })
+    .then((res) => {
+      console.log(res);
+    });
+  });
+});
 
 //function to show the correct exam's details when button is clicked on the exam list
 var prevElement = null
@@ -32,6 +53,8 @@ if (recentExamType != null) {
 } else {
   filterExamType('<li>SAT Mock Exams</li>')
 }
+
+
 
 // gets exam details (also shows recent exam if possible)
 function getExamDetails(btnId) {
@@ -284,3 +307,5 @@ function resetExam(examPk, targetBtnId) {
     }
   })
 }
+
+

@@ -23,6 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '+gnf^_b)+3a3hqcp=w6-xpl=x8n&ooimm1u&$e638w$m_++1dj'
 
+# these keys are expired, need to save in env variables
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51LdGxZH5qgqT3cKZyvTWEvKH1TnOXc7sB0k5dQ6L6iY3vGH7xlB2VASFIVYAEmvqzW87CWomG68gm531QYf2c6Us00OmSs44kZ'
+STRIPE_SECRET_KEY = 'sk_test_51LdGxZH5qgqT3cKZ5FN7A5Vwk4rKSP7s0t0cr6IwFHvIBiqUA9a4miCOONLxECqUX6Txz07AZQzLSuOKrR3ZewK800Tg96uMLv'
+STRIPE_ENDPOINT_SECRET = 'whsec_9e5a68f42e416f577bfd1c53606e9065f5dca9d8dec31fe462027d3b7cacf381'
+
+STUDENT_ACCESS_CODE = 'POTATO'
+DOMAIN_URL = 'http://127.0.0.1:8000'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -38,8 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #add new Application
-    #'tester.apps.TesterConfig',
     'crispy_forms',
     'register',
     'exams',
@@ -47,6 +53,9 @@ INSTALLED_APPS = [
     'results',
     'easy_pdf',
     'django_cleanup',
+
+    # Payments
+    'payments',
 ]
 
 MIDDLEWARE = [
@@ -136,6 +145,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
     BASE_DIR / 'exams' / 'static',
+    BASE_DIR / 'payments' / 'static',
 ]
 
 
@@ -143,3 +153,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/assets/img/exam-materials')
 MEDIA_URL = '/exam-materials/'
 
 CRISPY_TEMPLATE_PACK="bootstrap4"
+
+

@@ -14,7 +14,6 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.contrib.admin.views.decorators import staff_member_required
 
-
 @staff_member_required
 def file_upload(request):
     if request.method == 'POST':
@@ -472,21 +471,29 @@ def exam_list_view(request):
         sections_completed.append(Result.objects.filter(user=user, exam=exam).count())
 
     exam_info = zip(exams, sections_completed, num_sections)
-    section_info = zip()
     # Get the most recent exam
     recent_exam = None
 
+    payment_status = None
     # Checks if user is a student (not an admin or superuser)
     if not user.is_superuser:
-        student = Student.objects.get(user=user)
+        student:Student = Student.objects.get(user=user)
         if student.recent_exam is not None:
             recent_exam = student.recent_exam.name
+        # Check if a payment was recently attempted
+        if student.payment_status != 'NONE':
+            payment_status = student.payment_status
+            student.payment_status = 'NONE'
+            student.save()
+
     context = {
         'exams':exams,
         'exam_info':exam_info,
         'sections_completed':sections_completed,
         'num_sections':num_sections,
         'recent_exam': recent_exam,
+        'payment_status': payment_status,
+        'student': student,
     }
     return render(request, 'exams/exam_list.html', context)
 
