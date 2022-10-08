@@ -19,19 +19,15 @@ Problem Database
   <div class="problem-database-header">
     <h1>Problem Database</h1>
     <div class="problem-categories-container">
-      <button class="problem-categories-button">Fundamental Algebra</button>
-      <button class="problem-categories-button">Word Problems</button>
-      <button class="problem-categories-button">Variable Substitution</button>
-      <button class="problem-categories-button">System of Equations</button>
-      <button class="problem-categories-button">Quadratics</button>
-      <button class="problem-categories-button">Factoring and Foiling</button>
-      <button class="problem-categories-button">Exponents</button>
-      <button class="problem-categories-button">Absolute Value/Inequalities</button>
-      <button class="problem-categories-button">Geomtry</button>
-      <button class="problem-categories-button">Triangles</button>
-      <button class="problem-categories-button">3D Shapes</button>
-      <button class="problem-categories-button">Parallel Lines</button>
-      <button class="problem-categories-button">Ratios</button>
+      {% for category in category_data %}
+        <button 
+          class="problem-categories-button" 
+          data-category="{{ category.key }}"
+          onclick="getProblemData('{{ category.key }}')"
+        >
+          {{ category.value }}
+        </button>
+      {% endfor %}
     </div>
   </div>
 

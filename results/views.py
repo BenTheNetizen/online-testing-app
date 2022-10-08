@@ -1,21 +1,13 @@
+
 from django.shortcuts import render
-from django.conf import settings
 from django.contrib.humanize.templatetags.humanize import ordinal
 # Create your views here.
 import os
-from django.http import HttpResponse
-from django.template.loader import get_template
-# from xhtml2pdf import pisa
-from django.contrib.staticfiles import finders
 from questions.models import Student_Answer, Question, Result
 from exams.models import Exam, Section, User
-from openpyxl import load_workbook
 from datetime import date
 import numpy as np
 import pandas as pd
-#from easy_pdf.views import PDFTemplateView
-#import easy_pdf
-import os
 import math
 
 
