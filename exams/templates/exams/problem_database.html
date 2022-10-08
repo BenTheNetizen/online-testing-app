@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+Problem Database
+{% endblock title %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'styles/problem_database.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<script>
+  $('body').css('height', 'auto')
+</script>
+
+<div class="section-wrapper">
+  <div class="problem-database-header">
+    <h1>Problem Database</h1>
+    <div class="problem-categories-container">
+      <button class="problem-categories-button">Fundamental Algebra</button>
+      <button class="problem-categories-button">Word Problems</button>
+      <button class="problem-categories-button">Variable Substitution</button>
+      <button class="problem-categories-button">System of Equations</button>
+      <button class="problem-categories-button">Quadratics</button>
+      <button class="problem-categories-button">Factoring and Foiling</button>
+      <button class="problem-categories-button">Exponents</button>
+      <button class="problem-categories-button">Absolute Value/Inequalities</button>
+      <button class="problem-categories-button">Geomtry</button>
+      <button class="problem-categories-button">Triangles</button>
+      <button class="problem-categories-button">3D Shapes</button>
+      <button class="problem-categories-button">Parallel Lines</button>
+      <button class="problem-categories-button">Ratios</button>
+    </div>
+  </div>
+
+  <div id="section-content">
+    <form id="section-form">
+      {% csrf_token %}
+      <div id="section-box">
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="{% static 'problem_database.js'%}" defer></script>
+<script>
+  const dataUrl = "{% url 'exams:problem-database-data-view' %}";
+</script>
+{% endblock content %}

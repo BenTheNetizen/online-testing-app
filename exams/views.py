@@ -597,6 +597,22 @@ def exam_list_change_time_view(request, pk):
 
     return JsonResponse({'is_extended_time': exam_instance.is_extended_time})
 
+@login_required
+def problem_database_view(request):
+    # pass the types of categories as context
+    return render(request, 'exams/problem_database.html', {})
+
+@login_required
+def problem_database_data_view(request):
+    if request.is_ajax():
+        # get the category and section type selected
+        # make query and return the question data as json
+        data = dict(request.GET.lists())
+        potato = data['potato'][0]
+    data = {
+        'potato': potato
+    }
+    return JsonResponse({'data': data})
 
 @login_required
 # Deletes the 'Result' and 'Student_Answer' objects and redirects to the respective section directions URL

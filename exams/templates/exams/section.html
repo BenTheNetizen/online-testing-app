@@ -130,11 +130,13 @@
   </div>
 
   <div id="section-content">
+    {% comment %} if we have correct_answers, then this is reviewing past section {% endcomment %}
     {% if not correct_answers %}
     <button type="button" class="btn btn-primary finish-this-section-btn" data-toggle="modal" data-target="#finishSectionModal">
       Finish section
     </button>
     {% endif %}
+    {% comment %} section-material is for english and reading passages {% endcomment %}
     {% if 'math' not in section.type %}
     <div id="section-material">
       <!-- DYNAMICALLY ADDED IMAGES FROM section.js HERE -->
@@ -147,7 +149,7 @@
       {% endif %}
       <div id="section-box">
       </div>
-      <!-- Button trigger modal -->
+      {% comment %} passage navigation for english/reading sections {% endcomment %}
       {% if 'math' not in section.type %}
       <div class='passage-navigation'>
         <a id="prev-passage" role='button' onclick="getPassage('prev')"><span class="material-icons">
