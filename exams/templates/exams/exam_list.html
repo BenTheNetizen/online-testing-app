@@ -94,7 +94,7 @@ aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div>
         <span>
           {% if not student.is_premium and not exam.name == 'SAT Mock Test 1' and not exam.name == 'ACT Mock Test 1' %}
-          <img id='exam-lock-img' src="{% static 'lock-icon.svg' %}" alt="lock-icon">
+          <img id='exam-lock-img' src="{% static 'img/lock-icon.svg' %}" alt="lock-icon">
           {% endif %}
           {{exam.name}}
         </span>
@@ -213,7 +213,7 @@ aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                   class="ca-btn begin"
                   onclick="$('#prepaymentModal').modal()"
                 >
-                <img id='exam-lock-img' src="{% static 'lock-icon.svg' %}" alt="lock-icon">Begin this section
+                <img id='exam-lock-img' src="{% static 'img/lock-icon.svg' %}" alt="lock-icon">Begin this section
                 </a>
               {% else %}
                 <a id="exam{{exam.pk}}-{{section.type}}-start"

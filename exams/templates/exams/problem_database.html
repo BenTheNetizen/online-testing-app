@@ -22,6 +22,7 @@ Problem Database
       {% for category in category_data %}
         <button 
           class="problem-categories-button" 
+          name="problem-categories-button"
           data-category="{{ category.key }}"
           onclick="getProblemData('{{ category.key }}')"
         >
@@ -31,8 +32,8 @@ Problem Database
     </div>
   </div>
 
-  <div id="section-content">
-    <form id="section-form">
+  <div id="problem-database-content">
+    <form id="problem-database-form">
       {% csrf_token %}
       <div id="section-box">
       </div>
@@ -43,5 +44,7 @@ Problem Database
 <script src="{% static 'problem_database.js'%}" defer></script>
 <script>
   const dataUrl = "{% url 'exams:problem-database-data-view' %}";
+  const hideAnswerUrl = "{% static 'img/answer-hide.svg' %}";
+  const showAnswerUrl = "{% static 'img/answer-show.svg' %}";
 </script>
 {% endblock content %}
