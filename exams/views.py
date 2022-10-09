@@ -1,18 +1,18 @@
-from django.shortcuts import render, redirect
-from .models import Section, Exam, SectionInstance, ExamInstance, Student
-from django.views.generic import ListView
-from django.http import JsonResponse
-from questions.models import Question, Answer, Result, Student_Answer
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from email import utils
 import re, os
 import pandas as pd
 from openpyxl import load_workbook
+
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-#from results.models import Result
-# Create your views here.
-from django.utils.decorators import method_decorator
 from django.contrib.admin.views.decorators import staff_member_required
+
+from .models import Section, Exam, SectionInstance, ExamInstance, Student
+from questions.models import Question, Answer, Result, Student_Answer
+from .utils.mappings import math_category_map 
+# Create your views here.
 
 @staff_member_required
 def file_upload(request):
@@ -597,6 +597,59 @@ def exam_list_change_time_view(request, pk):
 
     return JsonResponse({'is_extended_time': exam_instance.is_extended_time})
 
+@login_required
+def problem_database_view(request):
+    # pass the types of categories as context
+    # probabably need to make ajax call to grab which type of questions, but that's for later
+    # for now, just pass the types of categories
+    category_data = []
+    for key in math_category_map.keys():
+        category_data.append({
+            'key': key,
+            'value': math_category_map[key]
+        })
+    context = {
+        'category_data': category_data,
+    }
+    return render(request, 'exams/problem_database.html', context)
+
+@login_required
+def problem_database_data_view(request):
+    if request.is_ajax():
+        # get the category and section type selected
+        # make query and return the question data as json
+
+        """
+            TODO:
+            - handle other types of questions
+            - handle free response questions
+        """
+        data = dict(request.GET.lists())
+        category = data['category'][0]
+
+        # get math questions that have this category
+        matching_questions = []
+        questions = Question.objects.all()
+        for question in questions:
+            categories = question.categories.split(',') if question.categories else []
+            if category in categories:
+                choices_ = question.get_answers()
+                choices = []
+                for choice in choices_:
+                    choice_ = {
+                        'letter': choice.letter,
+                        'text': choice.text
+                    }
+                    choices.append(choice_)
+                question_ = {
+                    'text': question.text,
+                    'correctAnswer': question.correct_answer,
+                    'choices': choices,
+                    'materialUrl': question.material.url if question.material.name else None,
+                }
+                matching_questions.append(question_)
+
+    return JsonResponse({'data': matching_questions})
 
 @login_required
 # Deletes the 'Result' and 'Student_Answer' objects and redirects to the respective section directions URL

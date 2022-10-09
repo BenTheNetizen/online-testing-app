@@ -172,10 +172,10 @@ function getExamDetails(btnId) {
 
 function filterExamType(selection) {
   //console.log(`Selection: ${selection}`);
-  let examType = $(selection).text()
+  let optionSelection = $(selection).text()
   let selectedExam = document.getElementById('selected-exam')
 
-  if (examType == 'SAT Mock Exams') {
+  if (optionSelection == 'SAT Mock Exams') {
 
     //hide all exam buttons
     [...examButtons].forEach(element => {
@@ -199,7 +199,7 @@ function filterExamType(selection) {
     }
 
 
-  } else if (examType == 'ACT Mock Exams') {
+  } else if (optionSelection == 'ACT Mock Exams') {
 
     //hide all exam buttons
     [...examButtons].forEach(element => {
@@ -220,7 +220,7 @@ function filterExamType(selection) {
       // select the first ACT exam
       getExamDetails('ACT Mock Test 1-btn')
     }
-  } else if (examType == 'SAT/ACT Diagnostic Test') {
+  } else if (optionSelection == 'SAT/ACT Diagnostic Test') {
     //hide all exam buttons
     [...examButtons].forEach(element => {
       element.style.display = "none";
@@ -240,6 +240,8 @@ function filterExamType(selection) {
       // select the first diagnostic exam
       getExamDetails('Diagnostic Test-btn')
     }
+  } else if (optionSelection == 'Problem Database') {
+    window.location.href = problemDatabaseUrl;
   }
 }
 
