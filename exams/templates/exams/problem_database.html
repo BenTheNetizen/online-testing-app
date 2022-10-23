@@ -1,33 +1,46 @@
-{% extends "base.html" %}
-
-{% load static %}
-
-{% block title %}
-Problem Database
-{% endblock title %}
-
-{% block styles %}
-<link rel="stylesheet" href="{% static 'styles/problem_database.css' %}">
-{% endblock styles %}
-
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block title %} Problem Database
+{% endblock title %} {% block styles %}
+<link rel="stylesheet" href="{% static 'styles/problem_database.css' %}" />
+{% endblock styles %} {% block content %}
 <script>
-  $('body').css('height', 'auto')
+  $("body").css("height", "auto");
 </script>
 
 <div class="section-wrapper">
   <div class="problem-database-header">
     <h1>Problem Database</h1>
+    <div class="select-container">
+      <p>Select an exam</p>
+      <select
+        id="select-exam"
+        onchange="filterExamType()"
+        style="display: none"
+      >
+        <option value="SAT">SAT Exam Questions</option>
+        <option value="ACT">ACT Exam Questions</option>
+      </select>
+    </div>
+    <div class="select-container">
+      <p>Select type of question</p>
+      <select
+        id="select-exam"
+        onchange="filterQuestionType()"
+        style="display: none"
+      >
+        <option value="MATH">Math</option>
+        <option value="GRAMMAR">Grammar</option>
+      </select>
+    </div>
     <div class="problem-categories-container">
       {% for category in category_data %}
-        <button 
-          class="problem-categories-button" 
-          name="problem-categories-button"
-          data-category="{{ category.key }}"
-          onclick="getProblemData('{{ category.key }}')"
-        >
-          {{ category.value }}
-        </button>
+      <button
+        class="problem-categories-button"
+        name="problem-categories-button"
+        data-category="{{ category.key }}"
+        onclick="getProblemData('{{ category.key }}')"
+      >
+        {{ category.value }}
+      </button>
       {% endfor %}
     </div>
   </div>
@@ -35,13 +48,13 @@ Problem Database
   <div id="problem-database-content">
     <form id="problem-database-form">
       {% csrf_token %}
-      <div id="section-box">
-      </div>
+      <div id="section-box"></div>
     </form>
   </div>
 </div>
 
 <script src="{% static 'problem_database.js'%}" defer></script>
+<script src="{% static 'dropdown-list.js' %}"></script>
 <script>
   const dataUrl = "{% url 'exams:problem-database-data-view' %}";
   const hideAnswerUrl = "{% static 'img/answer-hide.svg' %}";

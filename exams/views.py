@@ -641,7 +641,11 @@ def problem_database_data_view(request):
                         'text': choice.text
                     }
                     choices.append(choice_)
+
                 question_ = {
+                    'exam': question.exam.name,
+                    'section': question.section.name,
+                    'questionNumber': question.question_number,
                     'text': question.text,
                     'correctAnswer': question.correct_answer,
                     'choices': choices,
@@ -649,7 +653,8 @@ def problem_database_data_view(request):
                 }
                 matching_questions.append(question_)
 
-    return JsonResponse({'data': matching_questions})
+    # CURRENTLY LIMITING TO ONLY 20 QUESTIONS
+    return JsonResponse({'data': matching_questions[0:20]})
 
 @login_required
 # Deletes the 'Result' and 'Student_Answer' objects and redirects to the respective section directions URL

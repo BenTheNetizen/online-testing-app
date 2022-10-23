@@ -4,6 +4,17 @@
     max-width: 1250px;
 }
 
+.select-container {
+    width: 25%;
+    margin-left: 15px;   
+}
+
+.select-container p {
+    margin-left: -15px;
+    margin-bottom: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 .problem-database-header h1 {
     font-family: 'Trade Gothic LT W05 Bold';
     font-size: 37px;
@@ -26,6 +37,10 @@
     color: black;
 }
 
+.question-tag {
+    color: #818181;
+    font-size: 14px;
+}
 .problem-categories-button:hover {
     background-color: #e8e8e8;
 }
@@ -37,6 +52,14 @@
     margin-right: 30px;
     margin-bottom: 16px;
     color: white;
+}
+
+.problem-database-question-container {
+    padding: 30px;
+    background-color: #fafafa;
+    border-radius: 20px;
+    border: 2px solid #66A1A5;
+    margin-bottom: 50px;
 }
 
 .problem-categories-button-selected:hover {

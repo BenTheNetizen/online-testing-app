@@ -1,19 +1,41 @@
 // constants from html document
-const questionBox = document.getElementById('section-box');
-const sectionForm = document.getElementById('problem-database-form');
-const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-const url = window.location.href 
+const questionBox = document.getElementById("section-box");
+const sectionForm = document.getElementById("problem-database-form");
+const csrf = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+const url = window.location.href;
+
+function filterExamType(selection) {
+  let optionSelection = $(selection).text();
+  if (optionSelection == "SAT Exam Questions") {
+    console.log(`selected ${optionSelection}`);
+  } else if (optionSelection == "ACT Exam Questions") {
+    console.log(`selected ${optionSelection}`);
+  } else {
+    console.log("dwajio");
+  }
+}
+
+function filterQuestionType(selection) {
+  let optionSelection = $(selection).text();
+  if (optionSelection == "Math") {
+    console.log(`selected ${optionSelection}`);
+  } else if (optionSelection == "Grammar") {
+    console.log(`selected ${optionSelection}`);
+  } else {
+    console.log("dwajioDAWJDAWJIO");
+  }
+}
 
 function getProblemData(category) {
   $.ajax({
     url: dataUrl,
-    type: 'GET',
+    type: "GET",
     data: {
-      'csrfmiddlewaretoken': csrf,
-      'category': category,
+      csrfmiddlewaretoken: csrf,
+      category: category,
     },
-    success: function(response) {
-      const data = response.data 
+    success: function (response) {
+      const data = response.data;
       /*
         shape of data:
         {
@@ -31,10 +53,10 @@ function getProblemData(category) {
       console.log(data);
 
       // reset the section box and answer box
-      questionBox.innerHTML = '';
+      questionBox.innerHTML = "";
       if (!data.length) {
-        console.log('no data');
-        questionBox.innerHTML = 'No questions found for this category';
+        console.log("no data");
+        questionBox.innerHTML = "No questions found for this category";
       }
       data.forEach((el, index) => {
         // let imgHTML = '<img class="math-material" src="${questionData[3]}"/>'
@@ -43,26 +65,51 @@ function getProblemData(category) {
         // `;
         if (el.materialUrl) {
           questionBox.innerHTML += `
-          <img class="math-material" src="${el.materialUrl}">
+          <div class='problem-database-question-container'>
+            <img class="math-material" src="${el.materialUrl}">
+            <div class="mb-2 testing">  
+              <b class="ca-question-data">
+                <p class="question-tag">
+                  From question ${el.questionNumber} in ${el.exam} - ${
+            el.section
+          } 
+                </p>
+                ${index + 1}. ${el.text}
+                <img class='question-hide-show-img' src=${hideAnswerUrl} data-index=${index} data-correct-answer=${
+            el.correctAnswer
+          } alt="eye-icon" onclick="showCorrectAnswer(this)" />
+              </b>
+            </div>
+            <div class="answers-container" id="${index}-answers"></div>
+          </div>
+          `;
+        } else {
+          questionBox.innerHTML += `
+          <div class='problem-database-question-container'>
+            <div class="mb-2 testing">  
+              <b class="ca-question-data">
+                <p class="question-tag">
+                  From question ${el.questionNumber} in ${el.exam} - ${
+            el.section
+          } 
+                </p>
+                ${index + 1}. ${el.text}
+                <img class='question-hide-show-img' src=${hideAnswerUrl} data-index=${index} data-correct-answer=${
+            el.correctAnswer
+          } alt="eye-icon" onclick="showCorrectAnswer(this)" />
+              </b>
+            </div>
+            <div class="answers-container" id="${index}-answers"></div>
+          </div>
           `;
         }
-        questionBox.innerHTML += `
-        <div class="mb-2 testing">  
-          <b class="ca-question-data">
-            ${el.text}
-            <img class='question-hide-show-img' src=${hideAnswerUrl} data-index=${index} data-correct-answer=${el.correctAnswer} alt="eye-icon" onclick="showCorrectAnswer(this)" />
-          </b>
-        </div>
-        <div class="answers-container" id="${index}-answers"></div>
-        `;
-        
         let answerBox = document.getElementById(`${index}-answers`);
 
         // if multiple choice question
         if (el.choices) {
-          el.choices.forEach(choice => {
-            let answer = choice.text
-            let letter = choice.letter
+          el.choices.forEach((choice) => {
+            let answer = choice.text;
+            let letter = choice.letter;
             answerBox.innerHTML += `
             <label for="${el.text}" class="answer-container" onclick="radioChecked(this, ${index})">
               <input type="radio" class="ans" id="${index}-${letter}" name="${el.text}" value="${answer}">
@@ -70,34 +117,36 @@ function getProblemData(category) {
             ${answer}
             </label>
             `;
-          })
+          });
         } else {
-          console.log('WE HAVE A FREE RESPONSE QUESTION');
+          console.log("WE HAVE A FREE RESPONSE QUESTION");
         }
-      })
+      });
 
       questionBox.innerHTML += `
       </div>
       </div>
-      `
+      `;
       // $('.answers-container').css('width', '50%')
       // needed statement for mathjax to render
       MathJax.typesetPromise();
 
       // set styling for the button
       // first set all buttons to grey
-      let buttons = document.getElementsByName('problem-categories-button');
-      buttons.forEach(button => {
-        button.className = 'problem-categories-button';
-      })
+      let buttons = document.getElementsByName("problem-categories-button");
+      buttons.forEach((button) => {
+        button.className = "problem-categories-button";
+      });
       // now set styling on selected button
-      let selectedButton = document.querySelector(`[data-category=${CSS.escape(category)}]`);
-      selectedButton.className = 'problem-categories-button-selected';
+      let selectedButton = document.querySelector(
+        `[data-category=${CSS.escape(category)}]`
+      );
+      selectedButton.className = "problem-categories-button-selected";
     },
-    error: function(error) {
+    error: function (error) {
       console.log(error);
-    }
-  })
+    },
+  });
 }
 
 function showCorrectAnswer(el) {
@@ -111,6 +160,6 @@ function showCorrectAnswer(el) {
     el.src = hideAnswerUrl;
     document.getElementById(`${index}-${correctAnswer}`).checked = false;
   }
-  
+
   // write functionality for showing the correct answer
 }

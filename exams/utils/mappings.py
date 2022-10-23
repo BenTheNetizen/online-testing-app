@@ -1,7 +1,7 @@
 math_category_map = {
     'FA': 'Fundamental Algebra',
     'WP': 'Word Problems',
-    'VS': 'Variable Substitution',
+    # 'VS': 'Variable Substitution',
     'SE': 'System of Equations',
     'Q': 'Quadratics',
     'FOIL': 'Factoring and Foiling',
@@ -10,7 +10,7 @@ math_category_map = {
     'GEO': 'Geometry',
     'CR': 'Circles',
     'TR': 'Triangles',
-    '3D': '3D Shapes',
+    #'3D': '3D Shapes',
     'PL': 'Parallel Lines',
     'RAT': 'Ratios',
     'CN': 'Complex Numbers',
