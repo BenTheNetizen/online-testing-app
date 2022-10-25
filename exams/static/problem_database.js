@@ -1,37 +1,90 @@
 // constants from html document
 const questionBox = document.getElementById("section-box");
 const sectionForm = document.getElementById("problem-database-form");
+const buttonContainer = document.getElementById("button-container");
 const csrf = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 const url = window.location.href;
 
+var examType = "SAT";
+var questionType = "MATH";
+
+// this function handles both the selection options due to how the dropdown works in dropdown-list.js (see bottom of file)
 function filterExamType(selection) {
+  // clear questions
+  questionBox.innerHTML = "";
+
   let optionSelection = $(selection).text();
   if (optionSelection == "SAT Exam Questions") {
     console.log(`selected ${optionSelection}`);
+    examType = "SAT";
+    getButtonData();
   } else if (optionSelection == "ACT Exam Questions") {
     console.log(`selected ${optionSelection}`);
-  } else {
-    console.log("dwajio");
-  }
-}
-
-function filterQuestionType(selection) {
-  let optionSelection = $(selection).text();
-  if (optionSelection == "Math") {
+    examType = "ACT";
+    getButtonData();
+  } else if (optionSelection == "Math") {
     console.log(`selected ${optionSelection}`);
+    questionType = "MATH";
+    getButtonData();
   } else if (optionSelection == "Grammar") {
     console.log(`selected ${optionSelection}`);
+    questionType = "GRAMMAR";
+    getButtonData();
   } else {
     console.log("dwajioDAWJDAWJIO");
   }
 }
 
+function getButtonData() {
+  $.ajax({
+    url: buttonDataUrl,
+    type: "GET",
+    data: {
+      csrfmiddlewaretoken: csrf,
+      question_type: questionType
+    },
+    success: function(response) {
+      const data = response.data;
+      console.log('response: ', data);
+      /*
+       shape of data: 
+       {
+          'key': key,
+          'value': english_category_map[key],
+       }
+      */
+      // clear the button container
+      buttonContainer.innerHTML = "";
+      
+      data.forEach((el) => {
+        buttonContainer.innerHTML += `
+          <button
+            class="problem-categories-button"
+            name="problem-categories-button"
+            data-category="${el.key}"
+            onclick="getProblemData('${el.key}')"
+          >
+            ${el.value}
+          </button>
+        `;
+      });
+
+    },
+    error: function(error) {
+      console.log(error);
+    }
+  });
+}
+
 function getProblemData(category) {
+  console.log('category: ', category);
   $.ajax({
     url: dataUrl,
     type: "GET",
     data: {
       csrfmiddlewaretoken: csrf,
+      exam_type: examType,
+      question_type: questionType,
       category: category,
     },
     success: function (response) {

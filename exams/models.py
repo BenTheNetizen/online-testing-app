@@ -90,7 +90,8 @@ class ExamInstance(models.Model):
 
 class Section(models.Model):
     name = models.CharField(max_length=100, default=" ")
-    #Type = "Reading", "Writing", "Math1", "Math2"
+    #Type = "Reading", "Writing", "Math1", "Math2" for SAT
+    #Type = "english", "math", "reading", "science" for ACT
     type = models.CharField(max_length=100, default='none')
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     num_questions = models.IntegerField(default=0)

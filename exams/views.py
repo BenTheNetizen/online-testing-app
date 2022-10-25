@@ -11,7 +11,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Section, Exam, SectionInstance, ExamInstance, Student
 from questions.models import Question, Answer, Result, Student_Answer
-from .utils.mappings import math_category_map 
+from .utils.mappings import math_category_map, english_category_map
 # Create your views here.
 
 @staff_member_required
@@ -626,10 +626,31 @@ def problem_database_data_view(request):
         """
         data = dict(request.GET.lists())
         category = data['category'][0]
+        exam_type = data['exam_type'][0]
+        question_type = data['question_type'][0]
+        SAT, ACT = ('SAT', 'ACT')
+        MATH, GRAMMAR = ('MATH', 'GRAMMAR')
+        # get questions that have this exam type and question type
+        if exam_type == SAT:
+            exams = Exam.objects.filter(type=SAT)
+            if question_type == MATH:
+                sections = Section.objects.filter(exam__in=exams, type__in=['math1', 'math2'])
+            elif question_type == GRAMMAR:
+                sections = Section.objects.filter(exam__in=exams, type='writing')
+        elif exam_type == ACT:
+            exams = Exam.objects.filter(type=ACT)
+            if question_type == MATH:
+                sections = Section.objects.filter(exam__in=exams, type='math')
+            elif question_type == GRAMMAR:
+                sections = Section.objects.filter(exam__in=exams, type='english')
+        else:
+            if question_type == MATH:
+                sections = Section.objects.filter(type__in=['math', 'math1', 'math2'])
+            elif question_type == GRAMMAR:
+                sections = Section.objects.filter(type__in=['english', 'writing'])
 
-        # get math questions that have this category
         matching_questions = []
-        questions = Question.objects.all()
+        questions = Question.objects.filter(section__in=sections)
         for question in questions:
             categories = question.categories.split(',') if question.categories else []
             if category in categories:
@@ -655,6 +676,38 @@ def problem_database_data_view(request):
 
     # CURRENTLY LIMITING TO ONLY 20 QUESTIONS
     return JsonResponse({'data': matching_questions[0:20]})
+
+@login_required 
+def problem_database_button_data_view(request):
+    if request.is_ajax():
+        """
+            return the data for the buttons
+            object with the following structure:
+            {
+                'examType',
+                'questionType',
+                'category',
+            }
+        """
+        data = dict(request.GET.lists())
+        question_type = data['question_type'][0]
+
+        MATH, GRAMMAR = ('MATH', 'GRAMMAR')
+        button_data = []
+        if question_type == MATH:
+            for key in math_category_map.keys():
+                button_data.append({
+                    'key': key,
+                    'value': math_category_map[key]
+                })
+        elif question_type == GRAMMAR:
+            for key in english_category_map.keys():
+                button_data.append({
+                    'key': key,
+                    'value': english_category_map[key],
+                })
+        return JsonResponse({'data': button_data})
+
 
 @login_required
 # Deletes the 'Result' and 'Student_Answer' objects and redirects to the respective section directions URL
