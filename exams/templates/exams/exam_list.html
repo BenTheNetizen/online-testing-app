@@ -265,6 +265,7 @@ aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     }
   });
   const is_premium = "{{student.is_premium}}"
+  console.log('is_premium', is_premium)
   const url = window.location.href
   const stripeConfigUrl = "{% url 'payments:config' %}"
   const stripeCreateSessionUrl = "{% url 'payments:create-checkout-session' %}"

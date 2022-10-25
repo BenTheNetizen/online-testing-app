@@ -241,7 +241,11 @@ function filterExamType(selection) {
       getExamDetails('Diagnostic Test-btn')
     }
   } else if (optionSelection == 'Problem Database') {
-    window.location.href = problemDatabaseUrl;
+    if (is_premium != 'True') {
+      $('#prepaymentModal').modal();
+    } else {
+      window.location.href = problemDatabaseUrl;
+    }
   }
 }
 
