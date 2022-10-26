@@ -211,18 +211,18 @@ function showCorrectAnswer(el) {
   let correctAnswer = el.dataset.correctAnswer;
   if (el.src.includes(hideAnswerUrl)) {
     el.src = showAnswerUrl;
-    // get's the input element of the correct answer and checks it
-    if (!isNaN(correctAnswer)) {
-      answerBox.innerHTML = `<p>Correct answer: ${correctAnswer}</p>`;
-    } else {
+    // check if the correct answer is multiple choice or free response
+    if(correctAnswer[0].toUpperCase() != correctAnswer[0].toLowerCase()) {
       document.getElementById(`${index}-${correctAnswer}`).checked = true;
+    } else {
+      answerBox.innerHTML = `<p>Correct answer: ${correctAnswer}</p>`;
     }
   } else {
     el.src = hideAnswerUrl;
-    if (!isNaN(correctAnswer)) {
-      answerBox.innerHTML = "<p>This is a free response question.</p>";
-    } else {
+    if (correctAnswer[0].toUpperCase() != correctAnswer[0].toLowerCase()) {
       document.getElementById(`${index}-${correctAnswer}`).checked = false;
+    } else {
+      answerBox.innerHTML = "<p>This is a free response question.</p>";
     }
   }
 
