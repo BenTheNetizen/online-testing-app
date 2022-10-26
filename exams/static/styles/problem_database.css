@@ -60,6 +60,8 @@
     border-radius: 20px;
     border: 2px solid #66A1A5;
     margin-bottom: 50px;
+    margin-left: 20%;
+    margin-right: 20%;
 }
 
 .problem-categories-button-selected:hover {
@@ -81,19 +83,20 @@
     display: block;
     margin: auto;
   } */
-
+.math-material {
+    max-width: 80%;
+}
+#section-box {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
 #problem-database-form img {
     max-height: 300px;
     width: auto;
     height: auto;
     display: block;
     margin: auto;
-}
-
-#problem-database-content {
-    display: flex;
-    justify-content: flex-start;
-    position: relative;
 }
 
 .question-hide-show-img {

@@ -11,7 +11,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Section, Exam, SectionInstance, ExamInstance, Student
 from questions.models import Question, Answer, Result, Student_Answer
-from .utils.mappings import math_category_map, english_category_map
+from .utils.mappings import act_math_category_map, sat_math_category_map, sat_english_category_map, act_english_category_map
 # Create your views here.
 
 @staff_member_required
@@ -603,10 +603,10 @@ def problem_database_view(request):
     # probabably need to make ajax call to grab which type of questions, but that's for later
     # for now, just pass the types of categories
     category_data = []
-    for key in math_category_map.keys():
+    for key in sat_math_category_map.keys():
         category_data.append({
             'key': key,
-            'value': math_category_map[key]
+            'value': sat_math_category_map[key]
         })
     context = {
         'category_data': category_data,
@@ -691,21 +691,27 @@ def problem_database_button_data_view(request):
         """
         data = dict(request.GET.lists())
         question_type = data['question_type'][0]
+        exam_type = data['exam_type'][0]
 
+        SAT, ACT = ('SAT', 'ACT')
         MATH, GRAMMAR = ('MATH', 'GRAMMAR')
         button_data = []
         if question_type == MATH:
-            for key in math_category_map.keys():
-                button_data.append({
-                    'key': key,
-                    'value': math_category_map[key]
-                })
+            if exam_type == SAT:
+                category_map = sat_math_category_map
+            elif exam_type == ACT:
+                category_map = act_math_category_map
         elif question_type == GRAMMAR:
-            for key in english_category_map.keys():
-                button_data.append({
-                    'key': key,
-                    'value': english_category_map[key],
-                })
+            if exam_type == SAT:
+                category_map = sat_english_category_map
+            elif exam_type == ACT:
+                category_map = act_english_category_map
+
+        for key in category_map.keys():
+            button_data.append({
+                'key': key,
+                'value': category_map[key]
+            })
         return JsonResponse({'data': button_data})
 
 

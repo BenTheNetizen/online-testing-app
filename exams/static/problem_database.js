@@ -12,7 +12,7 @@ var questionType = "MATH";
 function filterExamType(selection) {
   // clear questions
   questionBox.innerHTML = "";
-
+  
   let optionSelection = $(selection).text();
   if (optionSelection == "SAT Exam Questions") {
     console.log(`selected ${optionSelection}`);
@@ -41,7 +41,8 @@ function getButtonData() {
     type: "GET",
     data: {
       csrfmiddlewaretoken: csrf,
-      question_type: questionType
+      question_type: questionType,
+      exam_type: examType,
     },
     success: function(response) {
       const data = response.data;
@@ -159,7 +160,7 @@ function getProblemData(category) {
         let answerBox = document.getElementById(`${index}-answers`);
 
         // if multiple choice question
-        if (el.choices) {
+        if (el.choices[0].text != null) {
           el.choices.forEach((choice) => {
             let answer = choice.text;
             let letter = choice.letter;
@@ -172,7 +173,9 @@ function getProblemData(category) {
             `;
           });
         } else {
-          console.log("WE HAVE A FREE RESPONSE QUESTION");
+          answerBox.innerHTML += `
+          <p>This is a free response question.</p>
+          `
         }
       });
 
@@ -204,14 +207,23 @@ function getProblemData(category) {
 
 function showCorrectAnswer(el) {
   let index = el.dataset.index;
+  let answerBox = document.getElementById(`${index}-answers`);
   let correctAnswer = el.dataset.correctAnswer;
   if (el.src.includes(hideAnswerUrl)) {
     el.src = showAnswerUrl;
     // get's the input element of the correct answer and checks it
-    document.getElementById(`${index}-${correctAnswer}`).checked = true;
+    if (!isNaN(correctAnswer)) {
+      answerBox.innerHTML = `<p>Correct answer: ${correctAnswer}</p>`;
+    } else {
+      document.getElementById(`${index}-${correctAnswer}`).checked = true;
+    }
   } else {
     el.src = hideAnswerUrl;
-    document.getElementById(`${index}-${correctAnswer}`).checked = false;
+    if (!isNaN(correctAnswer)) {
+      answerBox.innerHTML = "<p>This is a free response question.</p>";
+    } else {
+      document.getElementById(`${index}-${correctAnswer}`).checked = false;
+    }
   }
 
   // write functionality for showing the correct answer
