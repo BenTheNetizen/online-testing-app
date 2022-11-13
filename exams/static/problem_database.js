@@ -84,11 +84,11 @@ function getButtonData() {
         sectionForm.style.overflowY = "initial";
       } else if (questionType == "GRAMMAR") {
         // show section material and passage navigation
-        sectionMaterial.innerHTML = "";
-        sectionMaterial.style.display = "block";
-        passageNavigation.style.display = "flex";
-        sectionForm.style.flexBasis = "50%";
-        sectionForm.style.overflowY = "scroll";
+        // sectionMaterial.innerHTML = "";
+        // sectionMaterial.style.display = "block";
+        // passageNavigation.style.display = "flex";
+        // sectionForm.style.flexBasis = "50%";
+        // sectionForm.style.overflowY = "scroll";
       }
     },
     error: function(error) {
@@ -97,19 +97,12 @@ function getButtonData() {
   });
 }
 
+// function only called when grammar questions are selected
 function getPassageData(value) {
   // assumes that passageData is already defined
   if (passageData === undefined) {
     console.log('passageData is undefined');
     return;
-  }
-
-  if (value == "init") {
-    passageNum = 1;
-  } else if (value == "next") {
-    passageNum += 1;
-  } else if (value == "prev") {
-    passageNum -= 1;
   }
 
   if (maxPassages == 0) {
@@ -119,6 +112,20 @@ function getPassageData(value) {
     `;
     return;
   }
+  if (value == "init") passageNum = 1;
+  else if (value == "next") passageNum += 1;
+  else if (value == "prev") passageNum -= 1;
+
+  // invalid passage number
+  if (passageNum > maxPassages || passageNum < 1) return;
+
+  // show section material and passage navigation
+  sectionMaterial.innerHTML = "";
+  sectionMaterial.style.display = "block";
+  passageNavigation.style.display = "flex";
+  sectionForm.style.flexBasis = "50%";
+  sectionForm.style.overflowY = "scroll";
+
   document.getElementById('passage-num').innerHTML = `Passage ${passageNum} of ${maxPassages}`;
 
   questionBox.innerHTML = ''
