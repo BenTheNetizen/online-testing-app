@@ -108,7 +108,7 @@ height: auto;
 
 #problem-database-form {
   overflow-y: initial;
-  height: calc(100vh - 169px);
+  height: initial;
   flex-basis: 100%;
   padding: 28px 21px;
 }

@@ -76,20 +76,15 @@ function getButtonData() {
       });
 
       // set visibility of divs based on questionType
-      if (questionType == "MATH") {
-        // hide section material and passage navigation
-        sectionMaterial.style.display = "none";
-        passageNavigation.style.display = "none";
-        sectionForm.style.flexBasis = "100%";
-        sectionForm.style.overflowY = "initial";
-      } else if (questionType == "GRAMMAR") {
-        // show section material and passage navigation
-        // sectionMaterial.innerHTML = "";
-        // sectionMaterial.style.display = "block";
-        // passageNavigation.style.display = "flex";
-        // sectionForm.style.flexBasis = "50%";
-        // sectionForm.style.overflowY = "scroll";
-      }
+      // hide section material and passage navigation
+      sectionMaterial.style.display = "none";
+      passageNavigation.style.display = "none";
+      sectionForm.style.flexBasis = "100%";
+      sectionForm.style.overflowY = "initial";
+      sectionForm.style.height = "initial";
+
+      // these are set to different values in getPassageData()
+
     },
     error: function(error) {
       console.log(error);
@@ -125,6 +120,7 @@ function getPassageData(value) {
   passageNavigation.style.display = "flex";
   sectionForm.style.flexBasis = "50%";
   sectionForm.style.overflowY = "scroll";
+  sectionForm.style.height = "calc(100vh - 169px)";
 
   document.getElementById('passage-num').innerHTML = `Passage ${passageNum} of ${maxPassages}`;
 
