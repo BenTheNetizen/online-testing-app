@@ -2,6 +2,7 @@ from email import utils
 import re, os
 import pandas as pd
 from openpyxl import load_workbook
+from collections import defaultdict
 
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -12,6 +13,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from .models import Section, Exam, SectionInstance, ExamInstance, Student
 from questions.models import Question, Answer, Result, Student_Answer
 from .utils.mappings import act_math_category_map, sat_math_category_map, sat_english_category_map, act_english_category_map
+from .utils.helpers import getMaterialUrlFromQuestion
 # Create your views here.
 
 @staff_member_required
@@ -651,6 +653,15 @@ def problem_database_data_view(request):
 
         matching_questions = []
         questions = Question.objects.filter(section__in=sections)
+        """
+            If question type is GRAMMAR, then need to be able to group the questions by matching section and passage number
+            use dictionary to map section/passage number to a list of questions
+            
+            first extract section and passage number from each question (combine into a string), then append to dictionary
+            then convert dictionary into expected format
+            each value in the dictionary is a list of questions grouped by passage
+        """
+        questions_groupby_passage = dict()
         for question in questions:
             categories = question.categories.split(',') if question.categories else []
             if category in categories:
@@ -672,14 +683,31 @@ def problem_database_data_view(request):
                     'choices': choices,
                     'materialUrl': question.material.url if question.material.name else None,
                 }
+
+                if question_type == GRAMMAR:
+                    material_url = getMaterialUrlFromQuestion(question)
+                    section_passage_str = f"{question.section};{question.passage}"
+                    if section_passage_str not in questions_groupby_passage:
+                        obj = {
+                            'materialUrl': material_url,	
+                            'questions': [question_]
+                        }
+                        questions_groupby_passage[section_passage_str] = obj
+                    else:
+                        questions_groupby_passage[section_passage_str]['questions'].append(question_)
+                    
                 matching_questions.append(question_)
 
+    questions_groupby_passage = [val for val in questions_groupby_passage.values()]
     # CURRENTLY LIMITING TO ONLY 20 QUESTIONS
-    return JsonResponse({'data': matching_questions[0:20]})
+    return JsonResponse({
+        'data': matching_questions[0:20],
+        'questions_groupby_passage': questions_groupby_passage
+    })
 
 @login_required 
 def problem_database_button_data_view(request):
-    if request.is_ajax():
+    if request.is_ajax():   
         """
             return the data for the buttons
             object with the following structure:

@@ -44,9 +44,20 @@
   </div>
 
   <div id="problem-database-content">
+    <div id = "section-material">
+    </div>
     <form id="problem-database-form">
       {% csrf_token %}
       <div id="section-box"></div>
+      <div id='problem-database-passage-navigation'>
+        <a id="prev-passage" role='button' onclick="getPassageData('prev')"><span class="material-icons">
+        navigate_before
+        </span></a>
+        <span id="passage-num" class='passage-navigation-text font-weight-bold'>Passage VAR of VAR</span>
+        <a id="next-passage" role='button' onclick="getPassageData('next')"><span class="material-icons">
+          navigate_next
+        </span></a>
+      </div>
     </form>
   </div>
 </div>

@@ -99,6 +99,13 @@
     margin: auto;
 }
 
+#problem-database-passage-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+  }
+
 .question-hide-show-img {
     margin: 5px 0px 5px 0px !important;
 }  

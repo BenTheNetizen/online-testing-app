@@ -1,12 +1,16 @@
 // constants from html document
 const questionBox = document.getElementById("section-box");
 const sectionForm = document.getElementById("problem-database-form");
+const sectionMaterial = document.getElementById('section-material');
 const buttonContainer = document.getElementById("button-container");
 const csrf = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 const url = window.location.href;
 
 var examType = "SAT";
 var questionType = "MATH";
+var passageNum = 1;
+var passageData;
+var maxPassages;
 
 // this function handles both the selection options due to how the dropdown works in dropdown-list.js (see bottom of file)
 function filterExamType(selection) {
@@ -77,6 +81,79 @@ function getButtonData() {
   });
 }
 
+function test() {
+  console.log('how the fuck si this possible');
+}
+
+function getPassageData(value) {
+  // assumes that passageData is already defined
+  if (passageData === undefined) {
+    console.log('passageData is undefined');
+    return;
+  }
+
+  if (value == "init") {
+    passageNum = 1;
+  } else if (value == "next") {
+    passageNum += 1;
+  } else if (value == "prev") {
+    passageNum -= 1;
+  }
+
+  document.getElementById('passage-num').innerHTML = `Passage ${passageNum} of ${maxPassages}`;
+
+  questionBox.innerHTML = ''
+  sectionMaterial.innerHTML = `
+    <img src=${passageData[passageNum - 1].materialUrl} />
+  `;
+
+  passageData[passageNum-1].questions.forEach((question, index) => {
+    var questionBoxString = '';
+
+    if (question.text.includes('no question')) {
+      questionBoxString += `
+        <div class='question-container' id="${index+1}-text">
+        <div class="mb-2 testing">
+          <b id="question-${index+1}" class="ca-question-num">Question ${index+1}</b>
+          <br>
+        </div>
+        <div class="answers-container">
+      `;
+    } else {
+      questionBoxString += `
+        <div class='question-container' id="${index+1}-text">
+        <div class="mb-2 testing">
+          <b id="question-${index+1}" class="ca-question-num">Question ${index+1}</b>
+          <br>
+          <b class="ca-question-data">${question.text}</b>
+        </div>
+        <div class="answers-container">
+      `;
+    }
+
+    question.choices.forEach((answer) => {
+      answer = answer.text.replaceAll('\"', '&quot;');
+      questionBoxString += `
+        <!--
+        <div>
+          <input type="radio" class="ans" id="${question.text}-${answer}" name="${question.text}" value="${answer}" onclick="radioChecked(this, ${index+1})">
+          <label for="${question.text}">${answer}</label>
+        </div>
+        -->
+        <label for="${question.text}" class="answer-container" onclick="radioChecked(this, ${index+1})">
+            <input type="radio" class="ans" id="${question.text}-${answer}" name="${question.text}" value="${answer}">
+            <span class="checkmark-con"><span class="material-icons checkmark">done</span></span>
+          ${answer}
+        </label>
+        </div>
+        </div>
+      `;
+    });
+
+    questionBox.innerHTML += questionBoxString;
+  })
+}
+
 function getProblemData(category) {
   console.log('category: ', category);
   $.ajax({
@@ -90,6 +167,8 @@ function getProblemData(category) {
     },
     success: function (response) {
       const data = response.data;
+      passageData = response.questions_groupby_passage;
+      maxPassages = passageData.length;
       /*
         shape of data:
         {
@@ -105,84 +184,99 @@ function getProblemData(category) {
         }
       */
       console.log(data);
+      console.log('passage data: ', passageData);
 
+      /*
+        shape of passageData:
+        {
+          'material_url',
+          'questions': [question (see shape above)]
+        }
+      */
       // reset the section box and answer box
       questionBox.innerHTML = "";
       if (!data.length) {
         console.log("no data");
         questionBox.innerHTML = "No questions found for this category";
       }
-      data.forEach((el, index) => {
-        // let imgHTML = '<img class="math-material" src="${questionData[3]}"/>'
-        // questionBox.innerHTML += `
-        // <div class='question-container question-container-math' id="${index}-text">
-        // `;
-        if (el.materialUrl) {
-          questionBox.innerHTML += `
-          <div class='problem-database-question-container'>
-            <img class="math-material" src="${el.materialUrl}">
-            <div class="mb-2 testing">  
-              <b class="ca-question-data">
-                <p class="question-tag">
-                  From question ${el.questionNumber} in ${el.exam} - ${
-            el.section
-          } 
-                </p>
-                ${index + 1}. ${el.text}
-                <img class='question-hide-show-img' src=${hideAnswerUrl} data-index=${index} data-correct-answer=${
-            el.correctAnswer
-          } alt="eye-icon" onclick="showCorrectAnswer(this)" />
-              </b>
-            </div>
-            <div class="answers-container" id="${index}-answers"></div>
-          </div>
-          `;
-        } else {
-          questionBox.innerHTML += `
-          <div class='problem-database-question-container'>
-            <div class="mb-2 testing">  
-              <b class="ca-question-data">
-                <p class="question-tag">
-                  From question ${el.questionNumber} in ${el.exam} - ${
-            el.section
-          } 
-                </p>
-                ${index + 1}. ${el.text}
-                <img class='question-hide-show-img' src=${hideAnswerUrl} data-index=${index} data-correct-answer=${
-            el.correctAnswer
-          } alt="eye-icon" onclick="showCorrectAnswer(this)" />
-              </b>
-            </div>
-            <div class="answers-container" id="${index}-answers"></div>
-          </div>
-          `;
-        }
-        let answerBox = document.getElementById(`${index}-answers`);
 
-        // if multiple choice question
-        if (el.choices[0].text != null) {
-          el.choices.forEach((choice) => {
-            let answer = choice.text;
-            let letter = choice.letter;
-            answerBox.innerHTML += `
-            <label for="${el.text}" class="answer-container" onclick="radioChecked(this, ${index})">
-              <input type="radio" class="ans" id="${index}-${letter}" name="${el.text}" value="${answer}">
-              <span class="checkmark-con"><span class="material-icons checkmark">done</span></span>
-            ${answer}
-            </label>
+      if (questionType == 'MATH') {
+        data.forEach((el, index) => {
+          // let imgHTML = '<img class="math-material" src="${questionData[3]}"/>'
+          // questionBox.innerHTML += `
+          // <div class='question-container question-container-math' id="${index}-text">
+          // `;
+          if (el.materialUrl) {
+            questionBox.innerHTML += `
+            <div class='problem-database-question-container'>
+              <img class="math-material" src="${el.materialUrl}">
+              <div class="mb-2 testing">  
+                <b class="ca-question-data">
+                  <p class="question-tag">
+                    From question ${el.questionNumber} in ${el.exam} - ${
+              el.section
+            } 
+                  </p>
+                  ${index + 1}. ${el.text}
+                  <img class='question-hide-show-img' src=${hideAnswerUrl} data-index=${index} data-correct-answer=${
+              el.correctAnswer
+            } alt="eye-icon" onclick="showCorrectAnswer(this)" />
+                </b>
+              </div>
+              <div class="answers-container" id="${index}-answers"></div>
+            </div>
             `;
-          });
-        } else {
-          answerBox.innerHTML += `
-          <p>This is a free response question.</p>
-          `
-        }
-      });
+          } else {
+            questionBox.innerHTML += `
+            <div class='problem-database-question-container'>
+              <div class="mb-2 testing">  
+                <b class="ca-question-data">
+                  <p class="question-tag">
+                    From question ${el.questionNumber} in ${el.exam} - ${
+              el.section
+            } 
+                  </p>
+                  ${index + 1}. ${el.text}
+                  <img class='question-hide-show-img' src=${hideAnswerUrl} data-index=${index} data-correct-answer=${
+              el.correctAnswer
+            } alt="eye-icon" onclick="showCorrectAnswer(this)" />
+                </b>
+              </div>
+              <div class="answers-container" id="${index}-answers"></div>
+            </div>
+            `;
+          }
+          let answerBox = document.getElementById(`${index}-answers`);
+  
+          // if multiple choice question
+          if (el.choices[0].text != null) {
+            el.choices.forEach((choice) => {
+              let answer = choice.text;
+              let letter = choice.letter;
+              answerBox.innerHTML += `
+              <label for="${el.text}" class="answer-container" onclick="radioChecked(this, ${index})">
+                <input type="radio" class="ans" id="${index}-${letter}" name="${el.text}" value="${answer}">
+                <span class="checkmark-con"><span class="material-icons checkmark">done</span></span>
+              ${answer}
+              </label>
+              `;
+            });
+          } else {
+            answerBox.innerHTML += `
+            <p>This is a free response question.</p>
+            `
+          }
+        });
+  
+        questionBox.innerHTML += `
+        </div>
+        </div>
+        `;
 
-      questionBox.innerHTML += `
-      </div>
-      </div>
-      `;
+      } else {
+        getPassageData('init');
+
+      }
       // $('.answers-container').css('width', '50%')
       // needed statement for mathjax to render
       MathJax.typesetPromise();
