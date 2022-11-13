@@ -2,7 +2,8 @@
 const questionBox = document.getElementById("section-box");
 const sectionForm = document.getElementById("problem-database-form");
 const passageNavigation = document.getElementById('problem-database-passage-navigation');
-const sectionMaterial = document.getElementById('section-material');
+const contentWrapper = document.getElementById('problem-database-content');
+const sectionMaterial = document.getElementById('problem-database-section-material');
 const buttonContainer = document.getElementById("button-container");
 const csrf = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 const url = window.location.href;
@@ -82,6 +83,7 @@ function getButtonData() {
       sectionForm.style.flexBasis = "100%";
       sectionForm.style.overflowY = "initial";
       sectionForm.style.height = "initial";
+      contentWrapper.style.height = "initial";
 
       // these are set to different values in getPassageData()
 
@@ -120,7 +122,8 @@ function getPassageData(value) {
   passageNavigation.style.display = "flex";
   sectionForm.style.flexBasis = "50%";
   sectionForm.style.overflowY = "scroll";
-  sectionForm.style.height = "calc(100vh - 169px)";
+  sectionForm.style.height = "calc(100vh - 100px)";
+  contentWrapper.style.height = "calc(100vh - 85px)";
 
   document.getElementById('passage-num').innerHTML = `Passage ${passageNum} of ${maxPassages}`;
 

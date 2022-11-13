@@ -92,18 +92,17 @@
     align-content: center;
 }
 
-#section-material {
+#problem-database-section-material {
     flex-basis: 41%;
     overflow-y: auto;
-    height: calc(100vh - 212px);
+    height: calc(100vh - 100px);
     padding-left: 28px;
     padding-right: 10px;
-    margin-top: 29px;
 }
   
-#section-material img {
-width: 100%;
-height: auto;
+#problem-database-section-material img {
+    width: 100%;
+    height: auto;
 }
 
 #problem-database-form {
@@ -126,16 +125,6 @@ height: auto;
     justify-content: center;
     position: relative;
 }
-
-#section-material {
-    flex-basis: 41%;
-    overflow-y: auto;
-    height: calc(100vh - 212px);
-    padding-left: 28px;
-    padding-right: 10px;
-    margin-top: 29px;
-  }
-
 
 #problem-database-passage-navigation {
     display: flex;
