@@ -1,6 +1,7 @@
 // constants from html document
 const questionBox = document.getElementById("section-box");
 const sectionForm = document.getElementById("problem-database-form");
+const passageNavigation = document.getElementById('problem-database-passage-navigation');
 const sectionMaterial = document.getElementById('section-material');
 const buttonContainer = document.getElementById("button-container");
 const csrf = document.getElementsByName("csrfmiddlewaretoken")[0].value;
@@ -74,15 +75,26 @@ function getButtonData() {
         `;
       });
 
+      // set visibility of divs based on questionType
+      if (questionType == "MATH") {
+        // hide section material and passage navigation
+        sectionMaterial.style.display = "none";
+        passageNavigation.style.display = "none";
+        sectionForm.style.flexBasis = "100%";
+        sectionForm.style.overflowY = "initial";
+      } else if (questionType == "GRAMMAR") {
+        // show section material and passage navigation
+        sectionMaterial.innerHTML = "";
+        sectionMaterial.style.display = "block";
+        passageNavigation.style.display = "flex";
+        sectionForm.style.flexBasis = "50%";
+        sectionForm.style.overflowY = "scroll";
+      }
     },
     error: function(error) {
       console.log(error);
     }
   });
-}
-
-function test() {
-  console.log('how the fuck si this possible');
 }
 
 function getPassageData(value) {
@@ -100,6 +112,13 @@ function getPassageData(value) {
     passageNum -= 1;
   }
 
+  if (maxPassages == 0) {
+    // no passages thus, no questions
+    questionBox.innerHTML = `
+      <p>There are no questions for this category.</p>
+    `;
+    return;
+  }
   document.getElementById('passage-num').innerHTML = `Passage ${passageNum} of ${maxPassages}`;
 
   questionBox.innerHTML = ''
@@ -112,46 +131,70 @@ function getPassageData(value) {
 
     if (question.text.includes('no question')) {
       questionBoxString += `
-        <div class='question-container' id="${index+1}-text">
+        <div class='question-container' id="${question.questionNumber}-text">
         <div class="mb-2 testing">
-          <b id="question-${index+1}" class="ca-question-num">Question ${index+1}</b>
+          <b id="question-${question.questionNumber}" class="ca-question-num">Question ${question.questionNumber}</b>
           <br>
+          <b class="ca-question-data">
+            <p class="question-tag">
+              From question ${question.questionNumber} in ${question.exam} - ${question.section}
+            </p>
+            <img 
+              class='question-hide-show-img' 
+              src=${hideAnswerUrl} 
+              data-index=${index} 
+              data-correct-answer=${question.correctAnswer} 
+              alt="eye-icon" 
+              onclick="showCorrectAnswer(this)" 
+            />
+          </b>
         </div>
-        <div class="answers-container">
+        <div class="answers-container" id=${index}-answers>
       `;
     } else {
       questionBoxString += `
-        <div class='question-container' id="${index+1}-text">
+        <div class='question-container' id="${question.questionNumber}-text">
         <div class="mb-2 testing">
-          <b id="question-${index+1}" class="ca-question-num">Question ${index+1}</b>
+          <b id="question-${question.questionNumber}" class="ca-question-num">Question ${question.questionNumber}</b>
           <br>
-          <b class="ca-question-data">${question.text}</b>
+          <b class="ca-question-data">
+            <p class="question-tag">
+              From question ${question.questionNumber} in ${question.exam} - ${question.section}
+            </p>
+            ${question.questionNumber}. ${question.text}
+            <img 
+              class='question-hide-show-img' 
+              src=${hideAnswerUrl} 
+              data-index=${index} 
+              data-correct-answer=${question.correctAnswer} 
+              alt="eye-icon" 
+              onclick="showCorrectAnswer(this)" 
+            />
+          </b>
         </div>
-        <div class="answers-container">
+        <div class="answers-container" id=${index}-answers>
       `;
     }
 
-    question.choices.forEach((answer) => {
-      answer = answer.text.replaceAll('\"', '&quot;');
+    question.choices.forEach((choice) => {
+      choice.text = choice.text.replaceAll('\"', '&quot;');
       questionBoxString += `
-        <!--
-        <div>
-          <input type="radio" class="ans" id="${question.text}-${answer}" name="${question.text}" value="${answer}" onclick="radioChecked(this, ${index+1})">
-          <label for="${question.text}">${answer}</label>
-        </div>
-        -->
-        <label for="${question.text}" class="answer-container" onclick="radioChecked(this, ${index+1})">
-            <input type="radio" class="ans" id="${question.text}-${answer}" name="${question.text}" value="${answer}">
+        <label for="${question.text}" class="answer-container" onclick="radioChecked(this, ${question.questionNumber})">
+            <input type="radio" class="ans" id="${index}-${choice.letter}" name="${question.text}" value="${choice.text}">
             <span class="checkmark-con"><span class="material-icons checkmark">done</span></span>
-          ${answer}
+          ${choice.text}
         </label>
-        </div>
-        </div>
       `;
     });
-
+    questionBoxString += `
+      </div>
+      </div>
+      `;
     questionBox.innerHTML += questionBoxString;
-  })
+  });
+
+  // return to top of the page after passage change
+  sectionForm.scrollTop = 0;
 }
 
 function getProblemData(category) {
@@ -213,14 +256,17 @@ function getProblemData(category) {
               <div class="mb-2 testing">  
                 <b class="ca-question-data">
                   <p class="question-tag">
-                    From question ${el.questionNumber} in ${el.exam} - ${
-              el.section
-            } 
+                    From question ${el.questionNumber} in ${el.exam} - ${el.section}
                   </p>
                   ${index + 1}. ${el.text}
-                  <img class='question-hide-show-img' src=${hideAnswerUrl} data-index=${index} data-correct-answer=${
-              el.correctAnswer
-            } alt="eye-icon" onclick="showCorrectAnswer(this)" />
+                  <img 
+                    class='question-hide-show-img' 
+                    src=${hideAnswerUrl} 
+                    data-index=${index} 
+                    data-correct-answer=${el.correctAnswer} 
+                    alt="eye-icon" 
+                    onclick="showCorrectAnswer(this)" 
+                  />
                 </b>
               </div>
               <div class="answers-container" id="${index}-answers"></div>
@@ -232,14 +278,17 @@ function getProblemData(category) {
               <div class="mb-2 testing">  
                 <b class="ca-question-data">
                   <p class="question-tag">
-                    From question ${el.questionNumber} in ${el.exam} - ${
-              el.section
-            } 
+                    From question ${el.questionNumber} in ${el.exam} - ${el.section}
                   </p>
                   ${index + 1}. ${el.text}
-                  <img class='question-hide-show-img' src=${hideAnswerUrl} data-index=${index} data-correct-answer=${
-              el.correctAnswer
-            } alt="eye-icon" onclick="showCorrectAnswer(this)" />
+                  <img 
+                    class='question-hide-show-img' 
+                    src=${hideAnswerUrl} 
+                    data-index=${index} 
+                    data-correct-answer=${el.correctAnswer} 
+                    alt="eye-icon" 
+                    onclick="showCorrectAnswer(this)" 
+                  />
                 </b>
               </div>
               <div class="answers-container" id="${index}-answers"></div>
@@ -303,6 +352,7 @@ function showCorrectAnswer(el) {
   let index = el.dataset.index;
   let answerBox = document.getElementById(`${index}-answers`);
   let correctAnswer = el.dataset.correctAnswer;
+  console.log(`trying to set ${index}-${correctAnswer} to checked`);
   if (el.src.includes(hideAnswerUrl)) {
     el.src = showAnswerUrl;
     // check if the correct answer is multiple choice or free response
