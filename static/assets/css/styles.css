@@ -1171,9 +1171,17 @@ select {
 
 .MathJax {
   display: inline-block !important;
+  margin: 0px !important;
+  font-size: 100% !important;
 }
 
+.mjx-container[jax="CHTML"][display="true"] {
+  margin: 0px !important;
+}
 
+.mjx-container[jax="CHTML"][display="true"] mjx-math {
+  font-size: 50% !important;
+}
 /*--------------------------------------------------------------
 # File Uploading
 --------------------------------------------------------------*/
